@@ -1,4 +1,4 @@
-﻿// This file is part of the TA.ArduinoPowerController project
+﻿// This file is part of the TA.SnapCap project
 // 
 // Copyright © 2016-2017 Tigra Astronomy, all rights reserved.
 // Licensed under the MIT license, see http://tigra.mit-license.org/
