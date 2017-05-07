@@ -4,6 +4,7 @@
 // 
 // File: TransactionSpecs.cs  Last modified: 2017-05-07@04:58 by Tim Long
 
+using System;
 using Machine.Specifications;
 using TA.SnapCap.DeviceInterface;
 
@@ -33,4 +34,14 @@ namespace TA.SnapCap.Specifications
             };
         It should_extract_the_response_payload = () => Transaction.ResponsePayload.ShouldEqual("123");
         }
-    }
+
+        [Subject(typeof(TransactionFactory), "creation")]
+        public class when_creating_a_new_transaction
+        {
+            Establish context;
+            Because of = () => Transaction = TransactionFactory.Create(Protocol.GetStatus);
+            It should_build_a_valid_command = () => Transaction.Command.ShouldEqual(">S000\r\n");
+            It should_set_the_timeout = () => Transaction.Timeout.ShouldEqual(TimeSpan.FromSeconds(2));
+            static SnapCapTransaction Transaction;
+        }
+     }

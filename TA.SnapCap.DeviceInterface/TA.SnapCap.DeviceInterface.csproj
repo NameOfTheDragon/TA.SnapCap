@@ -81,11 +81,19 @@
     <Compile Include="CommunicationsStackBuilder.cs" />
     <Compile Include="DeviceController.cs" />
     <Compile Include="ITransactionProcessorFactory.cs" />
+    <Compile Include="MathExtensions.cs" />
+    <Compile Include="Protocol.cs" />
+    <Compile Include="SnapCapDisposition.cs" />
+    <Compile Include="SnapCapFlatPanel.cs" />
+    <Compile Include="SnapCapOpenClose.cs" />
+    <Compile Include="SnapCapState.cs" />
     <Compile Include="SnapCapTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveTransactionProcessorFactory.cs" />
     <Compile Include="RelayStateChangedEventArgs.cs" />
+    <Compile Include="ISnapCapSwitch.cs" />
     <Compile Include="TransactionException.cs" />
+    <Compile Include="TransactionFactory.cs" />
     <Compile Include="WriteRelayTransaction.cs" />
   </ItemGroup>
   <ItemGroup>

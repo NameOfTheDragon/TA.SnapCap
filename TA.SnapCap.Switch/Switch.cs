@@ -1,12 +1,13 @@
 ﻿// This file is part of the TA.SnapCap project
 // 
-// Copyright © 2016-2017 Tigra Astronomy, all rights reserved.
-// Licensed under the MIT license, see http://tigra.mit-license.org/
+// Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
 // 
-// File: Switch.cs  Last modified: 2017-03-17@17:37 by Tim Long
+// File: Switch.cs  Created: 2017-05-07@12:52
+// Last modified: 2017-05-07@15:44 by Tim Long
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -14,10 +15,10 @@ using ASCOM;
 using ASCOM.DeviceInterface;
 using JetBrains.Annotations;
 using NLog;
+using TA.PostSharp.Aspects;
 using TA.SnapCap.DeviceInterface;
 using TA.SnapCap.Server;
 using TA.SnapCap.Server.Properties;
-using TA.PostSharp.Aspects;
 using NotImplementedException = System.NotImplementedException;
 
 #if DEBUG_IN_EXTERNAL_APP
@@ -26,7 +27,7 @@ using System.Windows.Forms;
 #endif
 
 namespace TA.SnapCap.AscomSwitch
-    {
+{
     [ProgId(SharedResources.SwitchDriverId)]
     [Guid("7e30c5fc-bfdc-48a7-b3d3-965e0ad100a2")]
     [ComVisible(true)]
@@ -35,51 +36,51 @@ namespace TA.SnapCap.AscomSwitch
     [ServedClassName(SharedResources.SwitchDriverName)]
     [NLogTraceWithArguments]
     public class Switch : ReferenceCountedObjectBase, ISwitchV2, IDisposable, IAscomDriver
-        {
+    {
         private readonly Guid clientId;
         private readonly ILogger log = LogManager.GetCurrentClassLogger();
         private DeviceController device;
-
         private bool disposed;
         private Octet shadow = Octet.Zero;
+        private IDictionary<short, ISnapCapSwitch> switches = new Dictionary<ushort, ISnapCapSwitch>();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Switch" /> class.
         /// </summary>
         public Switch()
-            {
+        {
 #if DEBUG_IN_EXTERNAL_APP
             MessageBox.Show("Attach debugger now");
 #endif
             //HandleAssemblyResolveEvents();
             //device = CompositionRoot.GetDeviceLayer();
             clientId = SharedResources.ConnectionManager.RegisterClient(SharedResources.SwitchDriverId);
-            }
+        }
 
         internal bool IsOnline => device?.IsOnline ?? false;
 
         [MustBeConnected]
         public string Action(string ActionName, string ActionParameters)
-            {
+        {
             throw new NotImplementedException();
-            }
+        }
 
         public bool CanWrite(short id) => true;
 
         public void CommandBlind(string Command, bool Raw = false)
-            {
+        {
             throw new NotImplementedException();
-            }
+        }
 
         public bool CommandBool(string Command, bool Raw = false)
-            {
+        {
             throw new NotImplementedException();
-            }
+        }
 
         public string CommandString(string Command, bool Raw = false)
-            {
+        {
             throw new NotImplementedException();
-            }
+        }
 
         /// <summary>
         ///     Gets or sets the connection state.
@@ -103,10 +104,10 @@ namespace TA.SnapCap.AscomSwitch
         public string Description => "Arduino Power Controller";
 
         public void Dispose()
-            {
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
-            }
+        }
 
         /// <summary>
         ///     Descriptive and version information about this ASCOM driver.
@@ -131,9 +132,9 @@ Licensed under the MIT License: http://tigra.mit-license.org/";
             }
 
         [MustBeConnected]
-        public bool GetSwitch(short id) => shadow[id];
+        public bool GetSwitch(short id) => switches[id].GetValue().IsNonZero();
 
-        public string GetSwitchDescription(short id) => $"Relay {id}";
+        public string GetSwitchDescription(short id) => switches[id].Name;
 
 
         public string GetSwitchName(short id) => Settings.Default.SwitchNames[id] ?? $"Relay {id}";
@@ -142,7 +143,7 @@ Licensed under the MIT License: http://tigra.mit-license.org/";
         ///     Returns the value for switch device id as a double
         /// </summary>
         [MustBeConnected]
-        public double GetSwitchValue(short id) => shadow[id] ? 1.0 : 0.0;
+        public double GetSwitchValue(short id) => shadow[id];
 
         /// <summary>
         ///     The ASCOM interface version number that this device supports.
@@ -168,32 +169,28 @@ Licensed under the MIT License: http://tigra.mit-license.org/";
 
         [MustBeConnected]
         public void SetSwitch(short id, bool state)
-            {
-            var relay = (ushort) id;
-            if (state) device.SetRelay(relay);
-            else device.ClearRelay(relay);
-            shadow = shadow.WithBitSetTo(id, state);
-            }
+        {
+        }
 
         public void SetSwitchName(short id, string name)
-            {
+        {
             Settings.Default.SwitchNames[id] = string.IsNullOrWhiteSpace(name) ? $"Relay {id}" : name;
             Settings.Default.Save();
-            }
+        }
 
         /// <summary>
         ///     Set the value for this device as a double.
         /// </summary>
         [MustBeConnected]
         public void SetSwitchValue(short id, double value)
-            {
+        {
             SetSwitch(id, value > 0.0);
-            }
+        }
 
         public void SetupDialog()
-            {
+        {
             SharedResources.DoSetupDialog(clientId);
-            }
+        }
 
         /// <summary>
         ///     Returns the list of action names supported by this driver (currently none supported).
@@ -213,63 +210,67 @@ Licensed under the MIT License: http://tigra.mit-license.org/";
         ///     is was offline.
         /// </exception>
         private void Connect()
-            {
+        {
             device = SharedResources.ConnectionManager.GoOnline(clientId);
             if (!device.IsOnline)
-                {
+            {
                 log.Error("Connect failed - device reported offline");
                 throw new DriverException(
                     "Failed to connect. Open apparently succeeded but then the device reported that is was offline.");
-                }
-            device.PerformOnConnectTasks();
             }
+            device.PerformOnConnectTasks();
+            switches.Clear();
+            switches.Add(0,new SnapCapOpenClose("SnapCap Open/Close", device));
+            switches.Add(1, new SnapCapFlatPanel("Flat Panel Brightness", device));
+        }
 
         private void CreateSwitchNames()
-            {
+        {
             Settings.Default.SwitchNames = new StringCollection();
             for (var i = 0; i < MaxSwitch; i++)
-                {
+            {
                 Settings.Default.SwitchNames.Add($"Relay {i}");
-                }
             }
+        }
 
         /// <summary>
         ///     Disconnects from the device.
         /// </summary>
         private void Disconnect()
-            {
+        {
             SharedResources.ConnectionManager.GoOffline(clientId);
+            switches.Clear();
             device = null; //[Sentinel]
-            }
+        }
 
         protected virtual void Dispose(bool fromUserCode)
-            {
+        {
             if (!disposed)
-                {
+            {
                 if (fromUserCode)
-                    {
+                {
                     SharedResources.ConnectionManager.UnregisterClient(clientId);
-                    }
                 }
-            disposed = true;
             }
+            disposed = true;
+        }
 
 
         /// <summary>
         ///     Finalizes this instance (called prior to garbage collection by the CLR)
         /// </summary>
         ~Switch()
-            {
+        {
             Dispose(false);
-            }
+        }
 
         /// <summary>
         ///     Installs a custom assembly resolver into the AppDomain so that the driver can find its
         ///     referenced assemblies. This avoids the need for strong-naming
         /// </summary>
         private void HandleAssemblyResolveEvents()
-            {
+        {
             AppDomain.CurrentDomain.AssemblyResolve += AscomDriverAssemblyResolver.ResolveSupportAssemblies;
-            }
         }
     }
+}

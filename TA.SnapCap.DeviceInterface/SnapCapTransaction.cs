@@ -15,7 +15,7 @@ using TA.Ascom.ReactiveCommunications.Diagnostics;
 
 namespace TA.SnapCap.DeviceInterface
     {
-    internal abstract class SnapCapTransaction : DeviceTransaction
+    internal class SnapCapTransaction : DeviceTransaction
         {
         private const char CommandInitiator = '>';
         private static readonly StringBuilder builder = new StringBuilder();

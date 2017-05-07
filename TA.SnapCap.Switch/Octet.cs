@@ -50,7 +50,7 @@ namespace TA.SnapCap.AscomSwitch
         /// </summary>
         public static Octet Max { get; } = FromInt(0xFF);
 
-        public bool this[int bit]
+        public double this[int bit]
             {
             get
                 {
