@@ -47,9 +47,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(159, 3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 13);
+            this.label2.Size = new System.Drawing.Size(98, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "9600,n,8,1";
+            this.label2.Text = global::TA.SnapCap.Server.Properties.Settings.Default.SerialParameters;
             // 
             // CommPortName
             // 
@@ -65,11 +65,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CommPortName);
             this.Name = "CommunicationSettingsControl";
-            this.Size = new System.Drawing.Size(238, 22);
+            this.Size = new System.Drawing.Size(260, 24);
             this.ResumeLayout(false);
             this.PerformLayout();
 

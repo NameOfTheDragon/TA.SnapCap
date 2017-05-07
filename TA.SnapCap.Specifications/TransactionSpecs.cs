@@ -38,7 +38,6 @@ namespace TA.SnapCap.Specifications
         [Subject(typeof(TransactionFactory), "creation")]
         public class when_creating_a_new_transaction
         {
-            Establish context;
             Because of = () => Transaction = TransactionFactory.Create(Protocol.GetStatus);
             It should_build_a_valid_command = () => Transaction.Command.ShouldEqual(">S000\r\n");
             It should_set_the_timeout = () => Transaction.Timeout.ShouldEqual(TimeSpan.FromSeconds(2));

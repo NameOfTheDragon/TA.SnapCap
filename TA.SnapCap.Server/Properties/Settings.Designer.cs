@@ -81,5 +81,14 @@ namespace TA.SnapCap.Server.Properties {
                 this["SwitchNames"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("38400,None,8,One,DTR,RTS")]
+        public string SerialParameters {
+            get {
+                return ((string)(this["SerialParameters"]));
+            }
+        }
     }
 }

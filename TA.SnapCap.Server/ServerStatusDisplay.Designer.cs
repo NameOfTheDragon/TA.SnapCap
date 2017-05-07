@@ -254,7 +254,7 @@ namespace TA.SnapCap.Server
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Location = global::TA.SnapCap.Server.Properties.Settings.Default.MainFormLocation;
             this.Name = "ServerStatusDisplay";
-            this.Text = "Arduino Power Controller";
+            this.Text = "SnapCap Controller";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.LocationChanged += new System.EventHandler(this.frmMain_LocationChanged);

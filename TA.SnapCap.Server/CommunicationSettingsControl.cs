@@ -31,7 +31,7 @@ namespace TA.SnapCap.Server
 
         public void Save()
             {
-            Settings.Default.ConnectionString = $"{Settings.Default.CommPortName}:9600";
+            Settings.Default.ConnectionString = $"{Settings.Default.CommPortName}:{Settings.Default.SerialParameters}";
             Settings.Default.Save();
             }
         }
