@@ -81,7 +81,7 @@
     <Compile Include="CommunicationsStackBuilder.cs" />
     <Compile Include="DeviceController.cs" />
     <Compile Include="ITransactionProcessorFactory.cs" />
-    <Compile Include="ArduinoSwitchTransaction.cs" />
+    <Compile Include="SnapCapTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveTransactionProcessorFactory.cs" />
     <Compile Include="RelayStateChangedEventArgs.cs" />

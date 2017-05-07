@@ -1,11 +1,11 @@
 ﻿// This file is part of the TA.SnapCap project
 // 
-// Copyright © 2016-2017 Tigra Astronomy, all rights reserved.
-// Licensed under the MIT license, see http://tigra.mit-license.org/
+// Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
 // 
-// File: GlobalAssemblyInfo.cs  Last modified: 2017-04-07@17:48 by Tim Long
+// File: GlobalAssemblyInfo.cs  Last modified: 2017-05-06@21:40 by Tim Long
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Global assembly attributes shared by all projects
@@ -20,3 +20,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.0.*")]
 [assembly: AssemblyFileVersion("0.0.0")]
 [assembly: AssemblyInformationalVersion("0.0.0")]
+
+// For unit testing
+[assembly: InternalsVisibleTo("TA.SnapCap.Specifications")]

@@ -2,7 +2,7 @@
 // 
 // Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
 // 
-// File: SharedResources.cs  Last modified: 2017-05-06@20:11 by Tim Long
+// File: SharedResources.cs  Last modified: 2017-05-06@20:23 by Tim Long
 
 using System;
 using System.Windows.Forms;
@@ -30,7 +30,7 @@ namespace TA.SnapCap.Server
         /// <summary>
         ///     Driver description for the rotator driver.
         /// </summary>
-        public const string SwitchDriverName = "Arduino Power Controller";
+        public const string SwitchDriverName = "SnapCap from Gemini Telescope";
 
         private static readonly ILogger Log;
 

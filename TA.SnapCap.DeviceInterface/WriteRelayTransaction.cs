@@ -6,7 +6,7 @@
 
 namespace TA.SnapCap.DeviceInterface
     {
-    internal class WriteRelayTransaction : ArduinoSwitchTransaction
+    internal class WriteRelayTransaction : SnapCapTransaction
         {
         private readonly ushort relay;
         private readonly bool value;
