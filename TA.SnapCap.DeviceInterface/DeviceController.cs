@@ -1,21 +1,32 @@
 ﻿// This file is part of the TA.SnapCap project
 // 
-// Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
+// Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
 // 
-// File: DeviceController.cs  Last modified: 2017-05-07@15:22 by Tim Long
+// File: DeviceController.cs  Created: 2017-05-07@12:52
+// Last modified: 2017-05-08@18:17 by Tim Long
 
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using NLog;
+using PostSharp.Patterns.Model;
 using TA.Ascom.ReactiveCommunications;
 
 namespace TA.SnapCap.DeviceInterface
 {
-    public class DeviceController : IDisposable
+    [NotifyPropertyChanged]
+    public class DeviceController : IDisposable, INotifyPropertyChanged
     {
         private readonly ITransactionProcessorFactory factory;
         private readonly Logger log = LogManager.GetCurrentClassLogger();
 
         private bool disposed;
+
+        [NotNull] private CancellationTokenSource monitorStateCancellation = new CancellationTokenSource();
+
         private ITransactionProcessor transactionProcessor;
 
         public DeviceController(ITransactionProcessorFactory factory)
@@ -23,7 +34,15 @@ namespace TA.SnapCap.DeviceInterface
             this.factory = factory;
         }
 
+        public SnapCapDisposition Disposition { get; private set; }
+        public bool Illuminated { get; private set; }
+
+        [SafeForDependencyAnalysis]
         public bool IsOnline => transactionProcessor != null && (factory?.Channel?.IsOpen ?? false);
+
+        public bool MotorRunning { get; private set; }
+
+        public SnapCapState State { get; private set; }
 
         public void Dispose()
         {
@@ -31,13 +50,7 @@ namespace TA.SnapCap.DeviceInterface
             GC.SuppressFinalize(this);
         }
 
-        public void ClearRelay(ushort id)
-        {
-            var transaction = new WriteRelayTransaction(id, false);
-            transactionProcessor.CommitTransaction(transaction);
-            transaction.WaitForCompletionOrTimeout();
-            RaiseRelayStateChanged(id, false);
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         ///     Close the connection to the AWR system. This should never fail.
@@ -45,6 +58,7 @@ namespace TA.SnapCap.DeviceInterface
         public void Close()
         {
             log.Warn("Close requested");
+            monitorStateCancellation.Cancel(); // Cancel any background monitoring.
             if (!IsOnline)
             {
                 log.Warn("Ignoring Close request because already closed");
@@ -53,6 +67,11 @@ namespace TA.SnapCap.DeviceInterface
             log.Info($"Closing device endpoint: {factory.Endpoint}");
             factory.DestroyTransactionProcessor();
             log.Info("====== Channel closed: the device is now disconnected ======");
+        }
+
+        public void CloseCap()
+        {
+            TransactSimpleCommand(Protocol.CloseCover);
         }
 
         protected virtual void Dispose(bool fromUserCode)
@@ -64,6 +83,16 @@ namespace TA.SnapCap.DeviceInterface
 
             // ToDo: Call the base class's Dispose(Boolean) method, if available.
             // base.Dispose(fromUserCode);
+        }
+
+        public void ElectroluminescentPanelOff()
+        {
+            TransactSimpleCommand(Protocol.ElpOff);
+        }
+
+        public void ElectroluminescentPanelOn()
+        {
+            TransactSimpleCommand(Protocol.ElpOn);
         }
 
         // The IDisposable pattern, as described at
@@ -78,10 +107,51 @@ namespace TA.SnapCap.DeviceInterface
             Dispose(false);
         }
 
+        public ushort GetBrightness()
+        {
+            var transaction = TransactSimpleCommand(Protocol.GetBrightness);
+            var brightness = ushort.Parse(transaction.ResponsePayload);
+            return brightness;
+        }
+
         public SnapCapState GetState()
         {
             var transaction = TransactSimpleCommand(Protocol.GetStatus);
             return SnapCapState.FromResponsePayload(transaction.ResponsePayload);
+        }
+
+        private async void MonitorState(CancellationToken cancel)
+        {
+            /*
+             * We delay for a short time to allow any startup tasks to complete.
+             * This also allows the method to immediately return while monitoring occurs asynchronously
+             */
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            while (!cancel.IsCancellationRequested)
+            {
+                try
+                {
+                    var delayTask = Task.Delay(TimeSpan.FromSeconds(1));
+                    var transaction = TransactionFactory.Create(Protocol.GetStatus);
+                    transactionProcessor?.CommitTransaction(transaction);
+                    var transactionTask = transaction.WaitForCompletionOrTimeoutAsync(cancel);
+                    Task.WaitAll(new[] {delayTask, transactionTask}, cancel);
+                    if (transaction.Failed)
+                        throw new TransactionException(transaction.ToString());
+                    var state = SnapCapState.FromResponsePayload(transaction.ResponsePayload);
+                    UpdateStateProperties(state);
+                }
+                catch (Exception e)
+                {
+                    log.Error($"Error in state monitoring task: {e.Message}");
+                }
+            }
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -93,28 +163,8 @@ namespace TA.SnapCap.DeviceInterface
             log.Info($"Opening device endpoint: {factory.Endpoint}");
             transactionProcessor = factory.CreateTransactionProcessor();
             log.Info("====== Initialization completed successfully : Device is now ready to accept commands ======");
-        }
-
-
-        public void PerformOnConnectTasks()
-        {
-            //ToDo: perform any tasks that must occur as soon as the communication channel is connected.
-        }
-
-        protected void RaiseRelayStateChanged(int relay, bool newState)
-        {
-            var args = new RelayStateChangedEventArgs(relay, newState);
-            RelayStateChanged?.Invoke(this, args);
-        }
-
-        public event EventHandler<RelayStateChangedEventArgs> RelayStateChanged;
-
-        public void SetRelay(ushort id)
-        {
-            var transaction = new WriteRelayTransaction(id, true);
-            transactionProcessor.CommitTransaction(transaction);
-            transaction.WaitForCompletionOrTimeout();
-            RaiseRelayStateChanged(id, true);
+            monitorStateCancellation = new CancellationTokenSource();
+            MonitorState(monitorStateCancellation.Token);
         }
 
         public void OpenCap()
@@ -122,31 +172,14 @@ namespace TA.SnapCap.DeviceInterface
             TransactSimpleCommand(Protocol.OpenCover);
         }
 
-        public void CloseCap()
+        public void PerformOnConnectTasks()
         {
-            TransactSimpleCommand(Protocol.CloseCover);
-        }
-
-        public ushort GetBrightness()
-        {
-            var transaction = TransactSimpleCommand(Protocol.GetBrightness);
-            var brightness = ushort.Parse(transaction.ResponsePayload);
-            return brightness;
-        }
-
-        public void ElectroluminescentPanelOff()
-        {
-            TransactSimpleCommand(Protocol.ElpOff);
+            //ToDo: perform any tasks that must occur as soon as the communication channel is connected.
         }
 
         public void SetBrightness(byte brightness)
         {
             TransactSimpleCommand(Protocol.SetBrightness, brightness);
-        }
-
-        public void ElectroluminescentPanelOn()
-        {
-            TransactSimpleCommand(Protocol.ElpOn);
         }
 
         private SnapCapTransaction TransactSimpleCommand(char command, byte? payload = null)
@@ -157,6 +190,13 @@ namespace TA.SnapCap.DeviceInterface
             if (transaction.Failed)
                 throw new TransactionException($"Transaction failed: {transaction}");
             return transaction;
+        }
+
+        private void UpdateStateProperties(SnapCapState state)
+        {
+            MotorRunning = state.MotorRunning;
+            Illuminated = state.Illuminated;
+            Disposition = state.Disposition;
         }
     }
 }
