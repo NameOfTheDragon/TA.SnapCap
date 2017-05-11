@@ -2,13 +2,13 @@
 // 
 // Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
 // 
-// File: ISnapCapSwitch.cs  Created: 2017-05-07@21:19
-// Last modified: 2017-05-07@22:13 by Tim Long
+// File: ISnapCapSwitch.cs  Created: 2017-05-07@14:38
+// Last modified: 2017-05-11@02:34 by Tim Long
 
 namespace TA.SnapCap.DeviceInterface
-    {
+{
     public interface ISnapCapSwitch
-        {
+    {
         string Description { get; }
 
         double MaximumValue { get; }
@@ -17,7 +17,7 @@ namespace TA.SnapCap.DeviceInterface
 
         string Name { get; set; }
 
-        double Precision { get;  }
+        double Precision { get; }
 
         bool GetState();
 
@@ -26,5 +26,5 @@ namespace TA.SnapCap.DeviceInterface
         void SetValue(double newValue);
 
         void SetValue(bool turnOn);
-        }
     }
+}

@@ -112,6 +112,7 @@
     </Reference>
     <Reference Include="PostSharp, Version=5.0.23.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <HintPath>..\packages\PostSharp.Redist.5.0.23-preview\lib\net45\PostSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PostSharp.Patterns.Aggregation, Version=5.0.23.0, Culture=neutral, PublicKeyToken=e7f631e6ce13f078, processorArchitecture=MSIL">
       <HintPath>..\packages\PostSharp.Patterns.Aggregation.Redist.5.0.23-preview\lib\net45\PostSharp.Patterns.Aggregation.dll</HintPath>

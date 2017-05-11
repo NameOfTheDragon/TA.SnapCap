@@ -3,11 +3,10 @@
 // Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
 // 
 // File: DeviceController.cs  Created: 2017-05-07@12:52
-// Last modified: 2017-05-08@18:17 by Tim Long
+// Last modified: 2017-05-11@02:52 by Tim Long
 
 using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -20,6 +19,7 @@ namespace TA.SnapCap.DeviceInterface
     [NotifyPropertyChanged]
     public class DeviceController : IDisposable, INotifyPropertyChanged
     {
+        private const double BrightnessRange = 255.0 - 24.0;
         private readonly ITransactionProcessorFactory factory;
         private readonly Logger log = LogManager.GetCurrentClassLogger();
 
@@ -33,6 +33,12 @@ namespace TA.SnapCap.DeviceInterface
         {
             this.factory = factory;
         }
+
+        /// <summary>
+        ///     Gets the brightness setting of the electroluminescent panel, as a percentage
+        ///     in the range 0 to 100. This value is updated whenever the brightness is read or written.
+        /// </summary>
+        public int Brightness { get; private set; } = 50;
 
         public SnapCapDisposition Disposition { get; private set; }
         public bool Illuminated { get; private set; }
@@ -52,6 +58,27 @@ namespace TA.SnapCap.DeviceInterface
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        internal static byte BrightnessFromPercent(double percentBrightness)
+        {
+            if (percentBrightness >= 100.0)
+                return 255;
+            if (percentBrightness <= 0.0)
+                return 0;
+            var fractionOfUnity = percentBrightness / 100.0;
+            var brightness = (int) Math.Ceiling(BrightnessRange * fractionOfUnity);
+            return (byte) (brightness + 24);
+        }
+
+        internal static int BrightnessToPercent(byte brightness)
+        {
+            if (brightness < 24)
+                return 0;
+            var offsetBrightness = brightness - 24;
+
+            var fractionOfUnity = offsetBrightness / BrightnessRange;
+            return (int) (fractionOfUnity * 100.0);
+        }
+
         /// <summary>
         ///     Close the connection to the AWR system. This should never fail.
         /// </summary>
@@ -67,6 +94,7 @@ namespace TA.SnapCap.DeviceInterface
             log.Info($"Closing device endpoint: {factory.Endpoint}");
             factory.DestroyTransactionProcessor();
             log.Info("====== Channel closed: the device is now disconnected ======");
+            OnPropertyChanged(nameof(IsOnline));
         }
 
         public void CloseCap()
@@ -107,15 +135,21 @@ namespace TA.SnapCap.DeviceInterface
             Dispose(false);
         }
 
+        /// <summary>
+        ///     Gets the electroluminescent panel brightness setting, in the range 0..255.
+        /// </summary>
+        /// <seealso cref="Brightness" />
         public ushort GetBrightness()
         {
             var transaction = TransactSimpleCommand(Protocol.GetBrightness);
-            var brightness = ushort.Parse(transaction.ResponsePayload);
+            var brightness = byte.Parse(transaction.ResponsePayload);
+            Brightness = BrightnessToPercent(brightness);
             return brightness;
         }
 
         public SnapCapState GetState()
         {
+            Brightness = GetBrightness();
             var transaction = TransactSimpleCommand(Protocol.GetStatus);
             return SnapCapState.FromResponsePayload(transaction.ResponsePayload);
         }
@@ -126,20 +160,14 @@ namespace TA.SnapCap.DeviceInterface
              * We delay for a short time to allow any startup tasks to complete.
              * This also allows the method to immediately return while monitoring occurs asynchronously
              */
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            await Task.Delay(TimeSpan.FromSeconds(5), cancel).ConfigureAwait(false);
             while (!cancel.IsCancellationRequested)
             {
                 try
                 {
-                    var delayTask = Task.Delay(TimeSpan.FromSeconds(1));
-                    var transaction = TransactionFactory.Create(Protocol.GetStatus);
-                    transactionProcessor?.CommitTransaction(transaction);
-                    var transactionTask = transaction.WaitForCompletionOrTimeoutAsync(cancel);
+                    var delayTask = Task.Delay(TimeSpan.FromSeconds(5), cancel);
+                    var transactionTask = PollDeviceState(cancel);
                     Task.WaitAll(new[] {delayTask, transactionTask}, cancel);
-                    if (transaction.Failed)
-                        throw new TransactionException(transaction.ToString());
-                    var state = SnapCapState.FromResponsePayload(transaction.ResponsePayload);
-                    UpdateStateProperties(state);
                 }
                 catch (Exception e)
                 {
@@ -148,9 +176,31 @@ namespace TA.SnapCap.DeviceInterface
             }
         }
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void MonitorStateWorker(object state)
         {
+            var cancel = (CancellationToken) state;
+            while (!cancel.IsCancellationRequested)
+            {
+                try
+                {
+                    Task.Delay(TimeSpan.FromSeconds(1), cancel).Wait(cancel);
+                    PollDeviceState(cancel).Wait(cancel);
+                }
+                catch (TaskCanceledException)
+                {
+                    log.Warn($"Monitoring task cancelled");
+                }
+                catch (Exception e)
+                {
+                    log.Error($"Error in State Monitor Worker: {e.Message}");
+                }
+            }
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([NotNull] string propertyName)
+        {
+            log.Debug($"NotifyPropertyChanged: {propertyName}");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
@@ -164,7 +214,8 @@ namespace TA.SnapCap.DeviceInterface
             transactionProcessor = factory.CreateTransactionProcessor();
             log.Info("====== Initialization completed successfully : Device is now ready to accept commands ======");
             monitorStateCancellation = new CancellationTokenSource();
-            MonitorState(monitorStateCancellation.Token);
+            ThreadPool.QueueUserWorkItem(MonitorStateWorker, monitorStateCancellation.Token);
+            OnPropertyChanged(nameof(IsOnline));
         }
 
         public void OpenCap()
@@ -172,14 +223,28 @@ namespace TA.SnapCap.DeviceInterface
             TransactSimpleCommand(Protocol.OpenCover);
         }
 
-        public void PerformOnConnectTasks()
+        public async Task PerformOnConnectTasks()
         {
-            //ToDo: perform any tasks that must occur as soon as the communication channel is connected.
+            await PollDeviceState(monitorStateCancellation.Token).ConfigureAwait(false);
+            var brightness = GetBrightness();
+            Brightness = BrightnessToPercent((byte) brightness);
+        }
+
+        private async Task PollDeviceState(CancellationToken cancel)
+        {
+            var transaction = TransactionFactory.Create(Protocol.GetStatus);
+            transactionProcessor?.CommitTransaction(transaction);
+            await transaction.WaitForCompletionOrTimeoutAsync(cancel).ConfigureAwait(false);
+            if (transaction.Failed)
+                throw new TransactionException(transaction.ToString());
+            var state = SnapCapState.FromResponsePayload(transaction.ResponsePayload);
+            UpdateStateProperties(state);
         }
 
         public void SetBrightness(byte brightness)
         {
             TransactSimpleCommand(Protocol.SetBrightness, brightness);
+            Brightness = BrightnessToPercent(brightness);
         }
 
         private SnapCapTransaction TransactSimpleCommand(char command, byte? payload = null)
