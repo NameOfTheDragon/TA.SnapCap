@@ -3,7 +3,7 @@
 // Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
 // 
 // File: Switch.cs  Created: 2017-05-07@12:52
-// Last modified: 2017-05-07@22:49 by Tim Long
+// Last modified: 2017-05-11@02:57 by Tim Long
 
 using System;
 using System.Collections;
@@ -240,7 +240,7 @@ Professionally developed by Tigra Astronomy";
                 throw new DriverException(
                     "Failed to connect. Open apparently succeeded but then the device reported that is was offline.");
             }
-            device.PerformOnConnectTasks();
+            device.PerformOnConnectTasks().Wait();
             switches.Clear();
             switches.Add(0, new SnapCapOpenClose("Open/Close", "Controls the SnapCap cover position", device));
             switches.Add(1, new SnapCapFlatPanel("Brightness", "Controls the electroluminescent panel brightness", device));
