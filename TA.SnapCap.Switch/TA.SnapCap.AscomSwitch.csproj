@@ -97,8 +97,6 @@
       <IsTransformFile>True</IsTransformFile>
     </None>
     <None Include="packages.config" />
-    <None Include="Scripts\LoadSwitch.ps1" />
-    <None Include="Scripts\WalkingRelayTest.ps1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TA.PostSharp.Aspects\TA.PostSharp.Aspects.csproj">
@@ -116,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Diagrams\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets" Condition="Exists('..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets')" />

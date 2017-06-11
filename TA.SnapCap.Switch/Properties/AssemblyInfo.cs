@@ -8,4 +8,4 @@
 using System.Reflection;
 
 [assembly: AssemblyTitle("ASCOM.SnapCap.Switch")]
-[assembly: AssemblyDescription("ASCOM Switch Driver for Arduino Power Controller")]
+[assembly: AssemblyDescription("ASCOM Switch Driver for Gemini Telescope SnapCap")]

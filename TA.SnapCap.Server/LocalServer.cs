@@ -140,7 +140,7 @@ namespace TA.SnapCap.Server
                         default:
                             MessageBox.Show(
                                 "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-                                "ASCOM driver for Arduino Power Controller", MessageBoxButtons.OK,
+                                "ASCOM driver for SnapCap", MessageBoxButtons.OK,
                                 MessageBoxIcon.Exclamation);
                             break;
                     }
