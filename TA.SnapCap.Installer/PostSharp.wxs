@@ -27,6 +27,12 @@
               Vital="yes" 
               KeyPath="yes" />
       </Component>
+      <Component Id="cmpPostSharpAggregation"  Guid="*" Win64="no">
+        <File Id="filPostSharpAggregation"     
+              Source="$(var.Server.TargetDir)PostSharp.Patterns.Aggregation.dll"                         
+              Vital="yes" 
+              KeyPath="yes" />
+      </Component>
     </ComponentGroup>
 	</Fragment>
 </Wix>

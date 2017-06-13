@@ -12,7 +12,7 @@
   -->
   
   <?define InstallName = "ASCOM Switch Driver for Gemini SnapCap" ?>
-  <?define Manufacturer = "Tigra Astronomy" ?>
+  <?define Manufacturer = "Gemini Telescope Design" ?>
   <?define InstallDirectory = "$(var.InstallName)" ?>
   <?define UpgradeCode = "{15e41692-5da2-4bff-a091-3e8feaa24e0a}" ?>
   <?define LocalServerAppId = "{390d6b29-41e0-4162-8ddd-b525466d9ca5}" ?>

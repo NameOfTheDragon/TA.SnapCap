@@ -25,6 +25,7 @@
     <Compile Include="DeviceControlLayer.wxs" />
     <Compile Include="Directories.wxs" />
     <Compile Include="FeatureTree.wxs" />
+    <Compile Include="JetBrains.wxs" />
     <Compile Include="NLog.wxs" />
     <Compile Include="PostSharp.wxs" />
     <Compile Include="PostSharpAspects.wxs" />
