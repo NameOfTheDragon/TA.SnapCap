@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Include>
+  <!--
+    User Configuration - you must ensure all these variables have correct values for your project. 
+    GUIDs specified here must match those used in the project files, and must be unique to this product.
+    The LocalServerAppId is defined in the Server project, in LocalServer.cs
+    Driver Class IDs are defined in each driver class, in the [Guid()] attribute.
+    Driver ProgIDs must match those used in the source code, typically this will be defined in the LocalServer
+    project as a constant in the SharedResources static class.
+    UpgradeCode must be unique to this product and should not be changed for the product lifetime.
+  -->
+  
+  <?define InstallName = "ASCOM Switch Driver for Gemini SnapCap" ?>
+  <?define Manufacturer = "Gemini Telescope Design" ?>
+  <?define InstallDirectory = "$(var.InstallName)" ?>
+  <?define UpgradeCode = "{15e41692-5da2-4bff-a091-3e8feaa24e0a}" ?>
+  <?define LocalServerAppId = "{390d6b29-41e0-4162-8ddd-b525466d9ca5}" ?>
+  <?define CopyrightNotice="Copyright © 2017 Tigra Astronomy, all rights reserved" ?>
+  <?define SwitchDriverClassId="{dd351fb1-ad95-4901-9672-777b93d0fe24}" ?>
+  <?define SwitchDriverProgId="ASCOM.SnapCap.Switch" ?>
+  <?define SwitchDriverDescription="SnapCap" ?>
+  <!-- End of User Configuration - do not edit anything beyond this point -->
+
+  <!-- Define platform-specific names and locations -->
+  <?if $(var.Platform) = x64 ?>
+  <?define ProductName = "$(var.InstallName) (x64)" ?>
+  <?define Win64 = "yes" ?>
+  <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+  <?define PlatformCommonFilesFolder = "CommonFiles64Folder" ?>
+  <?else ?>
+  <?define ProductName = "$(var.InstallName) (x86)" ?>
+  <?define Win64 = "no" ?>
+  <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+  <?define PlatformCommonFilesFolder = "CommonFilesFolder" ?>
+  <?endif ?>
+
+  <!-- Set installer version based on the file version of the main assembly. -->
+  <?define ProductVersion="!(bind.FileVersion.filLocalServerAssembly)"?>
+</Include>

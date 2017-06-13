@@ -93,7 +93,7 @@
             this.ProductTitle.Name = "ProductTitle";
             this.ProductTitle.Size = new System.Drawing.Size(305, 30);
             this.ProductTitle.TabIndex = 3;
-            this.ProductTitle.Text = "Arduino Power Controller";
+            this.ProductTitle.Text = "Gemini Telescope SnapCap";
             // 
             // label1
             // 
