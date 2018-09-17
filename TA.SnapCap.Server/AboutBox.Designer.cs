@@ -37,6 +37,7 @@
             this.DriverVersion = new System.Windows.Forms.Label();
             this.FirmwareVersion = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.panel1 = new System.Windows.Forms.Panel();
             DriverVersionLabel = new System.Windows.Forms.Label();
             FirmwareVersionLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -102,8 +103,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(303, 147);
             this.label1.TabIndex = 4;
-            this.label1.Text = "ASCOM LocalServer Hub\r\nProfessionally produced by\r\n" +
-    "Tigra Astronomy";
+            this.label1.Text = "ASCOM LocalServer Hub\r\nProfessionally produced by\r\nTigra Astronomy";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
@@ -118,6 +118,13 @@
             this.DriverVersion.Text = "(unset)";
             this.DriverVersion.Click += new System.EventHandler(this.DriverVersion_Click);
             // 
+            // FirmwareVersion
+            // 
+            this.FirmwareVersion.Location = new System.Drawing.Point(0, 0);
+            this.FirmwareVersion.Name = "FirmwareVersion";
+            this.FirmwareVersion.Size = new System.Drawing.Size(100, 23);
+            this.FirmwareVersion.TabIndex = 7;
+            // 
             // linkLabel1
             // 
             this.linkLabel1.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -130,12 +137,23 @@
             this.linkLabel1.Text = "http://tigra-astronomy.com";
             this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // panel1
+            // 
+            this.panel1.BackgroundImage = global::TA.SnapCap.Server.Properties.Resources.GTD_logo;
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(536, 134);
+            this.panel1.TabIndex = 8;
+            // 
             // AboutBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(536, 612);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.FirmwareVersion);
             this.Controls.Add(this.DriverVersion);
@@ -164,5 +182,6 @@
         private System.Windows.Forms.Label DriverVersion;
         private System.Windows.Forms.Label FirmwareVersion;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
