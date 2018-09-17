@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9CDCF319-DADC-41EB-B787-DE3862017E95}</ProjectGuid>
+    <ProjectGuid>{3015F05F-D747-4C3E-A0D4-EC2B3BD76C56}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TA.PostSharp.Aspects</RootNamespace>
-    <AssemblyName>TA.PostSharp.Aspects</AssemblyName>
+    <RootNamespace>TA.SnapCap.DeviceInterface</RootNamespace>
+    <AssemblyName>TA.SnapCap.DeviceInterface</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -19,71 +19,55 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\BuildOutput\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\BuildOutput\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.Astrometry.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.Attributes.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.Controls, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.Controls.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.DeviceInterfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.DriverAccess.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.Exceptions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.Internal.Extensions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.Internal.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.SettingsProvider, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.SettingsProvider.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.Utilities.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.3.0\lib\net40\ASCOM.Utilities.Video.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\net\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.10\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PostSharp, Version=5.0.26.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <HintPath>..\packages\PostSharp.Redist.5.0.26-rc\lib\net45\PostSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Patterns.Aggregation, Version=5.0.26.0, Culture=neutral, PublicKeyToken=e7f631e6ce13f078, processorArchitecture=MSIL">
+      <HintPath>..\packages\PostSharp.Patterns.Aggregation.Redist.5.0.26-rc\lib\net45\PostSharp.Patterns.Aggregation.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Patterns.Common, Version=5.0.26.0, Culture=neutral, PublicKeyToken=e7f631e6ce13f078, processorArchitecture=MSIL">
+      <HintPath>..\packages\PostSharp.Patterns.Common.Redist.5.0.26-rc\lib\net46\PostSharp.Patterns.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Patterns.Model, Version=5.0.26.0, Culture=neutral, PublicKeyToken=e7f631e6ce13f078, processorArchitecture=MSIL">
+      <HintPath>..\packages\PostSharp.Patterns.Model.Redist.5.0.26-rc\lib\net40\PostSharp.Patterns.Model.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -93,12 +77,31 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TA.Ascom.ReactiveCommunications, Version=0.4.6306.31345, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TA.Ascom.ReactiveCommunications.0.4.2\lib\net45\TA.Ascom.ReactiveCommunications.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAscomDriver.cs" />
-    <Compile Include="MustBeConnectedAttribute.cs" />
-    <Compile Include="NLogTraceWithArgumentsAttribute.cs" />
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="CommunicationsStackBuilder.cs" />
+    <Compile Include="DeviceController.cs" />
+    <Compile Include="ITransactionProcessorFactory.cs" />
+    <Compile Include="MathExtensions.cs" />
+    <Compile Include="Protocol.cs" />
+    <Compile Include="SnapCapDisposition.cs" />
+    <Compile Include="SnapCapFlatPanel.cs" />
+    <Compile Include="SnapCapOpenClose.cs" />
+    <Compile Include="SnapCapState.cs" />
+    <Compile Include="SnapCapTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReactiveTransactionProcessorFactory.cs" />
+    <Compile Include="RelayStateChangedEventArgs.cs" />
+    <Compile Include="ISnapCapSwitch.cs" />
+    <Compile Include="TransactionException.cs" />
+    <Compile Include="TransactionFactory.cs" />
+    <Compile Include="WriteRelayTransaction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
