@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using NLog;
+using TA.SnapCap.Server.AscomSwitch;
 
 namespace TA.SnapCap.AscomSwitch
     {

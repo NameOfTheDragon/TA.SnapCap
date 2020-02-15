@@ -11,7 +11,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 
-namespace TA.SnapCap.AscomSwitch
+namespace TA.SnapCap.Server.ExtensionMethods
     {
     public static class StringExtensions
         {

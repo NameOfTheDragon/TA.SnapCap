@@ -1,7 +1,7 @@
 // This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: LocalServer.cs  Created: 2017-05-07@12:52
 // Last modified: 2017-06-13@15:10 by Tim Long
 
@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
@@ -20,7 +21,9 @@ using ASCOM;
 using ASCOM.Utilities;
 using Microsoft.Win32;
 using NLog;
+using NLog.Fluent;
 using TA.SnapCap.Aspects;
+using TA.SnapCap.Server.ExtensionMethods;
 
 namespace TA.SnapCap.Server
 {
@@ -51,12 +54,20 @@ namespace TA.SnapCap.Server
             // Manage unhandled exceptions
             Application.ThreadException += UnhandledThreadException;
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
+            LogVersionStrings();
 
-            var foundTypes = LoadComObjectAssemblies();
-            if (foundTypes < 1)
-                return; // There is no point continuing if we found nothing to serve.
 
-            if (!ProcessArguments(args)) return; // Register/Unregister
+        var drivers = new DriverDiscovery();
+        drivers.DiscoverServedClasses();
+        if (!drivers.DiscoveredTypes.Any())
+            {
+            Log.Fatal()
+                .Message(
+                    "No driver classes found. Have you added ServedClassName attributes to your driver classes?")
+                .Write();
+            return;
+            }
+            if (!ProcessArguments(drivers, args)) return; // Register/Unregister
 
             // Initialize critical member variables.
             objsInUse = 0;
@@ -64,19 +75,19 @@ namespace TA.SnapCap.Server
             MainThreadId = GetCurrentThreadId();
             Thread.CurrentThread.Name = "Main Thread";
 
+            // Create the user interface and display it
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            s_MainForm = new ServerStatusDisplay();
-//#if !DEBUG
-//// Only show the application main window if it was started manually by the user.
-//            if (StartedByCOM) s_MainForm.WindowState = FormWindowState.Minimized;
-//#endif
+            var statusDisplay = new ServerStatusDisplay();
+            /*
+             * If you do not wish your main form to display when started automatically
+             * by a client app, then minimize it to the task bar here.
+             */
+            //if (StartedByCOM) s_MainForm.WindowState = FormWindowState.Minimized;
 
-            // Register the class factories of the served objects
-            RegisterClassFactories();
-
-            // Start up the garbage collection thread.
-            var GarbageCollector = new GarbageCollection(1000);
+            var registeredFactories = RegisterClassFactories(drivers);
+            // ToDo: [TPL] Why is this even necessary? Shouldn't GC be automatic?
+            var GarbageCollector = new GarbageCollection(10000);
             var GCThread = new Thread(GarbageCollector.GCWatch);
             GCThread.Name = "Garbage Collection Thread";
             GCThread.Start();
@@ -86,24 +97,23 @@ namespace TA.SnapCap.Server
             // served COM objects, making this act like the VB6 equivalent!
             //
             try
-            {
-                Application.Run(s_MainForm);
-            }
+                {
+                Application.Run(statusDisplay);
+                }
             finally
-            {
+                {
                 // Revoke the class factories immediately.
                 // Don't wait until the thread has stopped before
                 // we perform revocation!!!
-                RevokeClassFactories();
+                RevokeClassFactories(registeredFactories);
 
                 // Now stop the Garbage Collector thread.
                 GarbageCollector.StopThread();
                 GarbageCollector.WaitForThreadToStop();
                 Application.ThreadException -= UnhandledThreadException;
                 AppDomain.CurrentDomain.UnhandledException -= UnhandledException;
+                }
             }
-        }
-
         #endregion
 
         #region Command Line Arguments
@@ -173,6 +183,19 @@ namespace TA.SnapCap.Server
         // -----------------
         // PRIVATE FUNCTIONS
         // -----------------
+    private static void LogVersionStrings()
+        {
+        // var assembly = Assembly.GetExecutingAssembly();
+        // var assemblyName = assembly.GetName().Name;
+        // var git = assembly.GetType(assemblyName + ".GitVersionInformation");
+        Log.Info("Git Commit ID: {fullCommit}", GitVersionExtensions.GitCommitSha);
+        Log.Info("Git Short ID: {shortCommit}", GitVersionExtensions.GitCommitShortSha);
+        Log.Info("Commit Date: {commitDate}", GitVersionExtensions.GitCommitDate);
+        Log.Info("Semantic version: {semVer}", GitVersionExtensions.GitSemVer);
+        Log.Info("Full Semantic version: {fullSemVer}", GitVersionExtensions.GitFullSemVer);
+        Log.Info("Build metadata: {buildMetadata}", GitVersionExtensions.GitBuildMetadata);
+        Log.Info("Informational Version: {informationalVersion}", GitVersionExtensions.GitInformationalVersion);
+        }
 
         #region Dynamic Driver Assembly Loader
 
@@ -210,19 +233,19 @@ namespace TA.SnapCap.Server
         private static Assembly CurrentDomainOnReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
         {
             try
-            {
+                {
                 Log.Info(
                     $"Event: ReflectionOnlyResolveAssembly for {args.Name} requested by {args.RequestingAssembly.GetName().Name}",
                     args.Name);
                 var resolved = Assembly.ReflectionOnlyLoad(args.Name);
                 Log.Info($"Successfully resolved assembly with {resolved.FullName}");
                 return resolved;
-            }
+                }
             catch (FileLoadException ex)
-            {
+                {
                 Log.Error(ex, $"Failed to resolve assembly: {args.Name}");
                 return null; // Let the app raise its own error.
-            }
+                }
         }
 
         #endregion
@@ -293,7 +316,7 @@ namespace TA.SnapCap.Server
 
         // PostThreadMessage() allows us to post a Windows Message to
         // a specific thread (identified by its thread id).
-        // We will need this API to post a WM_QUIT message to the main 
+        // We will need this API to post a WM_QUIT message to the main
         // thread in order to terminate this application.
         [DllImport("user32.dll")]
         private static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam,
@@ -360,7 +383,7 @@ namespace TA.SnapCap.Server
                 }
             }
 
-        // This method performs a thread-safe incrementation the 
+        // This method performs a thread-safe incrementation the
         // server lock count.
         public static int CountLock()
         {
@@ -368,7 +391,7 @@ namespace TA.SnapCap.Server
             return Interlocked.Increment(ref serverLocks);
         }
 
-        // This method performs a thread-safe decrementation the 
+        // This method performs a thread-safe decrementation the
         // server lock count.
         public static int UncountLock()
         {
@@ -376,11 +399,11 @@ namespace TA.SnapCap.Server
             return Interlocked.Decrement(ref serverLocks);
         }
 
-        // AttemptToTerminateServer() will check to see if the objects count and the server 
+        // AttemptToTerminateServer() will check to see if the objects count and the server
         // lock count have both dropped to zero.
         //
         // If so, and if we were started by COM, we post a WM_QUIT message to the main thread's
-        // message loop. This will cause the message loop to exit and hence the termination 
+        // message loop. This will cause the message loop to exit and hence the termination
         // of this application. If hand-started, then just trace that it WOULD exit now.
         //
         public static void ExitIf()
@@ -452,7 +475,7 @@ namespace TA.SnapCap.Server
 
         //
         // Do everything to register this for COM. Never use REGASM on
-        // this exe assembly! It would create InProcServer32 entries 
+        // this exe assembly! It would create InProcServer32 entries
         // which would prevent proper activation!
         //
         // Using the list of COM object types generated during dynamic
@@ -557,7 +580,7 @@ namespace TA.SnapCap.Server
                         }
                     }
                     //
-                    // ASCOM 
+                    // ASCOM
                     //
                     assy = type.Assembly;
 
@@ -585,7 +608,7 @@ namespace TA.SnapCap.Server
         }
 
         //
-        // Remove all traces of this from the registry. 
+        // Remove all traces of this from the registry.
         //
         // **TODO** If the above does AppID/DCOM stuff, this would have
         // to remove that stuff too.
@@ -652,38 +675,41 @@ namespace TA.SnapCap.Server
 
         #endregion
 
-        #region Class Factory Support
+    #region Class Factory Support
 
-        //
-        // On startup, we register the class factories of the COM objects
-        // that we serve. This requires the class facgtory name to be
-        // equal to the served class name + "ClassFactory".
-        //
-        private static bool RegisterClassFactories()
+    //
+    // Register the class factories of the COM objects (drivers)
+    // that we serve. This requires the class factory name to be
+    // equal to the served class name + "ClassFactory".
+    //
+    private static IEnumerable<ClassFactory> RegisterClassFactories(DriverDiscovery drivers)
         {
-            s_ClassFactories = new ArrayList();
-            foreach (var type in s_ComObjectTypes)
+        var registeredFactories = new List<ClassFactory>();
+        foreach (var type in drivers.DiscoveredTypes)
             {
-                var factory = new ClassFactory(type); // Use default context & flags
-                s_ClassFactories.Add(factory);
-                if (!factory.RegisterClassObject())
+            var factory = new ClassFactory(type); // Use default context & flags
+            if (factory.RegisterClassObject())
                 {
-                    MessageBox.Show("Failed to register class factory for " + type.Name,
-                        "TA.SnapCap.Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    return false;
+                registeredFactories.Add(factory);
+                }
+            else
+                {
+                Log.Fatal()
+                    .Message("Failed to register class factory for {type}", type.Name)
+                    .Write();
                 }
             }
-            ClassFactory.ResumeClassObjects(); // Served objects now go live
-            return true;
+        ClassFactory.ResumeClassObjects(); // Served objects now go live
+        return registeredFactories;
         }
 
-        private static void RevokeClassFactories()
+    private static void RevokeClassFactories(IEnumerable<ClassFactory> factories)
         {
-            ClassFactory.SuspendClassObjects(); // Prevent race conditions
-            foreach (ClassFactory factory in s_ClassFactories)
-                factory.RevokeClassObject();
+        ClassFactory.SuspendClassObjects(); // Prevent race conditions
+        foreach (var factory in factories)
+            factory.RevokeClassObject();
         }
 
-        #endregion
+    #endregion
     }
-}
+    }
