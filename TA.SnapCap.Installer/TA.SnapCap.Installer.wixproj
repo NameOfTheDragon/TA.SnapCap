@@ -47,7 +47,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TA.PostSharp.Aspects\TA.PostSharp.Aspects.csproj">
+    <ProjectReference Include="..\TA.PostSharp.Aspects\TA.SnapCap.Aspects.csproj">
       <Name>Aspects</Name>
       <Project>{9cdcf319-dadc-41eb-b787-de3862017e95}</Project>
       <Private>True</Private>

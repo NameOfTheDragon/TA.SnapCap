@@ -1,14 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29311.281
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.PostSharp.Aspects", "TA.PostSharp.Aspects\TA.PostSharp.Aspects.csproj", "{9CDCF319-DADC-41EB-B787-DE3862017E95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.Aspects", "TA.PostSharp.Aspects\TA.SnapCap.Aspects.csproj", "{9CDCF319-DADC-41EB-B787-DE3862017E95}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Shared Items", "Solution Shared Items", "{2D14AE63-4259-4517-8C0B-B5A2A6D47007}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
@@ -22,7 +21,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.AscomSwitch", "T
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TA.SnapCap.Installer", "TA.SnapCap.Installer\TA.SnapCap.Installer.wixproj", "{DE875CEB-B5E0-4B60-B991-DA7261B1D6CC}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TA.SnapCap.SharedCode", "TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.shproj", "{60286353-AE35-4A4D-8BA4-ADEE435BDDC7}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{3015f05f-d747-4c3e-a0d4-ec2b3bd76c56}*SharedItemsImports = 4
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{3689a2cb-94c5-4012-a5cf-7e7d1dd27143}*SharedItemsImports = 4
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{60286353-ae35-4a4d-8ba4-adee435bddc7}*SharedItemsImports = 13
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{9cdcf319-dadc-41eb-b787-de3862017e95}*SharedItemsImports = 4
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{c006703f-2193-481d-aa15-f46d2fb2a21b}*SharedItemsImports = 4
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{ed0fe6aa-e1e5-4d21-9b5e-802d50edcce1}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -81,5 +90,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {443C5521-EBEC-4337-8085-1C679BB347DE}
 	EndGlobalSection
 EndGlobal

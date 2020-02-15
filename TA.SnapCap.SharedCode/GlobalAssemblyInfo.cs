@@ -1,10 +1,4 @@
-﻿// This file is part of the TA.SnapCap project
-//
-// Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
-//
-// File: GlobalAssemblyInfo.cs  Created: 2017-05-07@12:52
-// Last modified: 2017-06-13@16:09 by Tim Long
-
+﻿
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

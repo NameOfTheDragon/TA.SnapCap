@@ -20,7 +20,7 @@ using ASCOM;
 using ASCOM.Utilities;
 using Microsoft.Win32;
 using NLog;
-using TA.PostSharp.Aspects;
+using TA.SnapCap.Aspects;
 
 namespace TA.SnapCap.Server
 {

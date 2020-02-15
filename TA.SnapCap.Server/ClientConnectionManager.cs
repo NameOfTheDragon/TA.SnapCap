@@ -12,7 +12,7 @@ using NLog;
 using PostSharp.Patterns.Model;
 using PostSharp.Patterns.Threading;
 using TA.Ascom.ReactiveCommunications;
-using TA.PostSharp.Aspects;
+using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
 
 namespace TA.SnapCap.Server

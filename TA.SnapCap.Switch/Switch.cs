@@ -15,7 +15,7 @@ using ASCOM;
 using ASCOM.DeviceInterface;
 using JetBrains.Annotations;
 using NLog;
-using TA.PostSharp.Aspects;
+using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
 using TA.SnapCap.Server;
 using TA.SnapCap.Server.Properties;
