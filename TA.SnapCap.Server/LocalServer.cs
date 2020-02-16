@@ -1,12 +1,10 @@
 // This file is part of the TA.SnapCap project
 //
-// Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
+// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
 //
-// File: LocalServer.cs  Created: 2017-05-07@12:52
-// Last modified: 2017-06-13@15:10 by Tim Long
+// File: LocalServer.cs  Last modified: 2020-02-16@01:46 by Tim Long
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -26,9 +24,9 @@ using TA.SnapCap.Aspects;
 using TA.SnapCap.Server.ExtensionMethods;
 
 namespace TA.SnapCap.Server
-{
-    public static class Server
     {
+    public static class Server
+        {
         private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         // This property returns the main thread's id.
@@ -38,7 +36,6 @@ namespace TA.SnapCap.Server
         public static bool StartedByCOM { get; private set; } // True if server started by COM (-embedding)
 
         #region SERVER ENTRY POINT (main)
-
         //
         // ==================
         // SERVER ENTRY POINT
@@ -47,7 +44,7 @@ namespace TA.SnapCap.Server
         [STAThread]
         [NLogTraceWithArguments]
         private static void Main(string[] args)
-        {
+            {
 #if DEBUG
             MessageBox.Show("Attach the debugger now");
 #endif
@@ -56,21 +53,20 @@ namespace TA.SnapCap.Server
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
             LogVersionStrings();
 
-
-        var drivers = new DriverDiscovery();
-        drivers.DiscoverServedClasses();
-        if (!drivers.DiscoveredTypes.Any())
-            {
-            Log.Fatal()
-                .Message(
-                    "No driver classes found. Have you added ServedClassName attributes to your driver classes?")
-                .Write();
-            return;
-            }
+            var drivers = new DriverDiscovery();
+            drivers.DiscoverServedClasses();
+            if (!drivers.DiscoveredTypes.Any())
+                {
+                Log.Fatal()
+                    .Message(
+                        "No driver classes found. Have you added ServedClassName attributes to your driver classes?")
+                    .Write();
+                return;
+                }
             if (!ProcessArguments(drivers, args)) return; // Register/Unregister
 
             // Initialize critical member variables.
-            objsInUse = 0;
+            objectsInUse = 0;
             serverLocks = 0;
             MainThreadId = GetCurrentThreadId();
             Thread.CurrentThread.Name = "Main Thread";
@@ -117,89 +113,87 @@ namespace TA.SnapCap.Server
         #endregion
 
         #region Command Line Arguments
-
-    //
-    // ProcessArguments() will process the command-line arguments
-    // If the return value is true, we carry on and start this application.
-    // If the return value is false, we terminate this application immediately.
-    //
-    private static bool ProcessArguments(DriverDiscovery drivers, string[] args)
-        {
-        var bRet = true;
-
         //
-        //**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
+        // ProcessArguments() will process the command-line arguments
+        // If the return value is true, we carry on and start this application.
+        // If the return value is false, we terminate this application immediately.
         //
-        if (args.Length > 0)
+        private static bool ProcessArguments(DriverDiscovery drivers, string[] args)
             {
-            switch (args[0].ToLower())
+            var bRet = true;
+
+            //
+            //**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
+            //
+            if (args.Length > 0)
                 {
-                    case "-embedding":
-                        StartedByCOM = true; // Indicate COM started us
-                        break;
+                switch (args[0].ToLower())
+                    {
+                        case "-embedding":
+                            StartedByCOM = true; // Indicate COM started us
+                            break;
 
-                    case "-register":
-                    case @"/register":
-                    case "-regserver": // Emulate VB6
-                    case @"/regserver":
-                        RegisterObjects(drivers); // Register each served object
-                        bRet = false;
-                        break;
+                        case "-register":
+                        case @"/register":
+                        case "-regserver": // Emulate VB6
+                        case @"/regserver":
+                            RegisterObjects(drivers); // Register each served object
+                            bRet = false;
+                            break;
 
-                    case "-unregister":
-                    case @"/unregister":
-                    case "-unregserver": // Emulate VB6
-                    case @"/unregserver":
-                        UnregisterObjects(drivers); //Unregister each served object
-                        bRet = false;
-                        break;
+                        case "-unregister":
+                        case @"/unregister":
+                        case "-unregserver": // Emulate VB6
+                        case @"/unregserver":
+                            UnregisterObjects(drivers); //Unregister each served object
+                            bRet = false;
+                            break;
 
-                    default:
-                        MessageBox.Show(
-                            "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-                            "ASCOM driver for Arduino Power Controller", MessageBoxButtons.OK,
-                            MessageBoxIcon.Exclamation);
-                        break;
+                        default:
+                            MessageBox.Show(
+                                "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
+                                "ASCOM driver for Arduino Power Controller", MessageBoxButtons.OK,
+                                MessageBoxIcon.Exclamation);
+                            break;
+                    }
                 }
+            else
+                StartedByCOM = false;
+
+            return bRet;
             }
-        else
-            StartedByCOM = false;
-
-        return bRet;
-        }
-
         #endregion
 
         private static void UnhandledException(object sender, UnhandledExceptionEventArgs ea)
-        {
+            {
             Log.Error((Exception) ea.ExceptionObject, "Unhandled exception");
-        }
+            }
 
         private static void UnhandledThreadException(object sender, ThreadExceptionEventArgs ea)
-        {
+            {
             Log.Error(ea.Exception, "Unhandled thread exception");
-        }
+            }
 
         // -----------------
         // PRIVATE FUNCTIONS
         // -----------------
-    private static void LogVersionStrings()
-        {
-        // var assembly = Assembly.GetExecutingAssembly();
-        // var assemblyName = assembly.GetName().Name;
-        // var git = assembly.GetType(assemblyName + ".GitVersionInformation");
-        Log.Info("Git Commit ID: {fullCommit}", GitVersionExtensions.GitCommitSha);
-        Log.Info("Git Short ID: {shortCommit}", GitVersionExtensions.GitCommitShortSha);
-        Log.Info("Commit Date: {commitDate}", GitVersionExtensions.GitCommitDate);
-        Log.Info("Semantic version: {semVer}", GitVersionExtensions.GitSemVer);
-        Log.Info("Full Semantic version: {fullSemVer}", GitVersionExtensions.GitFullSemVer);
-        Log.Info("Build metadata: {buildMetadata}", GitVersionExtensions.GitBuildMetadata);
-        Log.Info("Informational Version: {informationalVersion}", GitVersionExtensions.GitInformationalVersion);
-        }
+        private static void LogVersionStrings()
+            {
+            // var assembly = Assembly.GetExecutingAssembly();
+            // var assemblyName = assembly.GetName().Name;
+            // var git = assembly.GetType(assemblyName + ".GitVersionInformation");
+            Log.Info("Git Commit ID: {fullCommit}", GitVersionExtensions.GitCommitSha);
+            Log.Info("Git Short ID: {shortCommit}", GitVersionExtensions.GitCommitShortSha);
+            Log.Info("Commit Date: {commitDate}", GitVersionExtensions.GitCommitDate);
+            Log.Info("Semantic version: {semVer}", GitVersionExtensions.GitSemVer);
+            Log.Info("Full Semantic version: {fullSemVer}", GitVersionExtensions.GitFullSemVer);
+            Log.Info("Build metadata: {buildMetadata}", GitVersionExtensions.GitBuildMetadata);
+            Log.Info("Informational Version: {informationalVersion}", GitVersionExtensions.GitInformationalVersion);
+            }
 
         #region Dynamic Driver Assembly Loader
-    private static Assembly CurrentDomainOnReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
-        {
+        private static Assembly CurrentDomainOnReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
+            {
             try
                 {
                 Log.Info(
@@ -214,15 +208,13 @@ namespace TA.SnapCap.Server
                 Log.Error(ex, $"Failed to resolve assembly: {args.Name}");
                 return null; // Let the app raise its own error.
                 }
-        }
-
+            }
         #endregion
 
         #region Access to kernel32.dll, user32.dll, and ole32.dll functions
-
         [Flags]
         private enum CLSCTX : uint
-        {
+            {
             CLSCTX_INPROC_SERVER = 0x1,
             CLSCTX_INPROC_HANDLER = 0x2,
             CLSCTX_LOCAL_SERVER = 0x4,
@@ -244,11 +236,11 @@ namespace TA.SnapCap.Server
             CLSCTX_INPROC = CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER,
             CLSCTX_SERVER = CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER,
             CLSCTX_ALL = CLSCTX_SERVER | CLSCTX_INPROC_HANDLER
-        }
+            }
 
         [Flags]
         private enum COINIT : uint
-        {
+            {
             /// Initializes the thread for multi-threaded object concurrency.
             COINIT_MULTITHREADED = 0x0,
 
@@ -260,18 +252,17 @@ namespace TA.SnapCap.Server
 
             /// Trades memory for speed.
             COINIT_SPEED_OVER_MEMORY = 0x8
-        }
+            }
 
         [Flags]
         private enum REGCLS : uint
-        {
+            {
             REGCLS_SINGLEUSE = 0,
             REGCLS_MULTIPLEUSE = 1,
             REGCLS_MULTI_SEPARATE = 2,
             REGCLS_SUSPENDED = 4,
             REGCLS_SURROGATE = 8
-        }
-
+            }
 
         // CoInitializeEx() can be used to set the apartment model
         // of individual threads.
@@ -295,49 +286,41 @@ namespace TA.SnapCap.Server
         // the main thread.
         [DllImport("kernel32.dll")]
         private static extern uint GetCurrentThreadId();
-
         #endregion
 
         #region Private Data
-
-        private static int objsInUse; // Keeps a count on the total number of objects alive.
+        private static int objectsInUse; // Keeps a count on the total number of objects alive.
         private static int serverLocks; // Keeps a lock count on this application.
-        private static ServerStatusDisplay s_MainForm; // Reference to our main form
-        private static List<string> s_ComObjectAssys; // Dynamically loaded assemblies containing served COM objects
-        private static List<Type> s_ComObjectTypes; // Served COM object types
-        private static ArrayList s_ClassFactories; // Served COM object class factories
         private static readonly string s_appId = "{390d6b29-41e0-4162-8ddd-b525466d9ca5}"; // Our AppId
         private static readonly object lockObject = new object();
-
         #endregion
 
         #region Server Lock, Object Counting, and AutoQuit on COM startup
-
         // Returns the total number of objects alive currently.
         public static int ObjectsCount
             {
             get
                 {
                 lock (lockObject)
-                {
-                    return objsInUse;
-                }
+                    {
+                    return objectsInUse;
+                    }
                 }
             }
 
         // This method performs a thread-safe incrementation of the objects count.
         public static int CountObject()
-        {
+            {
             // Increment the global count of objects.
-            return Interlocked.Increment(ref objsInUse);
-        }
+            return Interlocked.Increment(ref objectsInUse);
+            }
 
         // This method performs a thread-safe decrementation the objects count.
         public static int UncountObject()
-        {
+            {
             // Decrement the global count of objects.
-            return Interlocked.Decrement(ref objsInUse);
-        }
+            return Interlocked.Decrement(ref objectsInUse);
+            }
 
         // Returns the current server lock count.
         public static int ServerLockCount
@@ -345,27 +328,27 @@ namespace TA.SnapCap.Server
             get
                 {
                 lock (lockObject)
-                {
+                    {
                     return serverLocks;
-                }
+                    }
                 }
             }
 
         // This method performs a thread-safe incrementation the
         // server lock count.
         public static int CountLock()
-        {
+            {
             // Increment the global lock count of this server.
             return Interlocked.Increment(ref serverLocks);
-        }
+            }
 
         // This method performs a thread-safe decrementation the
         // server lock count.
         public static int UncountLock()
-        {
+            {
             // Decrement the global lock count of this server.
             return Interlocked.Decrement(ref serverLocks);
-        }
+            }
 
         // AttemptToTerminateServer() will check to see if the objects count and the server
         // lock count have both dropped to zero.
@@ -375,31 +358,29 @@ namespace TA.SnapCap.Server
         // of this application. If hand-started, then just trace that it WOULD exit now.
         //
         public static void ExitIf()
-        {
-            lock (lockObject)
             {
-                if (ObjectsCount <= 0 && ServerLockCount <= 0)
+            lock (lockObject)
                 {
-                    if (StartedByCOM)
+                if (ObjectsCount <= 0 && ServerLockCount <= 0)
                     {
+                    if (StartedByCOM)
+                        {
                         var wParam = new UIntPtr(0);
                         var lParam = new IntPtr(0);
                         PostThreadMessage(MainThreadId, 0x0012, wParam, lParam);
+                        }
                     }
                 }
             }
-        }
 
         public static void TerminateLocalServer()
-        {
+            {
             if (StartedByCOM)
                 Application.Exit();
-        }
-
+            }
         #endregion
 
         #region COM Registration and Unregistration
-
         //
         // Test if running elevated
         //
@@ -417,39 +398,36 @@ namespace TA.SnapCap.Server
         // Elevate by re-running ourselves with elevation dialog
         //
         private static void ElevateSelf(string arg)
-        {
+            {
             var si = new ProcessStartInfo();
             si.Arguments = arg;
             si.WorkingDirectory = Environment.CurrentDirectory;
             si.FileName = Application.ExecutablePath;
             si.Verb = "runas";
             try
-            {
+                {
                 Process.Start(si);
-            }
+                }
             catch (Win32Exception)
-            {
+                {
                 MessageBox.Show(
                     "The LocalServer was not " + (arg == "/register" ? "registered" : "unregistered") +
                     " because you did not allow it.", SharedResources.SwitchDriverId, MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
-            }
+                }
             catch (Exception ex)
-            {
+                {
                 MessageBox.Show(ex.ToString(), SharedResources.SwitchDriverId, MessageBoxButtons.OK,
                     MessageBoxIcon.Stop);
+                }
             }
-        }
 
-        /// <summary>
-        ///     Registers the discovered driver types for COM and with the ASCOM Profile Store.
-        /// </summary>
+        /// <summary>Registers the discovered driver types for COM and with the ASCOM Profile Store.</summary>
         /// <param name="drivers">The discovered drivers.</param>
         /// <remarks>
-        ///     Registers each discovered driver type with COM so that applications
-        ///     can find it and load it by ProgID (i.e. via the ASCOM Chooser).
-        ///     Also adds DCOM info for the LocalServer itself, so it can be activated
-        ///     via an outbound connection from TheSky.
+        ///     Registers each discovered driver type with COM so that applications can find it and load it by
+        ///     ProgID (i.e. via the ASCOM Chooser). Also adds DCOM info for the LocalServer itself, so it can
+        ///     be activated via an outbound connection from TheSky.
         /// </remarks>
         private static void RegisterObjects(DriverDiscovery drivers)
             {
@@ -464,9 +442,9 @@ namespace TA.SnapCap.Server
 
             var assy = Assembly.GetExecutingAssembly();
             var attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
-            var assyTitle = ((AssemblyTitleAttribute)attr).Title;
+            var assyTitle = ((AssemblyTitleAttribute) attr).Title;
             attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyDescriptionAttribute));
-            var assyDescription = ((AssemblyDescriptionAttribute)attr).Description;
+            var assyDescription = ((AssemblyDescriptionAttribute) attr).Description;
 
             //
             // Local server's DCOM/AppID information
@@ -551,7 +529,7 @@ namespace TA.SnapCap.Server
                     // Pull the display name from the ServedClassName attribute.
                     attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute));
                     //PWGS Changed to search type for attribute rather than assembly
-                    var chooserName = ((ServedClassNameAttribute)attr).DisplayName ?? "MultiServer";
+                    var chooserName = ((ServedClassNameAttribute) attr).DisplayName ?? "MultiServer";
                     using (var P = new Profile())
                         {
                         P.DeviceType = deviceType;
@@ -628,48 +606,44 @@ namespace TA.SnapCap.Server
                         P.Unregister(progid);
                         }
                     }
-                catch (Exception)
-                    {
-                    }
+                catch (Exception) { }
                 }
             }
         #endregion
 
         #region Class Factory Support
-
         //
         // Register the class factories of the COM objects (drivers)
         // that we serve. This requires the class factory name to be
         // equal to the served class name + "ClassFactory".
         //
         private static IEnumerable<ClassFactory> RegisterClassFactories(DriverDiscovery drivers)
-        {
-        var registeredFactories = new List<ClassFactory>();
-        foreach (var type in drivers.DiscoveredTypes)
             {
-            var factory = new ClassFactory(type); // Use default context & flags
-            if (factory.RegisterClassObject())
+            var registeredFactories = new List<ClassFactory>();
+            foreach (var type in drivers.DiscoveredTypes)
                 {
-                registeredFactories.Add(factory);
+                var factory = new ClassFactory(type); // Use default context & flags
+                if (factory.RegisterClassObject())
+                    {
+                    registeredFactories.Add(factory);
+                    }
+                else
+                    {
+                    Log.Fatal()
+                        .Message("Failed to register class factory for {type}", type.Name)
+                        .Write();
+                    }
                 }
-            else
-                {
-                Log.Fatal()
-                    .Message("Failed to register class factory for {type}", type.Name)
-                    .Write();
-                }
+            ClassFactory.ResumeClassObjects(); // Served objects now go live
+            return registeredFactories;
             }
-        ClassFactory.ResumeClassObjects(); // Served objects now go live
-        return registeredFactories;
-        }
 
-    private static void RevokeClassFactories(IEnumerable<ClassFactory> factories)
-        {
-        ClassFactory.SuspendClassObjects(); // Prevent race conditions
-        foreach (var factory in factories)
-            factory.RevokeClassObject();
+        private static void RevokeClassFactories(IEnumerable<ClassFactory> factories)
+            {
+            ClassFactory.SuspendClassObjects(); // Prevent race conditions
+            foreach (var factory in factories)
+                factory.RevokeClassObject();
+            }
+        #endregion
         }
-
-    #endregion
-    }
     }
