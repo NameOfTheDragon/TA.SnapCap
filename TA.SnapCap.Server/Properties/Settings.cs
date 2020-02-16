@@ -20,7 +20,7 @@ namespace TA.SnapCap.Server.Properties
     //  The SettingsLoaded event is raised after the setting values are loaded.
     //  The SettingsSaving event is raised before the setting values are saved.
     [SettingsProvider(typeof(SettingsProvider))]
-    [DeviceId(SharedResources.SwitchDriverId, DeviceName = SharedResources.SwitchDriverName)]
+    [DeviceId(SharedResources.SwitchDriverId, DeviceName = SharedResources.DriverName)]
     public sealed partial class Settings
         {
         private readonly ILogger log = LogManager.GetCurrentClassLogger();

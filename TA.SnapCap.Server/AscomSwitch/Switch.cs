@@ -1,7 +1,7 @@
 ﻿// This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: Switch.cs  Last modified: 2020-02-15@19:31 by Tim Long
 
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace TA.SnapCap.Server.AscomSwitch
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     [UsedImplicitly]
-    [ServedClassName(SharedResources.SwitchDriverName)]
+    [ServedClassName(SharedResources.DriverName)]
     [NLogTraceWithArguments]
     public class Switch : AscomDriverBase, ISwitchV2
         {

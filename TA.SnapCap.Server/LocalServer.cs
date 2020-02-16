@@ -118,21 +118,21 @@ namespace TA.SnapCap.Server
 
         #region Command Line Arguments
 
-        //
-        // ProcessArguments() will process the command-line arguments
-        // If the return value is true, we carry on and start this application.
-        // If the return value is false, we terminate this application immediately.
-        //
-        private static bool ProcessArguments(string[] args)
+    //
+    // ProcessArguments() will process the command-line arguments
+    // If the return value is true, we carry on and start this application.
+    // If the return value is false, we terminate this application immediately.
+    //
+    private static bool ProcessArguments(DriverDiscovery drivers, string[] args)
         {
-            var bRet = true;
+        var bRet = true;
 
-            //
-            //**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
-            //
-            if (args.Length > 0)
+        //
+        //**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
+        //
+        if (args.Length > 0)
             {
-                switch (args[0].ToLower())
+            switch (args[0].ToLower())
                 {
                     case "-embedding":
                         StartedByCOM = true; // Indicate COM started us
@@ -142,7 +142,7 @@ namespace TA.SnapCap.Server
                     case @"/register":
                     case "-regserver": // Emulate VB6
                     case @"/regserver":
-                        RegisterObjects(); // Register each served object
+                        RegisterObjects(drivers); // Register each served object
                         bRet = false;
                         break;
 
@@ -150,22 +150,22 @@ namespace TA.SnapCap.Server
                     case @"/unregister":
                     case "-unregserver": // Emulate VB6
                     case @"/unregserver":
-                        UnregisterObjects(); //Unregister each served object
+                        UnregisterObjects(drivers); //Unregister each served object
                         bRet = false;
                         break;
 
                     default:
                         MessageBox.Show(
                             "Unknown argument: " + args[0] + "\nValid are : -register, -unregister and -embedding",
-                            "ASCOM driver for SnapCap", MessageBoxButtons.OK,
+                            "ASCOM driver for Arduino Power Controller", MessageBoxButtons.OK,
                             MessageBoxIcon.Exclamation);
                         break;
                 }
             }
-            else
-                StartedByCOM = false;
+        else
+            StartedByCOM = false;
 
-            return bRet;
+        return bRet;
         }
 
         #endregion
@@ -198,39 +198,7 @@ namespace TA.SnapCap.Server
         }
 
         #region Dynamic Driver Assembly Loader
-
-        /// <summary>
-        ///     Load the assemblies that we will serve via COM. These will be located in the same
-        ///     folder as out executable and will have at least one type decorated with a
-        ///     <see cref="ServedClassNameAttribute" />
-        /// </summary>
-        /// <returns>The count of types found.</returns>
-        private static int LoadComObjectAssemblies()
-        {
-            Log.Info("Loading served COM classes");
-            try
-            {
-                // Discover assemblies and types to be served in Reflection Only context in an isolated AppDomain
-                using (var reflectionContext = new AppDomainIsolated<ServedComClassLocator>())
-                {
-                    reflectionContext.Worker.DiscoverServedClasses();
-                    s_ComObjectAssys = new List<string>(reflectionContext.Worker.DiscoveredAssemblyNames);
-                    s_ComObjectTypes = new List<Type>(reflectionContext.Worker.DiscoveredTypes);
-                }
-                // Now load the discovered assemblies into the current domain's execution context
-                foreach (var assemblyName in s_ComObjectAssys)
-                {
-                    Assembly.Load(assemblyName);
-                }
-                return s_ComObjectTypes.Count;
-            }
-            finally
-            {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomainOnReflectionOnlyAssemblyResolve;
-            }
-        }
-
-        private static Assembly CurrentDomainOnReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
+    private static Assembly CurrentDomainOnReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
         {
             try
                 {
@@ -473,75 +441,71 @@ namespace TA.SnapCap.Server
             }
         }
 
-        //
-        // Do everything to register this for COM. Never use REGASM on
-        // this exe assembly! It would create InProcServer32 entries
-        // which would prevent proper activation!
-        //
-        // Using the list of COM object types generated during dynamic
-        // assembly loading, it registers each one for COM as served by our
-        // exe/local server, as well as registering it for ASCOM. It also
-        // adds DCOM info for the local server itself, so it can be activated
-        // via an outboiud connection from TheSky.
-        //
-        private static void RegisterObjects()
-        {
-            if (!IsAdministrator)
+        /// <summary>
+        ///     Registers the discovered driver types for COM and with the ASCOM Profile Store.
+        /// </summary>
+        /// <param name="drivers">The discovered drivers.</param>
+        /// <remarks>
+        ///     Registers each discovered driver type with COM so that applications
+        ///     can find it and load it by ProgID (i.e. via the ASCOM Chooser).
+        ///     Also adds DCOM info for the LocalServer itself, so it can be activated
+        ///     via an outbound connection from TheSky.
+        /// </remarks>
+        private static void RegisterObjects(DriverDiscovery drivers)
             {
+            if (!IsAdministrator)
+                {
                 ElevateSelf("/register");
                 return;
-            }
+                }
             //
             // If reached here, we're running elevated
             //
 
             var assy = Assembly.GetExecutingAssembly();
             var attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
-            var assyTitle = ((AssemblyTitleAttribute) attr).Title;
+            var assyTitle = ((AssemblyTitleAttribute)attr).Title;
             attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyDescriptionAttribute));
-            var assyDescription = ((AssemblyDescriptionAttribute) attr).Description;
+            var assyDescription = ((AssemblyDescriptionAttribute)attr).Description;
 
             //
             // Local server's DCOM/AppID information
             //
             try
-            {
+                {
                 //
                 // HKCR\APPID\appid
                 //
                 using (var key = Registry.ClassesRoot.CreateSubKey("APPID\\" + s_appId))
-                {
+                    {
                     key.SetValue(null, assyDescription);
                     key.SetValue("AppID", s_appId);
                     key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
-                }
+                    }
                 //
                 // HKCR\APPID\exename.ext
                 //
                 using (var key = Registry.ClassesRoot.CreateSubKey(string.Format("APPID\\{0}",
                     Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1))))
-                {
+                    {
                     key.SetValue("AppID", s_appId);
+                    }
                 }
-            }
             catch (Exception ex)
-            {
+                {
                 MessageBox.Show("Error while registering the server:\n" + ex,
                     SharedResources.SwitchDriverId, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
-            }
-            finally
-            {
-            }
+                }
 
             //
             // For each of the driver assemblies
             //
-            foreach (var type in s_ComObjectTypes)
-            {
+            foreach (var type in drivers.DiscoveredTypes)
+                {
                 var bFail = false;
                 try
-                {
+                    {
                     //
                     // HKCR\CLSID\clsid
                     //
@@ -551,34 +515,34 @@ namespace TA.SnapCap.Server
                     var deviceType = type.Name;
 
                     using (var key = Registry.ClassesRoot.CreateSubKey(string.Format("CLSID\\{0}", clsid)))
-                    {
+                        {
                         key.SetValue(null, progid); // Could be assyTitle/Desc??, but .NET components show ProgId here
                         key.SetValue("AppId", s_appId);
                         using (var key2 = key.CreateSubKey("Implemented Categories"))
-                        {
+                            {
                             key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
-                        }
+                            }
                         using (var key2 = key.CreateSubKey("ProgId"))
-                        {
+                            {
                             key2.SetValue(null, progid);
-                        }
+                            }
                         key.CreateSubKey("Programmable");
                         using (var key2 = key.CreateSubKey("LocalServer32"))
-                        {
+                            {
                             key2.SetValue(null, Application.ExecutablePath);
+                            }
                         }
-                    }
                     //
                     // HKCR\progid
                     //
                     using (var key = Registry.ClassesRoot.CreateSubKey(progid))
-                    {
+                        {
                         key.SetValue(null, assyTitle);
                         using (var key2 = key.CreateSubKey("CLSID"))
-                        {
+                            {
                             key2.SetValue(null, clsid);
+                            }
                         }
-                    }
                     //
                     // ASCOM
                     //
@@ -587,25 +551,22 @@ namespace TA.SnapCap.Server
                     // Pull the display name from the ServedClassName attribute.
                     attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute));
                     //PWGS Changed to search type for attribute rather than assembly
-                    var chooserName = ((ServedClassNameAttribute) attr).DisplayName ?? "MultiServer";
+                    var chooserName = ((ServedClassNameAttribute)attr).DisplayName ?? "MultiServer";
                     using (var P = new Profile())
-                    {
+                        {
                         P.DeviceType = deviceType;
                         P.Register(progid, chooserName);
+                        }
                     }
-                }
                 catch (Exception ex)
-                {
+                    {
                     MessageBox.Show("Error while registering the server:\n" + ex,
                         SharedResources.SwitchDriverId, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     bFail = true;
-                }
-                finally
-                {
-                }
+                    }
                 if (bFail) break;
+                }
             }
-        }
 
         //
         // Remove all traces of this from the registry.
@@ -613,13 +574,13 @@ namespace TA.SnapCap.Server
         // **TODO** If the above does AppID/DCOM stuff, this would have
         // to remove that stuff too.
         //
-        private static void UnregisterObjects()
-        {
-            if (!IsAdministrator)
+        private static void UnregisterObjects(DriverDiscovery drivers)
             {
+            if (!IsAdministrator)
+                {
                 ElevateSelf("/unregister");
                 return;
-            }
+                }
 
             //
             // Local server's DCOM/AppID information
@@ -631,8 +592,8 @@ namespace TA.SnapCap.Server
             //
             // For each of the driver assemblies
             //
-            foreach (var type in s_ComObjectTypes)
-            {
+            foreach (var type in drivers.DiscoveredTypes)
+                {
                 var clsid = Marshal.GenerateGuidForType(type).ToString("B");
                 var progid = Marshal.GenerateProgIdForType(type);
                 var deviceType = type.Name;
@@ -657,32 +618,31 @@ namespace TA.SnapCap.Server
                 Registry.ClassesRoot.DeleteSubKey(string.Format("CLSID\\{0}\\Programmable", clsid), false);
                 Registry.ClassesRoot.DeleteSubKey(string.Format("CLSID\\{0}", clsid), false);
                 try
-                {
+                    {
                     //
                     // ASCOM
                     //
                     using (var P = new Profile())
-                    {
+                        {
                         P.DeviceType = deviceType;
                         P.Unregister(progid);
+                        }
+                    }
+                catch (Exception)
+                    {
                     }
                 }
-                catch (Exception)
-                {
-                }
             }
-        }
-
         #endregion
 
-    #region Class Factory Support
+        #region Class Factory Support
 
-    //
-    // Register the class factories of the COM objects (drivers)
-    // that we serve. This requires the class factory name to be
-    // equal to the served class name + "ClassFactory".
-    //
-    private static IEnumerable<ClassFactory> RegisterClassFactories(DriverDiscovery drivers)
+        //
+        // Register the class factories of the COM objects (drivers)
+        // that we serve. This requires the class factory name to be
+        // equal to the served class name + "ClassFactory".
+        //
+        private static IEnumerable<ClassFactory> RegisterClassFactories(DriverDiscovery drivers)
         {
         var registeredFactories = new List<ClassFactory>();
         foreach (var type in drivers.DiscoveredTypes)

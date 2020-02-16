@@ -51,7 +51,7 @@ Professionally developed by Tigra Astronomy";
         public abstract short InterfaceVersion { get; }
 
         /// <summary>The short name of the driver, for display purposes</summary>
-        public string Name => SharedResources.SwitchDriverName;
+        public string Name => SharedResources.DriverName;
 
         /// <summary>Returns the list of action names supported by this driver (currently none supported).</summary>
         public ArrayList SupportedActions => new ArrayList();

@@ -1,7 +1,7 @@
 ﻿// This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: DeviceController.cs  Created: 2017-05-07@12:52
 // Last modified: 2017-05-11@02:52 by Tim Long
 
@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using NLog;
+using NLog.Fluent;
 using PostSharp.Patterns.Model;
 using TA.Ascom.ReactiveCommunications;
 
@@ -80,21 +81,29 @@ namespace TA.SnapCap.DeviceInterface
         }
 
         /// <summary>
-        ///     Close the connection to the AWR system. This should never fail.
+        ///     Close the connection to the target system. This should never fail.
         /// </summary>
         public void Close()
         {
             log.Warn("Close requested");
-            monitorStateCancellation.Cancel(); // Cancel any background monitoring.
-            if (!IsOnline)
+        try
             {
-                log.Warn("Ignoring Close request because already closed");
-                return;
+            monitorStateCancellation.Cancel(); // Cancel any background monitoring.
             }
-            log.Info($"Closing device endpoint: {factory.Endpoint}");
-            factory.DestroyTransactionProcessor();
-            log.Info("====== Channel closed: the device is now disconnected ======");
-            OnPropertyChanged(nameof(IsOnline));
+        catch (Exception e)
+            {
+            // Only log the exception because closing cannot fail.
+            Log.Warn().Exception(e).Message("Error when cancelling monitoring task: {message} ", e.Message).Write();
+            }
+        if (!IsOnline)
+            {
+            log.Warn("Ignoring Close request because already closed");
+            return;
+            }
+        log.Info($"Closing device endpoint: {factory.Endpoint}");
+        factory.DestroyTransactionProcessor();
+        log.Info("====== Channel closed: the device is now disconnected ======");
+        OnPropertyChanged(nameof(IsOnline));
         }
 
         public void CloseCap()

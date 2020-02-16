@@ -1,7 +1,7 @@
 // This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: SharedResources.cs  Last modified: 2017-05-06@20:23 by Tim Long
 
 using System;
@@ -23,14 +23,9 @@ namespace TA.SnapCap.Server
     /// </summary>
     public static class SharedResources
         {
-        /// <summary>
-        ///     ASCOM DeviceID (COM ProgID) for the rotator driver.
-        /// </summary>
         public const string SwitchDriverId = "ASCOM.SnapCap.Switch";
-        /// <summary>
-        ///     Driver description for the rotator driver.
-        /// </summary>
-        public const string SwitchDriverName = "SnapCap from Gemini Telescope";
+        public const string DriverName = "SnapCap from Gemini Telescope";
+        public const string CoverCalibratorDriverId = "ASCOM.SnapCap.CoverCalibrator";
 
         private static readonly ILogger Log;
 

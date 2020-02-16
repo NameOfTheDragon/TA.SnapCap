@@ -1,7 +1,7 @@
 ﻿// This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: ReactiveTransactionProcessorFactory.cs  Last modified: 2017-05-06@19:42 by Tim Long
 
 using System;
@@ -18,8 +18,6 @@ namespace TA.SnapCap.DeviceInterface
         public ReactiveTransactionProcessorFactory(string connectionString)
             {
             ConnectionString = connectionString;
-            // Endpoint will be InvalidEndpoint if the connection string is invalid.
-            Endpoint = DeviceEndpoint.FromConnectionString(connectionString);
             }
 
         public string ConnectionString { get; }
@@ -33,13 +31,12 @@ namespace TA.SnapCap.DeviceInterface
         /// <returns>ITransactionProcessor.</returns>
         public ITransactionProcessor CreateTransactionProcessor()
             {
-            Endpoint = DeviceEndpoint.FromConnectionString(ConnectionString);
-            Channel = CommunicationsStackBuilder.BuildChannel(Endpoint);
+            var factory = new ChannelFactory();
+            Channel = factory.FromConnectionString(ConnectionString);
             observer = new TransactionObserver(Channel);
             processor = new ReactiveTransactionProcessor();
             processor.SubscribeTransactionObserver(observer, TimeSpan.FromMilliseconds(100));
             Channel.Open();
-            //Task.Delay(TimeSpan.FromSeconds(2)).Wait(); // Arduino needs 2 seconds to initialize
             Thread.Sleep(TimeSpan.FromSeconds(3));
             return processor;
             }
@@ -63,6 +60,6 @@ namespace TA.SnapCap.DeviceInterface
             GC.Collect(3, GCCollectionMode.Forced, blocking: true);
             }
 
-        public DeviceEndpoint Endpoint { get; set; }
+        public DeviceEndpoint Endpoint => Channel.Endpoint;
         }
     }
