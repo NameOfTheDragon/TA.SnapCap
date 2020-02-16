@@ -12,9 +12,9 @@ using TA.SnapCap.Aspects;
 using TA.SnapCap.Server.AscomSwitch;
 
 namespace TA.SnapCap.Server.AscomCoverCalibrator
-    {
+{
     [ProgId(SharedResources.CoverCalibratorDriverId)]
-    [Guid("dd351fb1-ad95-4901-9672-777b93d0fe24")]
+    [Guid("2c2a2dfe-497c-4eed-a808-9d038c2b441a")]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     [UsedImplicitly]
@@ -22,7 +22,7 @@ namespace TA.SnapCap.Server.AscomCoverCalibrator
     [NLogTraceWithArguments]
 
     class CoverCalibrator : AscomDriverBase, ICoverCalibratorV1
-        {
+    {
         /// <inheritdoc />
         public void OpenCover() { }
 
@@ -52,5 +52,5 @@ namespace TA.SnapCap.Server.AscomCoverCalibrator
 
         /// <inheritdoc />
         public int MaxBrightness { get; }
-        }
     }
+}

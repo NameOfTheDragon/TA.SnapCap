@@ -4,10 +4,13 @@
   <Fragment>
     <DirectoryRef Id="INSTALLDIRECTORY"/>
     <ComponentGroup Id="cgAscomLocalServer" Directory="INSTALLDIRECTORY">
+    
       <ComponentGroupRef Id="cgNLog"/>
       <ComponentGroupRef Id="cgDeviceLayer"/>
       <ComponentGroupRef Id="cgReactiveExtensions"/>
       <ComponentGroupRef Id="cgJetBrains"/>
+      <ComponentGroupRef Id="cgWinFormsControls" />
+
       <Component Id="cmpAscomLocalServer" Guid="*" Win64="no">
         <File Id="filLocalServerAssembly"
               Source="$(var.Server.TargetPath)"

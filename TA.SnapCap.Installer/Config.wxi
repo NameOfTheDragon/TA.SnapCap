@@ -19,7 +19,9 @@
   <?define CopyrightNotice="Copyright © 2017 Tigra Astronomy, all rights reserved" ?>
   <?define SwitchDriverClassId="{dd351fb1-ad95-4901-9672-777b93d0fe24}" ?>
   <?define SwitchDriverProgId="ASCOM.SnapCap.Switch" ?>
-  <?define SwitchDriverDescription="SnapCap" ?>
+  <?define SwitchDriverDescription="SnapCap by Gemini Telescope Design" ?>
+  <?define CoverCalibratorDriverClassId="{2c2a2dfe-497c-4eed-a808-9d038c2b441a}" ?>
+  <?define CoverCalibratorDriverProgId="ASCOM.SnapCap.CoverCalibrator" ?>
   <!-- End of User Configuration - do not edit anything beyond this point -->
 
   <!-- Define platform-specific names and locations -->

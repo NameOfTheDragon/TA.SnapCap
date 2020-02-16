@@ -13,19 +13,23 @@
     <OutputPath>bin\Debug\x86\</OutputPath>
     <IntermediateOutputPath>obj\Debug\x86\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\Release\x86\</OutputPath>
     <IntermediateOutputPath>obj\Release\x86\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\Debug\x64\</OutputPath>
     <IntermediateOutputPath>obj\Debug\x64\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\Release\x64\</OutputPath>
     <IntermediateOutputPath>obj\Release\x64\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AscomCustomActions.wxs" />
@@ -41,6 +45,8 @@
     <Compile Include="Product.wxs" />
     <Compile Include="ReactiveAscom.wxs" />
     <Compile Include="ReactiveExtensions.wxs" />
+    <Compile Include="System.wxs" />
+    <Compile Include="WinFormsControls.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config.wxi" />
