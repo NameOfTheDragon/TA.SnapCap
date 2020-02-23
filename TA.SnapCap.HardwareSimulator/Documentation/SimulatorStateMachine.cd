@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TA.DigitalDomeworks.HardwareSimulator.SimulatorState" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <NestedTypes>
+      <Delegate Name="TA.DigitalDomeworks.HardwareSimulator.SimulatorState.StateEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SimulatorState.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACACAAAEAAAAACQAAAhQAAAAAIAAAAAAACA=</HashCode>
+      <FileName>SimulatorState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TA.DigitalDomeworks.HardwareSimulator.SimulatorStateMachine">
+    <Position X="4" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>CKgAAUBIADAAgAQIASAAKCQEAaCAAAAgAAIQAAASQAA=</HashCode>
+      <FileName>SimulatorStateMachine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TA.DigitalDomeworks.HardwareSimulator.StateClosing" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StateClosing.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

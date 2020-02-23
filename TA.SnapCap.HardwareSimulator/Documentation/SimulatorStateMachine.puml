@@ -1,0 +1,18 @@
+﻿@startuml SnapCap Hardware Simulator
+title SnapCap Hardware Simulator
+state Closed
+state Open
+state Opening
+state Closing
+state Stalled
+
+[*] --> Closing : __channelOpen__
+Closed --> Opening : __openRequested__\ndisposition:=moving
+Open --> Closing : __closeRequested__\ndisposition:=moving
+Opening --> Open : __openLimitDetected__\ndisposition:=open
+Opening --> Stalled : __timeout__\ndisposition:=stalled
+Closing --> Closed : __closeLimitDetected__\ndisposition:=closed
+Closing --> Stalled : __timeout__\ndisposition:=stalled
+Stalled --> Opening : __forceOpenRequested__\ndisposition:=moving
+Stalled --> Closing : __forceCloseRequested__\ndisposition:=moving
+@enduml

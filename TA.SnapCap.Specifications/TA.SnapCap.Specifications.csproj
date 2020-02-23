@@ -83,6 +83,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SimulatorSpecs\ChannelCreationSpecs.cs" />
     <Compile Include="TestHelpers\DeviceLayerContextBuilder.cs" />
     <Compile Include="Fakes\BufferInputUntilCompletedTransaction.cs" />
     <Compile Include="Fakes\FakeCommunicationChannel.cs" />
@@ -104,6 +105,10 @@
     <ProjectReference Include="..\TA.SnapCap.DeviceInterface\TA.SnapCap.DeviceInterface.csproj">
       <Project>{3015f05f-d747-4c3e-a0d4-ec2b3bd76c56}</Project>
       <Name>TA.SnapCap.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TA.SnapCap.HardwareSimulator\TA.SnapCap.HardwareSimulator.csproj">
+      <Project>{393c3897-d66d-46f4-abc2-1d59ec96095b}</Project>
+      <Name>TA.SnapCap.HardwareSimulator</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems" Label="Shared" />
