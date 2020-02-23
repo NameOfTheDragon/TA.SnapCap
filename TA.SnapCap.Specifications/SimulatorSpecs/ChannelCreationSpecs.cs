@@ -1,30 +1,20 @@
 ﻿using Machine.Specifications;
 using TA.Ascom.ReactiveCommunications;
 using TA.DigitalDomeworks.HardwareSimulator;
+using TA.SnapCap.Specifications.Contexts;
 
 namespace TA.SnapCap.Specifications.SimulatorSpecs
     {
     // ToDo: there's a builder pattern struggling to get out here
     [Subject(typeof(SimulatorCommunicationsChannel), "create from connection string")]
-    internal class when_creating_a_realtime_simulator
+    internal class when_creating_a_realtime_simulator : with_simulator_context
         {
-        Establish context = () =>
-            {
-            factory = new ChannelFactory();
-            factory.RegisterChannelType(
-                SimulatorEndpoint.IsConnectionStringValid,
-                SimulatorEndpoint.FromConnectionString,
-                endpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint) endpoint)
-                );
-            };
-        Because of = () => channel = factory.FromConnectionString("Simulator:Realtime");
-        It should_be_realtime = () => endpoint.Realtime.ShouldBeTrue();
-
-        static SimulatorCommunicationsChannel simulator => channel as SimulatorCommunicationsChannel;
-        static SimulatorEndpoint endpoint => simulator.Endpoint as SimulatorEndpoint;
-        static ICommunicationChannel channel;
-        static ChannelFactory factory;
+        Establish context = () => Context = Builder
+            .WithRealtimeSimulator()
+            .Build();
+        It should_be_realtime = () => Context.Endpoint.Realtime.ShouldBeTrue();
         }
+
     [Subject(typeof(SimulatorEndpoint), "create from connection string")]
     internal class when_creating_a_test_simulator
         {

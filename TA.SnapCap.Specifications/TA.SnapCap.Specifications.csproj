@@ -83,6 +83,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contexts\SimulatorContext.cs" />
+    <Compile Include="Contexts\SimulatorContextBuilder.cs" />
+    <Compile Include="Contexts\with_simulator_context.cs" />
     <Compile Include="SimulatorSpecs\ChannelCreationSpecs.cs" />
     <Compile Include="TestHelpers\DeviceLayerContextBuilder.cs" />
     <Compile Include="Fakes\BufferInputUntilCompletedTransaction.cs" />
