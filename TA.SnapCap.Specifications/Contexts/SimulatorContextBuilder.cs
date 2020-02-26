@@ -15,6 +15,7 @@ namespace TA.SnapCap.Specifications.Contexts {
         public SimulatorContext Build()
             {
             var factory = new ChannelFactory();
+            factory.ClearRegisteredDevices();
             factory.RegisterChannelType(
                 SimulatorEndpoint.IsConnectionStringValid,
                 SimulatorEndpoint.FromConnectionString,
@@ -23,7 +24,7 @@ namespace TA.SnapCap.Specifications.Contexts {
 
             var context = new SimulatorContext();
             context.Channel = factory.FromConnectionString(connectionString);
-
+            context.Simulator.StateChanged += (args) => context.StateChanges.Add(args);
             return context;
             }
 

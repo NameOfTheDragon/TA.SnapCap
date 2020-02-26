@@ -17,7 +17,7 @@ namespace TA.DigitalDomeworks.HardwareSimulator
     /// </summary>
     public class SimulatorCommunicationsChannel : ICommunicationChannel
         {
-        private readonly SimulatorStateMachine simulator;
+        internal SimulatorStateMachine Simulator { get; }
 
         /// <summary>
         ///     Creates a simulator communications channel from a valid endpoint.
@@ -27,7 +27,7 @@ namespace TA.DigitalDomeworks.HardwareSimulator
             {
             Contract.Requires(endpoint != null);
             Endpoint = endpoint;
-            simulator = new SimulatorStateMachine(endpoint.Realtime, SystemClock.Instance);
+            Simulator = new SimulatorStateMachine(endpoint.Realtime, SystemClock.Instance);
             }
 
         /// <summary>
@@ -38,13 +38,14 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         /// <inheritdoc />
         public void Dispose()
             {
-            simulator?.InputObserver.OnCompleted();
+            Simulator?.InputObserver.OnCompleted();
             }
 
         /// <inheritdoc />
         public void Open()
             {
             IsOpen = true;
+            Simulator.Initialize(new StateClosing(Simulator));
             }
 
         /// <inheritdoc />
@@ -57,11 +58,11 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         public void Send(string txData)
             {
             SendLog.Add(txData);
-            foreach (var c in txData) simulator.InputObserver.OnNext(c);
+            foreach (var c in txData) Simulator.InputObserver.OnNext(c);
             }
 
         /// <inheritdoc />
-        public IObservable<char> ObservableReceivedCharacters => simulator.ObservableResponses;
+        public IObservable<char> ObservableReceivedCharacters => Simulator.ObservableResponses;
 
         /// <inheritdoc />
         public bool IsOpen { get; private set; }

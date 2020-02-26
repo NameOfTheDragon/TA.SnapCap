@@ -90,6 +90,12 @@
 	
 	
 	<s:String x:Key="/Default/Environment/Hierarchy/PsiConfigurationSettingsKey/CustomLocation/@EntryValue">C:\Users\Tim\AppData\Local\JetBrains\Transient\ReSharperPlatformVs15\v08_dfa3260a\SolutionCaches</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=60D92204D060804AB4D45DE0DF567C38/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=60D92204D060804AB4D45DE0DF567C38/AbsolutePath/@EntryValue">C:\Users\Tim\source\repos\ta.snapcap\TA.SnapCap.Specifications\TA.SnapCap.Specifications.csproj.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=60D92204D060804AB4D45DE0DF567C38/RelativePath/@EntryValue">..\TA.SnapCap.Specifications\TA.SnapCap.Specifications.csproj.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File60D92204D060804AB4D45DE0DF567C38/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File60D92204D060804AB4D45DE0DF567C38/IsOn/@EntryValue">False</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File60D92204D060804AB4D45DE0DF567C38/RelativePriority/@EntryValue">1</s:Double>
 	
 	
 	

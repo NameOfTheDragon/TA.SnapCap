@@ -100,8 +100,14 @@
       <HintPath>..\packages\JetBrains.Annotations.2019.1.3\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.6.8\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NodaTime">
+      <HintPath>..\..\..\..\.nuget\packages\nodatime\1.3.2\lib\net35-Client\NodaTime.dll</HintPath>
     </Reference>
     <Reference Include="PostSharp, Version=6.4.8.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <HintPath>..\packages\PostSharp.Redist.6.4.8\lib\net45\PostSharp.dll</HintPath>
@@ -158,6 +164,8 @@
     </Compile>
     <Compile Include="AscomCoverCalibrator\CoverCalibrator.cs" />
     <Compile Include="AscomSwitch\AscomDriverBase.cs" />
+    <Compile Include="CompositionRoot.cs" />
+    <Compile Include="DeviceControllerOptions.cs" />
     <Compile Include="DriverDiscovery.cs" />
     <Compile Include="ExtensionMethods\StringExtensions.cs" />
     <Compile Include="AscomSwitch\Switch.cs" />
@@ -286,6 +294,10 @@
     <ProjectReference Include="..\TA.SnapCap.DeviceInterface\TA.SnapCap.DeviceInterface.csproj">
       <Project>{3015f05f-d747-4c3e-a0d4-ec2b3bd76c56}</Project>
       <Name>TA.SnapCap.DeviceInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TA.SnapCap.HardwareSimulator\TA.SnapCap.HardwareSimulator.csproj">
+      <Project>{393C3897-D66D-46F4-ABC2-1D59EC96095B}</Project>
+      <Name>TA.SnapCap.HardwareSimulator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

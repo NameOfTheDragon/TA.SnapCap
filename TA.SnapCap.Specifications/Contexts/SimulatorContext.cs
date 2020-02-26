@@ -12,9 +12,13 @@ namespace TA.SnapCap.Specifications.Contexts
         {
         public ICommunicationChannel Channel { get; set; }
 
-        public SimulatorCommunicationsChannel Simulator => Channel as SimulatorCommunicationsChannel;
+        public SimulatorCommunicationsChannel SimulatorChannel => Channel as SimulatorCommunicationsChannel;
+
+        public SimulatorStateMachine Simulator => SimulatorChannel.Simulator;
 
         public SimulatorEndpoint Endpoint => Channel.Endpoint as SimulatorEndpoint;
+
+        public List<StateEventArgs> StateChanges = new List<StateEventArgs>();
 
         }
     }
