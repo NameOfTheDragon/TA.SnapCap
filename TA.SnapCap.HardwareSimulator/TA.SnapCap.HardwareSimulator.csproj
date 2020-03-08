@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncExtensions.cs" />
     <Compile Include="AzimuthChangedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
@@ -48,12 +49,14 @@
     <Compile Include="SimulatorEndpoint.cs" />
     <Compile Include="SimulatorState.cs" />
     <Compile Include="SimulatorStateMachine.cs" />
+    <Compile Include="StateClosed.cs" />
     <Compile Include="StateClosing.cs" />
     <Compile Include="StateEventArgs.cs" />
+    <Compile Include="StateOpening.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Platform">
-      <Version>6.4.2</Version>
+      <Version>6.5.0-beta0003</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -69,7 +72,7 @@
       <Version>1.3.2</Version>
     </PackageReference>
     <PackageReference Include="TA.Ascom.ReactiveCommunications">
-      <Version>1.2.2</Version>
+      <Version>1.3.0-alpha0010</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

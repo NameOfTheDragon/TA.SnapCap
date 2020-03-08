@@ -65,7 +65,7 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         public IObservable<char> ObservableReceivedCharacters => Simulator.ObservableResponses;
 
         /// <inheritdoc />
-        public bool IsOpen { get; private set; }
+        public bool IsOpen { get; internal set; }
 
         /// <inheritdoc />
         public DeviceEndpoint Endpoint { get; }

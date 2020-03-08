@@ -4,6 +4,7 @@
 //
 // File: SimulatorContextBuilder.cs  Last modified: 2020-02-23@17:56 by Tim Long
 
+using System;
 using TA.Ascom.ReactiveCommunications;
 using TA.DigitalDomeworks.HardwareSimulator;
 
@@ -11,6 +12,8 @@ namespace TA.SnapCap.Specifications.Contexts {
     class SimulatorContextBuilder
         {
         string connectionString = "invalid";
+        bool openChannel = false;   // Whether the channel should be  opened by the builder.
+        Action<SimulatorStateMachine> initializeStateMachine = machine => { }; // called to initialize the state machine. DO nothing by default.
 
         public SimulatorContext Build()
             {
@@ -24,7 +27,10 @@ namespace TA.SnapCap.Specifications.Contexts {
 
             var context = new SimulatorContext();
             context.Channel = factory.FromConnectionString(connectionString);
-            context.Simulator.StateChanged += (args) => context.StateChanges.Add(args);
+            context.SimulatorChannel.IsOpen = openChannel;
+            // ReSharper disable once EventExceptionNotDocumented - Exception means failed test, so don't catch it.
+            initializeStateMachine(context.Simulator);
+            context.Simulator.StateChanged += (args) => context.StateChanges.Add(args.StateName);
             return context;
             }
 
@@ -36,6 +42,18 @@ namespace TA.SnapCap.Specifications.Contexts {
         public SimulatorContextBuilder WithRealtimeSimulator()
             {
             connectionString = "Simulator:Realtime";
+            return this;
+            }
+
+        public SimulatorContextBuilder WithOpenChannel()
+            {
+            openChannel = true;
+            return this;
+            }
+
+        public SimulatorContextBuilder InStoppedState()
+            {
+            initializeStateMachine = machine => machine.Initialize(new StateClosed(machine));
             return this;
             }
         }

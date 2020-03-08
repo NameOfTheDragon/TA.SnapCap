@@ -7,6 +7,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using System.Threading.Tasks;
 using NLog;
 
 namespace TA.DigitalDomeworks.HardwareSimulator
@@ -67,7 +68,10 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         /// <summary>
         ///     Called (by the state machine) when entering the state.
         /// </summary>
-        public virtual void OnEnter() { }
+        public virtual Task OnEnter()
+            {
+            return Task.CompletedTask;
+            }
 
 
         #region Events

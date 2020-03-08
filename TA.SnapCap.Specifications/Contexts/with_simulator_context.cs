@@ -18,5 +18,11 @@ namespace TA.SnapCap.Specifications.Contexts
             };
         protected static ChannelFactory factory;
         protected static SimulatorContextBuilder Builder;
+
+        protected static void OpenChannelAndWaitUntilStopped()
+            {
+            Context.Channel.Open();
+            Context.Simulator.WhenStopped().Wait();
+            }
         }
     }

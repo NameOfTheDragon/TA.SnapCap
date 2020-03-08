@@ -1,7 +1,7 @@
 ﻿// This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: SimulatorStateMachine.cs  Last modified: 2020-02-25@23:51 by Tim Long
 
 using System;
@@ -11,6 +11,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NLog.Fluent;
 using NodaTime;
@@ -79,12 +80,18 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         /// </summary>
         public bool RealTime { get; }
 
+        public Task WhenStopped()
+            {
+            return InReadyState.AsTask();
+            }
+
         /// <summary>Transitions the state machine to the specified new state.</summary>
         /// <param name="newState">The new state.</param>
         public void Transition(SimulatorState newState)
             {
             if (newState == null)
                 throw new ArgumentNullException("newState", "Must reference a valid state instance.");
+            InReadyState.Reset();
             if (CurrentState != null)
                 try
                     {
@@ -183,6 +190,24 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         public void Initialize(SimulatorState startState)
             {
             Transition(startState);
+            }
+
+        /// <summary>
+        /// Gets a task that will complete either immediately (for a fast simulator) or after the specified time (for a realtime simulator).
+        /// </summary>
+        /// <param name="delay">The delay.</param>
+        /// <returns>Task.</returns>
+        public Task SimulatedDelay(TimeSpan delay)
+            {
+            if (RealTime)
+                return Task.Delay(delay);
+            else
+                return Task.CompletedTask;
+            }
+
+        public void SignalStopped()
+            {
+            InReadyState.Set();
             }
         }
     }

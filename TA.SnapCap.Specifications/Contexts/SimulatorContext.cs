@@ -18,7 +18,7 @@ namespace TA.SnapCap.Specifications.Contexts
 
         public SimulatorEndpoint Endpoint => Channel.Endpoint as SimulatorEndpoint;
 
-        public List<StateEventArgs> StateChanges = new List<StateEventArgs>();
+        public List<string> StateChanges = new List<string>();
 
         }
     }
