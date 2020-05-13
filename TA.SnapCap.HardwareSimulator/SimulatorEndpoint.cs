@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using NLog.Fluent;
 using TA.Ascom.ReactiveCommunications;
 
-namespace TA.DigitalDomeworks.HardwareSimulator
+namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>
     ///     Endpoint representing the hardware simulator.

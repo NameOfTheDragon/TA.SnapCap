@@ -1,7 +1,7 @@
 ﻿// This file is part of the TI.DigitalDomeWorks project
-// 
+//
 // Copyright © 2014 TiGra Astronomy, all rights reserved.
-// 
+//
 // File: Settings.cs  Created: 2014-10-05@00:56
 // Last modified: 2014-11-12@05:55 by Tim
 
@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Configuration;
 using NLog;
 
-namespace TA.DigitalDomeworks.HardwareSimulator
+namespace TA.SnapCap.HardwareSimulator
     {
     // This class allows you to handle specific events on the settings class:
     //  The SettingChanging event is raised before a setting's value is changed.

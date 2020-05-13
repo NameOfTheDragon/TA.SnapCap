@@ -10,24 +10,27 @@ using System.Diagnostics.Contracts;
 using NodaTime;
 using TA.Ascom.ReactiveCommunications;
 
-namespace TA.DigitalDomeworks.HardwareSimulator
+namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>
     ///     Provides a direct in-memory communications link to the hardware simulator.
     /// </summary>
     public class SimulatorCommunicationsChannel : ICommunicationChannel
         {
+        internal readonly InputParser inputParser;
+
         internal SimulatorStateMachine Simulator { get; }
 
         /// <summary>
         ///     Creates a simulator communications channel from a valid endpoint.
         /// </summary>
         /// <param name="endpoint">A valid simulator endpoint.</param>
-        public SimulatorCommunicationsChannel(SimulatorEndpoint endpoint)
+        public SimulatorCommunicationsChannel(SimulatorEndpoint endpoint, SimulatorStateMachine machine, InputParser parser)
             {
             Contract.Requires(endpoint != null);
             Endpoint = endpoint;
-            Simulator = new SimulatorStateMachine(endpoint.Realtime, SystemClock.Instance);
+            Simulator = machine;
+            inputParser = parser;
             }
 
         /// <summary>
@@ -45,7 +48,7 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         public void Open()
             {
             IsOpen = true;
-            Simulator.Initialize(new StateClosing(Simulator));
+            Simulator.Initialize(new StateClosing(Simulator), inputParser);
             }
 
         /// <inheritdoc />

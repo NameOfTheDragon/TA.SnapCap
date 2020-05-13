@@ -5,6 +5,7 @@
 // File: SimulatorStateMachine.cs  Last modified: 2020-02-25@23:51 by Tim Long
 
 using System;
+using System.Data;
 using System.Diagnostics.Contracts;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -16,10 +17,10 @@ using NLog;
 using NLog.Fluent;
 using NodaTime;
 
-namespace TA.DigitalDomeworks.HardwareSimulator
+namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>Class SimulatorStateMachine. This class cannot be inherited.</summary>
-    public sealed class SimulatorStateMachine
+    public sealed class SimulatorStateMachine : ISimulatorStateTriggers
         {
         /// <summary>Custom delegate signature for state machine static events.</summary>
         public delegate void StateEventHandler(StateEventArgs e);
@@ -32,7 +33,7 @@ namespace TA.DigitalDomeworks.HardwareSimulator
 
         private readonly Logger log = LogManager.GetCurrentClassLogger();
         private readonly Subject<char> receiveSubject = new Subject<char>();
-        private readonly IDisposable receiveSubscription;
+        private InputParser parser;
         private readonly IClock timeSource;
         private readonly Subject<char> transmitSubject = new Subject<char>();
 
@@ -53,11 +54,6 @@ namespace TA.DigitalDomeworks.HardwareSimulator
             Contract.Requires(timeSource != null);
             RealTime = realTime;
             this.timeSource = timeSource;
-
-            // Set the starting state and begin receiving.
-            Transition(new StateClosing(this));
-            var receiveObservable = receiveSubject.AsObservable();
-            receiveSubscription = receiveObservable.Subscribe(InputStimulus, EndOfSimulation);
             }
 
         internal SimulatorState CurrentState { get; set; }
@@ -79,6 +75,9 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         ///     accelerated pace (<c>false</c>).
         /// </summary>
         public bool RealTime { get; }
+
+        public bool MotorEnergized { get; set; }
+        public MotorDirection MotorDirection { get; set; }
 
         public Task WhenStopped()
             {
@@ -106,7 +105,7 @@ namespace TA.DigitalDomeworks.HardwareSimulator
 
             Log.Debug().Message("Transitioning from {oldState} => {newState}", CurrentState, newState).Write();
             CurrentState = newState;
-            RaiseStateChanged(new StateEventArgs(newState.Name));
+            RaiseStateChanged(newState.Name);
             try
                 {
                 newState.OnEnter();
@@ -125,10 +124,11 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         /// <summary>Raises the <see cref="StateChanged" /> event.</summary>
         /// <param name="e">The <see cref="StateEventArgs" /> instance containing the event data.</param>
         /// <exception cref="Exception">A delegate callback throws an exception.</exception>
-        private void RaiseStateChanged(StateEventArgs e)
+        private void RaiseStateChanged(string newState)
             {
-            Contract.Requires(e != null);
-            StateChanged?.Invoke(e);
+            Contract.Requires(newState != null);
+            var args = new StateEventArgs(newState);
+            StateChanged?.Invoke(args);
             }
 
         private void EndOfSimulation()
@@ -164,7 +164,6 @@ namespace TA.DigitalDomeworks.HardwareSimulator
             {
             if (disposing)
                 {
-                receiveSubscription?.Dispose();
                 transmitSubject?.OnCompleted();
                 }
             }
@@ -184,12 +183,20 @@ namespace TA.DigitalDomeworks.HardwareSimulator
             {
             Dispose(false);
             }
+#endregion Disposable pattern
+
+        #region State triggers
+        /// <inheritdoc />
+        public void OpenRequested() => CurrentState.OpenRequested();
         #endregion
 
         /// <summary>Called to initialize the state machine and set it into the starting state..</summary>
-        public void Initialize(SimulatorState startState)
+        public void Initialize(SimulatorState startState, InputParser parser)
             {
             Transition(startState);
+            this.parser = parser;
+            var receiveObservable = receiveSubject.AsObservable();
+            parser.SubscribeTo(receiveObservable);
             }
 
         /// <summary>

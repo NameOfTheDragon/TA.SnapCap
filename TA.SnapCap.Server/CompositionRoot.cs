@@ -11,8 +11,8 @@ using Ninject.Syntax;
 using NLog.Fluent;
 using NodaTime;
 using TA.Ascom.ReactiveCommunications;
-using TA.DigitalDomeworks.HardwareSimulator;
 using TA.SnapCap.DeviceInterface;
+using TA.SnapCap.HardwareSimulator;
 
 namespace TA.SnapCap.Server
     {

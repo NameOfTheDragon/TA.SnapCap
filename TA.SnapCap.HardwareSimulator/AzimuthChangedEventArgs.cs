@@ -7,7 +7,7 @@
 
 using System;
 
-namespace TA.DigitalDomeworks.HardwareSimulator
+namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>
     ///     Defines the event arguments passed to the <see cref="SimulatorStateMachine.AzimuthChanged" /> event handler.

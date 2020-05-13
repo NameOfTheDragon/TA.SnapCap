@@ -90,7 +90,6 @@
     <Compile Include="DeviceController.cs" />
     <Compile Include="ITransactionProcessorFactory.cs" />
     <Compile Include="MathExtensions.cs" />
-    <Compile Include="Protocol.cs" />
     <Compile Include="SnapCapDisposition.cs" />
     <Compile Include="SnapCapFlatPanel.cs" />
     <Compile Include="SnapCapOpenClose.cs" />
@@ -107,6 +106,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TA.SnapCap.SharedTypes\TA.SnapCap.SharedTypes.csproj">
+      <Project>{b625748c-5238-4192-90c1-b386f4d303c1}</Project>
+      <Name>TA.SnapCap.SharedTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

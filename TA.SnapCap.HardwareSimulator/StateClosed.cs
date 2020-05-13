@@ -6,7 +6,7 @@
 
 using System.Threading.Tasks;
 
-namespace TA.DigitalDomeworks.HardwareSimulator {
+namespace TA.SnapCap.HardwareSimulator {
     class StateClosed : SimulatorState {
         /// <inheritdoc />
         internal StateClosed(SimulatorStateMachine machine) : base(machine) { }
@@ -17,6 +17,15 @@ namespace TA.DigitalDomeworks.HardwareSimulator {
             base.OnEnter();
             Machine.SignalStopped();
             return Task.CompletedTask;
+            }
+
+        /// <inheritdoc />
+        public override void OpenRequested()
+            {
+            base.OpenRequested();
+            Machine.MotorDirection = MotorDirection.Opening;
+            Machine.MotorEnergized = true;
+            Machine.Transition(new StateOpening(Machine));
             }
         }
     }

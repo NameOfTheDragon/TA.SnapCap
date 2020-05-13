@@ -5,18 +5,17 @@
 // File: SimulatorState.cs  Created: 2016-06-20@18:14
 // Last modified: 2016-06-21@10:01 by Tim
 
-using System;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using NLog;
+using NLog.Fluent;
 
-namespace TA.DigitalDomeworks.HardwareSimulator
+namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>
     ///     This is the base class for all simulator state-machine states. It defines the behaviours common to all states,
     ///     as well as static data (shared state) and methods that perform the logic required to make the state machine work.
     /// </summary>
-    public class SimulatorState
+    public class SimulatorState : ISimulatorStateTriggers
         {
         /// <summary>
         ///     Provides logging services
@@ -78,6 +77,11 @@ namespace TA.DigitalDomeworks.HardwareSimulator
         #region Delegates
         #endregion
 
+        #endregion
+
+        #region State Triggers
+        /// <inheritdoc />
+        public virtual void OpenRequested() => Log.Info().Message("Open requested");
         #endregion
         }
     }

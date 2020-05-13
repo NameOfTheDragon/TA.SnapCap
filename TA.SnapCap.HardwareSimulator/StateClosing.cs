@@ -7,7 +7,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace TA.DigitalDomeworks.HardwareSimulator {
+namespace TA.SnapCap.HardwareSimulator {
     class StateClosing : SimulatorState {
         /// <inheritdoc />
         internal StateClosing(SimulatorStateMachine machine) : base(machine) { }

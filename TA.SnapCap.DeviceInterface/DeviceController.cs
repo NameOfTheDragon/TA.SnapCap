@@ -14,6 +14,7 @@ using NLog;
 using NLog.Fluent;
 using PostSharp.Patterns.Model;
 using TA.Ascom.ReactiveCommunications;
+using TA.SnapCap.SharedTypes;
 
 namespace TA.SnapCap.DeviceInterface
 {

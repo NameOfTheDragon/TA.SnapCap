@@ -7,8 +7,8 @@
     <ProjectGuid>{393C3897-D66D-46F4-ABC2-1D59EC96095B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TA.DigitalDomeworks.HardwareSimulator</RootNamespace>
-    <AssemblyName>TA.DigitalDomeworks.HardwareSimulator</AssemblyName>
+    <RootNamespace>TA.SnapCap.HardwareSimulator</RootNamespace>
+    <AssemblyName>TA.SnapCap.HardwareSimulator</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -43,6 +43,9 @@
   <ItemGroup>
     <Compile Include="AsyncExtensions.cs" />
     <Compile Include="AzimuthChangedEventArgs.cs" />
+    <Compile Include="InputParser.cs" />
+    <Compile Include="ISimulatorStateTriggers.cs" />
+    <Compile Include="MotorDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SimulatorCommunicationsChannel.cs" />
@@ -79,6 +82,12 @@
     <None Include="app.config" />
     <None Include="Documentation\SimulatorStateMachine.cd" />
     <None Include="Documentation\SimulatorStateMachine.puml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TA.SnapCap.SharedTypes\TA.SnapCap.SharedTypes.csproj">
+      <Project>{B625748C-5238-4192-90C1-B386F4D303C1}</Project>
+      <Name>TA.SnapCap.SharedTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

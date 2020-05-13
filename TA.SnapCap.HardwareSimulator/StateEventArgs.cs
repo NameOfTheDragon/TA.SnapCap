@@ -7,7 +7,7 @@
 
 using System;
 
-namespace TA.DigitalDomeworks.HardwareSimulator
+namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>
     ///     Event arguments used by state machine events.

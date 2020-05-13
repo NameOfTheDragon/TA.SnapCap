@@ -59,8 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contexts\SimulatorContext.cs" />
-    <Compile Include="Contexts\SimulatorContextBuilder.cs" />
+    <Compile Include="Contexts\SimulatorTestContextBuilder.cs" />
     <Compile Include="Contexts\with_simulator_context.cs" />
+    <Compile Include="SimulatorSpecs\InputParserSpecs.cs" />
     <Compile Include="SimulatorSpecs\CreationSpecs.cs" />
     <Compile Include="TestHelpers\DeviceLayerContextBuilder.cs" />
     <Compile Include="Fakes\BufferInputUntilCompletedTransaction.cs" />
@@ -91,8 +92,15 @@
       <Project>{393c3897-d66d-46f4-abc2-1d59ec96095b}</Project>
       <Name>TA.SnapCap.HardwareSimulator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TA.SnapCap.SharedTypes\TA.SnapCap.SharedTypes.csproj">
+      <Project>{b625748c-5238-4192-90c1-b386f4d303c1}</Project>
+      <Name>TA.SnapCap.SharedTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FakeItEasy">
+      <Version>6.0.0</Version>
+    </PackageReference>
     <PackageReference Include="GitVersionTask">
       <Version>5.1.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
