@@ -55,7 +55,9 @@
     <Compile Include="StateClosed.cs" />
     <Compile Include="StateClosing.cs" />
     <Compile Include="StateEventArgs.cs" />
+    <Compile Include="StateOpen.cs" />
     <Compile Include="StateOpening.cs" />
+    <Compile Include="SystemStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ASCOM.Platform">

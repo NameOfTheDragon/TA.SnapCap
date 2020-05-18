@@ -2,10 +2,9 @@
 //
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
 //
-// File: SimulatorStateMachine.cs  Last modified: 2020-02-25@23:51 by Tim Long
+// File: SimulatorStateMachine.cs  Last modified: 2020-05-13@21:15 by Tim Long
 
 using System;
-using System.Data;
 using System.Diagnostics.Contracts;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -33,9 +32,9 @@ namespace TA.SnapCap.HardwareSimulator
 
         private readonly Logger log = LogManager.GetCurrentClassLogger();
         private readonly Subject<char> receiveSubject = new Subject<char>();
-        private InputParser parser;
         private readonly IClock timeSource;
         private readonly Subject<char> transmitSubject = new Subject<char>();
+        private InputParser parser;
 
         /// <summary>
         ///     Characters received from the serial port, which accumulate until a valid command has been
@@ -77,7 +76,12 @@ namespace TA.SnapCap.HardwareSimulator
         public bool RealTime { get; }
 
         public bool MotorEnergized { get; set; }
+
         public MotorDirection MotorDirection { get; set; }
+
+        public bool LampOn { get; set; }
+
+        public SystemStatus SystemStatus { get; internal set; }
 
         public Task WhenStopped()
             {
@@ -154,6 +158,45 @@ namespace TA.SnapCap.HardwareSimulator
             foreach (var c in txData) transmitSubject.OnNext(c);
             }
 
+        internal void SendResponse(string message) => WriteLine(message);
+
+        internal string BuildStatusResponse()
+            {
+            var response = new StringBuilder("*S");
+            response.Append(MotorEnergized ? '1' : '0');
+            response.Append(LampOn ? '1' : '0');
+            response.Append((int) SystemStatus);
+            response.AppendLine();
+            return response.ToString();
+            }
+
+        /// <summary>Called to initialize the state machine and set it into the starting state..</summary>
+        public void Initialize(SimulatorState startState, InputParser parser)
+            {
+            Transition(startState);
+            this.parser = parser;
+            var receiveObservable = receiveSubject.AsObservable();
+            parser.SubscribeTo(receiveObservable);
+            }
+
+        /// <summary>
+        ///     Gets a task that will complete either immediately (for a fast simulator) or after the specified
+        ///     time (for a realtime simulator).
+        /// </summary>
+        /// <param name="delay">The delay.</param>
+        /// <returns>Task.</returns>
+        public Task SimulatedDelay(TimeSpan delay)
+            {
+            if (RealTime)
+                return Task.Delay(delay);
+            return Task.CompletedTask;
+            }
+
+        public void SignalStopped()
+            {
+            InReadyState.Set();
+            }
+
         #region Disposable pattern
         /// <summary>Releases the resources used by this object.</summary>
         /// <param name="disposing">
@@ -183,38 +226,19 @@ namespace TA.SnapCap.HardwareSimulator
             {
             Dispose(false);
             }
-#endregion Disposable pattern
+        #endregion Disposable pattern
 
         #region State triggers
         /// <inheritdoc />
         public void OpenRequested() => CurrentState.OpenRequested();
+
+        /// <inheritdoc />
+        public void QueryStatusRequested() => CurrentState.QueryStatusRequested();
         #endregion
 
-        /// <summary>Called to initialize the state machine and set it into the starting state..</summary>
-        public void Initialize(SimulatorState startState, InputParser parser)
+        internal void SetSystemState(SystemStatus value)
             {
-            Transition(startState);
-            this.parser = parser;
-            var receiveObservable = receiveSubject.AsObservable();
-            parser.SubscribeTo(receiveObservable);
-            }
-
-        /// <summary>
-        /// Gets a task that will complete either immediately (for a fast simulator) or after the specified time (for a realtime simulator).
-        /// </summary>
-        /// <param name="delay">The delay.</param>
-        /// <returns>Task.</returns>
-        public Task SimulatedDelay(TimeSpan delay)
-            {
-            if (RealTime)
-                return Task.Delay(delay);
-            else
-                return Task.CompletedTask;
-            }
-
-        public void SignalStopped()
-            {
-            InReadyState.Set();
+            SystemStatus = value;
             }
         }
     }

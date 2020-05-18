@@ -15,6 +15,7 @@ namespace TA.SnapCap.HardwareSimulator {
         public override Task OnEnter()
             {
             base.OnEnter();
+            Machine.SetSystemState(SystemStatus.Closed);
             Machine.SignalStopped();
             return Task.CompletedTask;
             }

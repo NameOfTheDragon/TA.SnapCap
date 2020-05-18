@@ -5,6 +5,7 @@
 // File: SimulatorState.cs  Created: 2016-06-20@18:14
 // Last modified: 2016-06-21@10:01 by Tim
 
+using System;
 using System.Threading.Tasks;
 using NLog;
 using NLog.Fluent;
@@ -26,6 +27,7 @@ namespace TA.SnapCap.HardwareSimulator
         /// A reference to the state machine that created the state.
         /// </summary>
         protected readonly SimulatorStateMachine Machine;
+        protected static readonly TimeSpan StallTimeout = TimeSpan.FromSeconds(20);
 
         /// <summary>
         ///     Initializes the simulator state with a reference to the parent state machine.
@@ -81,7 +83,15 @@ namespace TA.SnapCap.HardwareSimulator
 
         #region State Triggers
         /// <inheritdoc />
-        public virtual void OpenRequested() => Log.Info().Message("Open requested");
+        public virtual void OpenRequested() => Log.Info().Message("Open requested").Write();
+
+        /// <inheritdoc />
+        public virtual void QueryStatusRequested()
+            {
+            var response = Machine.BuildStatusResponse();
+            Log.Debug().Message($"Query status; responding: {response}").Write();
+            Machine.SendResponse(response);
+            }
         #endregion
         }
     }

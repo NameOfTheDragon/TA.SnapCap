@@ -18,7 +18,7 @@ namespace TA.SnapCap.Specifications.Contexts
         {
         private readonly IKernel testKernel = new StandardKernel();
         string connectionString = "Simulator:Fast";
-        Action<SimulatorStateMachine>
+        Action<SimulatorContext>
             initializeStateMachine = machine => { }; // called to initialize the state machine. DO nothing by default.
         bool openChannel;
         Maybe<SimulatorStateMachine> stateMachine = Maybe<SimulatorStateMachine>.Empty;
@@ -52,8 +52,9 @@ namespace TA.SnapCap.Specifications.Contexts
             testKernel.Load(this);
             var context = testKernel.Get<SimulatorContext>();
             context.SimulatorChannel.IsOpen = openChannel;
-            initializeStateMachine(context.Simulator);
+            initializeStateMachine(context);
             context.Simulator.StateChanged += args => context.StateChanges.Add(args.StateName);
+            context.SimulatorChannel.ObservableReceivedCharacters.Subscribe(ch => context.ReceiveBuffer.Append(ch));
             return context;
             }
 
@@ -77,15 +78,14 @@ namespace TA.SnapCap.Specifications.Contexts
 
         public SimulatorTestContextBuilder InClosedState()
             {
-            initializeStateMachine = InitializeStateMachineInClosedState;
+            initializeStateMachine = ctx => ctx.Simulator.Initialize(new StateClosed(ctx.Simulator), ctx.Parser);
             return this;
             }
 
-        void InitializeStateMachineInClosedState(SimulatorStateMachine machine)
+        public SimulatorTestContextBuilder InOpenState()
             {
-            var simulatorState = new StateClosed(machine);
-            var inputParser = testKernel.Get<InputParser>();
-            machine.Initialize(simulatorState, inputParser);
+            initializeStateMachine = ctx => ctx.Simulator.Initialize(new StateOpen(ctx.Simulator), ctx.Parser);
+            return this;
             }
         }
     }

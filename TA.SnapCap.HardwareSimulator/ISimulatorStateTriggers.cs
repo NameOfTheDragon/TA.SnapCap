@@ -2,5 +2,7 @@
     public interface ISimulatorStateTriggers
         {
         void OpenRequested();
+
+        void QueryStatusRequested();
         }
     }

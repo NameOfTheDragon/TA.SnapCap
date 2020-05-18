@@ -15,9 +15,9 @@ namespace TA.SnapCap.Specifications.SimulatorSpecs
             parser = new InputParser(fakeStateMachine);
             };
         Because of = () => parser.SubscribeTo(openCommand.ToObservable());
-        It should_trigger_the_open_action = () => A.CallTo(()=>fakeStateMachine.OpenRequested()).MustHaveHappenedOnceExactly();
+        It should_trigger_the_open_action =
+            () => A.CallTo(() => fakeStateMachine.OpenRequested()).MustHaveHappenedOnceExactly();
         static ISimulatorStateTriggers fakeStateMachine;
         static InputParser parser;
         }
-
     }

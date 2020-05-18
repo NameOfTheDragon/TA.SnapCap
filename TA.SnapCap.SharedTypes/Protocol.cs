@@ -19,7 +19,7 @@ namespace TA.SnapCap.SharedTypes
         public const char CommandInitiator = '>';
         public const char CommandTerminator = '\n';
 
-        public static string GetCommandString(char command) => $"{CommandInitiator}{command}\r\n";
-        public static string GetCommandString(char command, ushort payload) => $"{CommandInitiator}{command}{payload:D3}\r\n";
+        public static string GetCommandString(char command) => $"{CommandInitiator}{command}{CommandTerminator}";
+        public static string GetCommandString(char command, ushort payload) => $"{CommandInitiator}{command}{payload:D3}{CommandTerminator}";
         }
     }

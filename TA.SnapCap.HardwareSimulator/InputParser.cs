@@ -52,6 +52,9 @@ namespace TA.SnapCap.HardwareSimulator
                 case 'O':
                     stateMachine.OpenRequested();
                     break;
+                case 'S':   // query status
+                    stateMachine.QueryStatusRequested();
+                    break;
                 default:
                     Log.Warn().Message("Unsupported command {command}", command).Write();
                     break;

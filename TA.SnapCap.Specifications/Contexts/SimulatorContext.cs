@@ -22,5 +22,9 @@ namespace TA.SnapCap.Specifications.Contexts
         public List<string> StateChanges = new List<string>();
 
         public InputParser Parser => SimulatorChannel.inputParser;
+
+        internal StringBuilder ReceiveBuffer { get; } = new StringBuilder();
+
+        public string Response => ReceiveBuffer.ToString();
         }
     }

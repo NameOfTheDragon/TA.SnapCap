@@ -61,6 +61,7 @@
     <Compile Include="Contexts\SimulatorContext.cs" />
     <Compile Include="Contexts\SimulatorTestContextBuilder.cs" />
     <Compile Include="Contexts\with_simulator_context.cs" />
+    <Compile Include="SimulatorSpecs\CommandProtocolSpecs.cs" />
     <Compile Include="SimulatorSpecs\InputParserSpecs.cs" />
     <Compile Include="SimulatorSpecs\CreationSpecs.cs" />
     <Compile Include="TestHelpers\DeviceLayerContextBuilder.cs" />
