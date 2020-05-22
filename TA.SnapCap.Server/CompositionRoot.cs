@@ -112,11 +112,13 @@ namespace TA.SnapCap.Server
 
         private ICommunicationChannel BuildCommunicationsChannel(IContext context)
             {
+            var parser = Kernel.Get<InputParser>();
+            var machine = Kernel.Get<SimulatorStateMachine>();
             var channelFactory = Kernel.Get<ChannelFactory>();
             channelFactory.RegisterChannelType(
                 SimulatorEndpoint.IsConnectionStringValid,
                 SimulatorEndpoint.FromConnectionString,
-                endpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint)endpoint)
+                endpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint)endpoint, machine, parser)
             );
 
             var channel = channelFactory.FromConnectionString("dummy");

@@ -14,10 +14,10 @@ namespace TA.SnapCap.Specifications.Contexts
 
         Establish context = () =>
             {
-            Builder = new SimulatorTestContextBuilder();
+            ContextBuilder = new SimulatorTestContextBuilder();
             };
         protected static ChannelFactory factory;
-        protected static SimulatorTestContextBuilder Builder;
+        protected static SimulatorTestContextBuilder ContextBuilder;
 
         protected static void OpenChannelAndWaitUntilStopped()
             {

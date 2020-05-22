@@ -26,7 +26,7 @@ namespace TA.SnapCap.Specifications
     [Subject(typeof(SimulatorStateMachine), "Command/Response processing")]
     internal class when_requesting_status_from_a_closed_idle_snapcap : with_simulator_context
         {
-        Establish context = () => Context = Builder.InClosedState().WithOpenChannel().Build();
+        Establish context = () => Context = ContextBuilder.InClosedState().WithOpenChannel().Build();
         Because of = () => Context.Channel.Send(Protocol.GetCommandString(Protocol.GetStatus));
         It should_receive_a_status_response = () => Context.Response.ShouldEqual(Expected);
         const string Expected = "*S002\r\n";
@@ -34,7 +34,7 @@ namespace TA.SnapCap.Specifications
     [Subject(typeof(SimulatorStateMachine), "Command/Response processing")]
     internal class when_requesting_status_from_an_open_idle_snapcap : with_simulator_context
         {
-        Establish context = () => Context = Builder.InOpenState().WithOpenChannel().Build();
+        Establish context = () => Context = ContextBuilder.InOpenState().WithOpenChannel().Build();
         Because of = () => Context.Channel.Send(Protocol.GetCommandString(Protocol.GetStatus));
         It should_receive_a_status_response = () => Context.Response.ShouldEqual(Expected);
         const string Expected = "*S001\r\n";

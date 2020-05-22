@@ -5,6 +5,7 @@
 // File: SimulatorTestContextBuilder.cs  Last modified: 2020-03-22@16:40 by Tim Long
 
 using System;
+using System.ComponentModel;
 using System.Linq;
 using Ninject;
 using Ninject.Modules;
@@ -22,6 +23,7 @@ namespace TA.SnapCap.Specifications.Contexts
             initializeStateMachine = machine => { }; // called to initialize the state machine. DO nothing by default.
         bool openChannel;
         Maybe<SimulatorStateMachine> stateMachine = Maybe<SimulatorStateMachine>.Empty;
+        Action<PropertyChangedEventArgs> propertyChangedAction = null;
 
         /// <inheritdoc />
         public override void Load()
@@ -55,6 +57,7 @@ namespace TA.SnapCap.Specifications.Contexts
             initializeStateMachine(context);
             context.Simulator.StateChanged += args => context.StateChanges.Add(args.StateName);
             context.SimulatorChannel.ObservableReceivedCharacters.Subscribe(ch => context.ReceiveBuffer.Append(ch));
+            //ToDo: subscribe to property change notifications
             return context;
             }
 
@@ -85,6 +88,18 @@ namespace TA.SnapCap.Specifications.Contexts
         public SimulatorTestContextBuilder InOpenState()
             {
             initializeStateMachine = ctx => ctx.Simulator.Initialize(new StateOpen(ctx.Simulator), ctx.Parser);
+            return this;
+            }
+
+        public SimulatorTestContextBuilder InClosingState()
+            {
+            initializeStateMachine = ctx => ctx.Simulator.Initialize(new StateClosing(ctx.Simulator), ctx.Parser);
+            return this;
+            }
+
+        public SimulatorTestContextBuilder WithPropertyChangeNotifications(Action<PropertyChangedEventArgs> action)
+            {
+            propertyChangedAction = action;
             return this;
             }
         }

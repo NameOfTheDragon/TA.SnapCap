@@ -17,7 +17,7 @@ namespace TA.SnapCap.Specifications.SimulatorSpecs
     [Subject(typeof(SimulatorCommunicationsChannel), "create from connection string")]
     internal class when_creating_a_realtime_simulator : with_simulator_context
         {
-        Establish context = () => Context = Builder
+        Establish context = () => Context = ContextBuilder
             .WithRealtimeSimulator()
             .Build();
         It should_be_real_time = () => Context.Endpoint.Realtime.ShouldBeTrue();
@@ -29,7 +29,7 @@ namespace TA.SnapCap.Specifications.SimulatorSpecs
         {
         static readonly IEnumerable<string> expectedStates = new List<string>
                 {nameof(StateClosing), nameof(StateClosed)};
-        Establish context = () => Context = Builder
+        Establish context = () => Context = ContextBuilder
             .WithFastSimulator()
             .Build();
         Because of = () => OpenChannelAndWaitUntilStopped();
@@ -41,7 +41,7 @@ namespace TA.SnapCap.Specifications.SimulatorSpecs
     [Subject(typeof(SimulatorStateMachine), "Opening")]
     internal class when_closed_and_an_open_request_is_received : with_simulator_context
         {
-        Establish context = () => Context = Builder
+        Establish context = () => Context = ContextBuilder
             .WithFastSimulator()
             .WithOpenChannel()
             .InClosedState()
