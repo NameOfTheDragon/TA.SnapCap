@@ -23,7 +23,7 @@ namespace TA.SnapCap.Specifications.Contexts
             initializeStateMachine = machine => { }; // called to initialize the state machine. DO nothing by default.
         bool openChannel;
         Maybe<SimulatorStateMachine> stateMachine = Maybe<SimulatorStateMachine>.Empty;
-        Action<PropertyChangedEventArgs> propertyChangedAction = null;
+        PropertyChangedEventHandler propertyChangedAction = (sender, args) => { };
 
         /// <inheritdoc />
         public override void Load()
@@ -57,7 +57,7 @@ namespace TA.SnapCap.Specifications.Contexts
             initializeStateMachine(context);
             context.Simulator.StateChanged += args => context.StateChanges.Add(args.StateName);
             context.SimulatorChannel.ObservableReceivedCharacters.Subscribe(ch => context.ReceiveBuffer.Append(ch));
-            //ToDo: subscribe to property change notifications
+            context.Simulator.PropertyChanged += propertyChangedAction;
             return context;
             }
 
@@ -97,9 +97,9 @@ namespace TA.SnapCap.Specifications.Contexts
             return this;
             }
 
-        public SimulatorTestContextBuilder WithPropertyChangeNotifications(Action<PropertyChangedEventArgs> action)
+        public SimulatorTestContextBuilder WithPropertyChangeNotifications(PropertyChangedEventHandler handler)
             {
-            propertyChangedAction = action;
+            propertyChangedAction = handler;
             return this;
             }
         }

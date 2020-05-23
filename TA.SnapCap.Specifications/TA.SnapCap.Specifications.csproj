@@ -64,6 +64,7 @@
     <Compile Include="SimulatorSpecs\CommandProtocolSpecs.cs" />
     <Compile Include="SimulatorSpecs\InputParserSpecs.cs" />
     <Compile Include="SimulatorSpecs\CreationSpecs.cs" />
+    <Compile Include="SimulatorSpecs\StateTransitionSpecs.cs" />
     <Compile Include="TestHelpers\DeviceLayerContextBuilder.cs" />
     <Compile Include="Fakes\BufferInputUntilCompletedTransaction.cs" />
     <Compile Include="Fakes\FakeCommunicationChannel.cs" />

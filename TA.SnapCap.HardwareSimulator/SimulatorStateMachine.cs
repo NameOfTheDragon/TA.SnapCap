@@ -5,21 +5,26 @@
 // File: SimulatorStateMachine.cs  Last modified: 2020-05-13@21:15 by Tim Long
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using NLog;
 using NLog.Fluent;
 using NodaTime;
+using PostSharp.Patterns.Model;
 
 namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>Class SimulatorStateMachine. This class cannot be inherited.</summary>
-    public sealed class SimulatorStateMachine : ISimulatorStateTriggers
+    [NotifyPropertyChanged]
+    public sealed class SimulatorStateMachine : ISimulatorStateTriggers, INotifyPropertyChanged
         {
         /// <summary>Custom delegate signature for state machine static events.</summary>
         public delegate void StateEventHandler(StateEventArgs e);
@@ -55,19 +60,19 @@ namespace TA.SnapCap.HardwareSimulator
             this.timeSource = timeSource;
             }
 
-        internal SimulatorState CurrentState { get; set; }
+        [IgnoreAutoChangeNotification] internal SimulatorState CurrentState { get; set; }
 
         /// <summary>
         ///     An observable sequence of characters that simulates data arriving from the dome controller to
         ///     the PC serial port.
         /// </summary>
-        public IObservable<char> ObservableResponses => transmitSubject.AsObservable();
+        [IgnoreAutoChangeNotification] public IObservable<char> ObservableResponses => transmitSubject.AsObservable();
 
         /// <summary>
         ///     Simulate sending characters to the dome controller by calling the observer's
         ///     <see cref="IObserver{T}.OnNext" /> method.
         /// </summary>
-        public IObserver<char> InputObserver => receiveSubject.AsObserver();
+        [IgnoreAutoChangeNotification] public IObserver<char> InputObserver => receiveSubject.AsObserver();
 
         /// <summary>
         ///     A flag indicating whether the simulation should proceed in real time (<c>true</c>) or at an
@@ -240,5 +245,15 @@ namespace TA.SnapCap.HardwareSimulator
             {
             SystemStatus = value;
             }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+            {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+
+        public void CloseRequested() => CurrentState.CloseRequested();
         }
     }

@@ -93,5 +93,7 @@ namespace TA.SnapCap.HardwareSimulator
             Machine.SendResponse(response);
             }
         #endregion
+
+        public virtual void CloseRequested() => Log.Info().Message("Close requested").Write();
         }
     }

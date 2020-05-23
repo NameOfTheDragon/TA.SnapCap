@@ -76,6 +76,12 @@
     <PackageReference Include="NodaTime">
       <Version>1.3.2</Version>
     </PackageReference>
+    <PackageReference Include="PostSharp">
+      <Version>6.6.7</Version>
+    </PackageReference>
+    <PackageReference Include="PostSharp.Patterns.Model">
+      <Version>6.6.7</Version>
+    </PackageReference>
     <PackageReference Include="TA.Ascom.ReactiveCommunications">
       <Version>1.3.0-alpha0010</Version>
     </PackageReference>
