@@ -1,8 +1,8 @@
 ﻿// This file is part of the TA.SnapCap project
-//
+// 
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-//
-// File: SimulatorStateMachine.cs  Last modified: 2020-05-13@21:15 by Tim Long
+// 
+// File: SimulatorStateMachine.cs  Last modified: 2020-05-24@12:41 by Tim Long
 
 using System;
 using System.ComponentModel;
@@ -60,19 +60,22 @@ namespace TA.SnapCap.HardwareSimulator
             this.timeSource = timeSource;
             }
 
-        [IgnoreAutoChangeNotification] internal SimulatorState CurrentState { get; set; }
+        [IgnoreAutoChangeNotification]
+        internal SimulatorState CurrentState { get; set; }
 
         /// <summary>
         ///     An observable sequence of characters that simulates data arriving from the dome controller to
         ///     the PC serial port.
         /// </summary>
-        [IgnoreAutoChangeNotification] public IObservable<char> ObservableResponses => transmitSubject.AsObservable();
+        [IgnoreAutoChangeNotification]
+        public IObservable<char> ObservableResponses => transmitSubject.AsObservable();
 
         /// <summary>
         ///     Simulate sending characters to the dome controller by calling the observer's
         ///     <see cref="IObserver{T}.OnNext" /> method.
         /// </summary>
-        [IgnoreAutoChangeNotification] public IObserver<char> InputObserver => receiveSubject.AsObserver();
+        [IgnoreAutoChangeNotification]
+        public IObserver<char> InputObserver => receiveSubject.AsObserver();
 
         /// <summary>
         ///     A flag indicating whether the simulation should proceed in real time (<c>true</c>) or at an
@@ -87,6 +90,10 @@ namespace TA.SnapCap.HardwareSimulator
         public bool LampOn { get; set; }
 
         public SystemStatus SystemStatus { get; internal set; }
+
+        public uint LampBrightness { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Task WhenStopped()
             {
@@ -202,6 +209,28 @@ namespace TA.SnapCap.HardwareSimulator
             InReadyState.Set();
             }
 
+        internal void SetSystemState(SystemStatus value)
+            {
+            SystemStatus = value;
+            }
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+            {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+
+        public void CloseRequested() => CurrentState.CloseRequested();
+
+        /// <inheritdoc />
+        public void LampOnRequested() => CurrentState.LampOnRequested();
+
+        /// <inheritdoc />
+        public void LampOffRequested() => CurrentState.LampOffRequested();
+
+        /// <inheritdoc />
+        public void SetLampBrightness(uint brightness) => CurrentState.SetLampBrightness(brightness);
+
         #region Disposable pattern
         /// <summary>Releases the resources used by this object.</summary>
         /// <param name="disposing">
@@ -240,20 +269,5 @@ namespace TA.SnapCap.HardwareSimulator
         /// <inheritdoc />
         public void QueryStatusRequested() => CurrentState.QueryStatusRequested();
         #endregion
-
-        internal void SetSystemState(SystemStatus value)
-            {
-            SystemStatus = value;
-            }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-            {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-
-        public void CloseRequested() => CurrentState.CloseRequested();
         }
     }

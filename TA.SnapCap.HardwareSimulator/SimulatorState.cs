@@ -92,8 +92,37 @@ namespace TA.SnapCap.HardwareSimulator
             Log.Debug().Message($"Query status; responding: {response}").Write();
             Machine.SendResponse(response);
             }
-        #endregion
 
         public virtual void CloseRequested() => Log.Info().Message("Close requested").Write();
+
+        #region Lamp Control
+        /*
+         * Lamp control operations are always valid, so are handled here in the abstract base state.
+         * Other states are free to override this behaviour if necessary.
+         */
+
+        /// <inheritdoc />
+        public virtual void LampOnRequested()
+            {
+            Log.Info().Message("Lamp on requested").Write();
+            Machine.LampOn = true;
+            }
+
+        /// <inheritdoc />
+        public virtual void LampOffRequested()
+            {
+            Log.Info().Message("Lamp off requested").Write();
+            Machine.LampOn = false;
+            }
+
+        /// <inheritdoc />
+        public virtual void SetLampBrightness(uint brightness)
+            {
+            Log.Info().Message("Set lamp brightness to {brightness}", brightness).Write();
+            Machine.LampBrightness = brightness;
+            }
+
+        #endregion Lamp Control
+        #endregion State Triggers
         }
     }
