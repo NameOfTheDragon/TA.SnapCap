@@ -66,35 +66,37 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.Astrometry.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.Astrometry.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.Attributes.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.Attributes.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.Cache.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Controls, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.Controls.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.DeviceInterfaces.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.DeviceInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.DriverAccess.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.DriverAccess.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.Exceptions.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.Exceptions.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Internal.Extensions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.Internal.Extensions.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.Internal.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.SettingsProvider, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.SettingsProvider.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.SettingsProvider.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.Utilities.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
-      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0003\lib\net40\ASCOM.Utilities.Video.dll</HintPath>
+      <HintPath>..\packages\ASCOM.Platform.6.5.0-beta0004\lib\net40\ASCOM.Utilities.Video.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=2019.1.3.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.2019.1.3\lib\net20\JetBrains.Annotations.dll</HintPath>
@@ -162,13 +164,14 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="AscomCoverCalibrator\CoverCalibrator.cs" />
-    <Compile Include="AscomSwitch\AscomDriverBase.cs" />
+    <Compile Include="AscomDriver\CoverCalibrator.cs" />
+    <Compile Include="AscomDriver\AscomDriverBase.cs" />
     <Compile Include="CompositionRoot.cs" />
     <Compile Include="DeviceControllerOptions.cs" />
     <Compile Include="DriverDiscovery.cs" />
+    <Compile Include="ExtensionMethods\ClickCommand.cs" />
     <Compile Include="ExtensionMethods\StringExtensions.cs" />
-    <Compile Include="AscomSwitch\Switch.cs" />
+    <Compile Include="AscomDriver\Switch.cs" />
     <Compile Include="ClassFactory.cs" />
     <Compile Include="ClientConnectionManager.cs" />
     <Compile Include="CLientStatus.cs" />

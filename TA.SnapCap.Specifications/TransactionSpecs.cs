@@ -8,6 +8,7 @@ using System;
 using Machine.Specifications;
 using TA.SnapCap.DeviceInterface;
 using TA.SnapCap.SharedTypes;
+using TA.SnapCap.Specifications.Contexts;
 
 namespace TA.SnapCap.Specifications
     {

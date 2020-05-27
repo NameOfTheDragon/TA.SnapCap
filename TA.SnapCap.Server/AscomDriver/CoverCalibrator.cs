@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿// This file is part of the TA.SnapCap project
+//
+// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
+//
+// File: CoverCalibrator.cs  Last modified: 2020-05-27@19:35 by Tim Long
+
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using ASCOM;
 using ASCOM.DeviceInterface;
 using JetBrains.Annotations;
 using TA.SnapCap.Aspects;
-using TA.SnapCap.Server.AscomSwitch;
 
-namespace TA.SnapCap.Server.AscomCoverCalibrator
-{
+namespace TA.SnapCap.Server.AscomDriver
+    {
     [ProgId(SharedResources.CoverCalibratorDriverId)]
     [Guid("2c2a2dfe-497c-4eed-a808-9d038c2b441a")]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    [UsedImplicitly]
+    //[UsedImplicitly]
     [ServedClassName(SharedResources.DriverName)]
-    [NLogTraceWithArguments]
-
-    class CoverCalibrator : AscomDriverBase, ICoverCalibratorV1
-    {
+    //[NLogTraceWithArguments]
+    public class CoverCalibrator : AscomDriverBase, ICoverCalibratorV1
+        {
         /// <inheritdoc />
         public void OpenCover() { }
 
@@ -52,5 +50,5 @@ namespace TA.SnapCap.Server.AscomCoverCalibrator
 
         /// <inheritdoc />
         public int MaxBrightness { get; }
+        }
     }
-}

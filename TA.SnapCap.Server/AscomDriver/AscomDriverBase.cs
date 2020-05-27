@@ -8,13 +8,12 @@ using System;
 using System.Collections;
 using System.Reflection;
 using ASCOM;
-using JetBrains.Annotations;
 using NLog;
 using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
 using NotImplementedException = System.NotImplementedException;
 
-namespace TA.SnapCap.Server.AscomSwitch
+namespace TA.SnapCap.Server.AscomDriver
     {
     public abstract class AscomDriverBase : ReferenceCountedObjectBase, IDisposable, IAscomDriver
         {
@@ -36,7 +35,6 @@ namespace TA.SnapCap.Server.AscomSwitch
 Professionally developed by Tigra Astronomy";
 
         /// <summary>A string containing only the major and minor version of the driver.</summary>
-        [NotNull]
         public string DriverVersion
             {
             get

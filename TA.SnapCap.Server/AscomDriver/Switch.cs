@@ -16,10 +16,9 @@ using TA.SnapCap.Server.Properties;
 
 #if DEBUG_IN_EXTERNAL_APP
 using System.Windows.Forms;
-
 #endif
 
-namespace TA.SnapCap.Server.AscomSwitch
+namespace TA.SnapCap.Server.AscomDriver
     {
     [ProgId(SharedResources.SwitchDriverId)]
     [Guid("dd351fb1-ad95-4901-9672-777b93d0fe24")]

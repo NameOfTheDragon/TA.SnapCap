@@ -8,12 +8,16 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
+using TA.NexDome.Server;
+using TA.SnapCap.HardwareSimulator;
 using TA.SnapCap.Server.Properties;
 
 namespace TA.SnapCap.Server
     {
     public partial class CommunicationSettingsControl : UserControl
         {
+        private ClickCommand channelTypeClickCommand;
+
         public CommunicationSettingsControl()
             {
             InitializeComponent();
@@ -31,8 +35,32 @@ namespace TA.SnapCap.Server
 
         public void Save()
             {
-            Settings.Default.ConnectionString = $"{Settings.Default.CommPortName}:{Settings.Default.SerialParameters}";
+            RegenerateConnectionString();
             Settings.Default.Save();
+            }
+
+        private void RegenerateConnectionString()
+            {
+            var candidateConnectionString = UseSimulatorCheckbox.Checked
+                ? "Simulator:Realtime"
+                : $"{Settings.Default.CommPortName}:{Settings.Default.SerialParameters}";
+            Settings.Default.ConnectionString = candidateConnectionString;
+            }
+
+        private void CommunicationSettingsControl_Load(object sender, System.EventArgs e)
+            {
+            channelTypeClickCommand = CommPortName.AttachCommand(() => { }, () => !UseSimulatorCheckbox.Checked);
+            }
+
+        private void UseSimulatorCheckbox_CheckedChanged(object sender, System.EventArgs e)
+            {
+            channelTypeClickCommand.CanExecuteChanged();
+            RegenerateConnectionString();
+            }
+
+        private void CommPortName_Changed(object sender, System.EventArgs e)
+            {
+            RegenerateConnectionString();
             }
         }
     }

@@ -78,9 +78,8 @@
     <Compile Include="TestHelpers\TestableDeviceTransaction.cs" />
     <Compile Include="TestHelpers\TransactionExtensions.cs" />
     <Compile Include="TransactionSpecs.cs" />
-    <Compile Include="Fakes\UnitTestTransactionProcessorFactory.cs" />
     <Compile Include="UnitTestTransaction.cs" />
-    <Compile Include="with_device_context.cs" />
+    <Compile Include="Contexts\with_device_context.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
