@@ -1,7 +1,7 @@
 ﻿// This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: SimulatorStateMachine.cs  Last modified: 2020-05-24@12:41 by Tim Long
 
 using System;
@@ -53,11 +53,12 @@ namespace TA.SnapCap.HardwareSimulator
         ///     When <c>false</c>, the simulation proceeds at an accelerated pace with no pauses.
         /// </param>
         /// <param name="timeSource">A source of the current time.</param>
-        public SimulatorStateMachine(bool realTime, IClock timeSource)
+        public SimulatorStateMachine(bool realTime, IClock timeSource, InputParser parser)
             {
             Contract.Requires(timeSource != null);
             RealTime = realTime;
             this.timeSource = timeSource;
+            this.parser = parser;
             }
 
         [IgnoreAutoChangeNotification]
@@ -186,9 +187,11 @@ namespace TA.SnapCap.HardwareSimulator
         public void Initialize(SimulatorState startState, InputParser parser)
             {
             Transition(startState);
+            if (!ReferenceEquals(parser,this.parser))
+                throw new ArgumentException("Different parsers injected");
             this.parser = parser;
             var receiveObservable = receiveSubject.AsObservable();
-            parser.SubscribeTo(receiveObservable);
+            parser.SubscribeTo(receiveObservable, this);
             }
 
         /// <summary>

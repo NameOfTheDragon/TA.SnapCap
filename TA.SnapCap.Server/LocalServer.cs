@@ -45,7 +45,7 @@ namespace TA.SnapCap.Server
         [NLogTraceWithArguments]
         private static void Main(string[] args)
             {
-#if DEBUG
+#if DEBUG_IN_EXTERNAL_APP
             MessageBox.Show("Attach the debugger now");
 #endif
             // Manage unhandled exceptions

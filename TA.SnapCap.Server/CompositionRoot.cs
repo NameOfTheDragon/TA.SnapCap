@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Ninject;
 using Ninject.Activation;
+using Ninject.Activation.Strategies;
 using Ninject.Infrastructure.Disposal;
 using Ninject.Modules;
 using Ninject.Syntax;
@@ -13,6 +14,7 @@ using NodaTime;
 using TA.Ascom.ReactiveCommunications;
 using TA.SnapCap.DeviceInterface;
 using TA.SnapCap.HardwareSimulator;
+using TA.SnapCap.Server.Properties;
 
 namespace TA.SnapCap.Server
     {
@@ -21,9 +23,11 @@ namespace TA.SnapCap.Server
         static CompositionRoot()
             {
             Kernel = new StandardKernel();
+            Kernel.Components.Add<IActivationStrategy, LoggedActivationStrategy>();
+            AddBindings(new CoreModule());
             }
 
-        public static void AddBindings(IEnumerable<INinjectModule> bindingModules)
+        public static void AddBindings(params INinjectModule[] bindingModules)
             {
             foreach (var module in bindingModules)
                 {
@@ -93,13 +97,30 @@ namespace TA.SnapCap.Server
         {
         public override void Load()
             {
-            Bind<DeviceController>().ToSelf().InSessionScope();
+            Bind<InputParser>().ToSelf().InSessionScope();
+            Bind<SimulatorStateMachine>().ToMethod(BuildSimulatorStateMachine).InSessionScope();
+            Bind<DeviceController>().ToMethod(BuildDeviceController).InSessionScope();
             Bind<ICommunicationChannel>().ToMethod(BuildCommunicationsChannel).InSessionScope();
             Bind<ChannelFactory>().ToSelf().InSessionScope();
-            Bind<IClock>().ToMethod((context)=>SystemClock.Instance).InSingletonScope();
+            Bind<IClock>().ToMethod((context) => SystemClock.Instance).InSingletonScope();
             Bind<ReactiveTransactionProcessor>().ToSelf().InSessionScope();
             Bind<TransactionObserver>().ToSelf().InSessionScope();
             Bind<ITransactionProcessor>().ToMethod(BuildTransactionProcessor).InSessionScope();
+            }
+
+        private SimulatorStateMachine BuildSimulatorStateMachine(IContext ctx)
+            {
+            var parser = Kernel.Get<InputParser>();
+            var clock = Kernel.Get<IClock>();
+            var machine = new SimulatorStateMachine(realTime: true, clock, parser);
+            return machine;
+            }
+
+        private DeviceController BuildDeviceController(IContext ctx)
+            {
+            var communicationChannel = Kernel.Get<ICommunicationChannel>();
+            var transactionProcessor = Kernel.Get<ITransactionProcessor>();
+            return new DeviceController(communicationChannel, transactionProcessor);
             }
 
         private ITransactionProcessor BuildTransactionProcessor(IContext arg)
@@ -112,23 +133,15 @@ namespace TA.SnapCap.Server
 
         private ICommunicationChannel BuildCommunicationsChannel(IContext context)
             {
-            var parser = Kernel.Get<InputParser>();
-            var machine = Kernel.Get<SimulatorStateMachine>();
             var channelFactory = Kernel.Get<ChannelFactory>();
             channelFactory.RegisterChannelType(
                 SimulatorEndpoint.IsConnectionStringValid,
                 SimulatorEndpoint.FromConnectionString,
-                endpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint)endpoint, machine, parser)
+                endpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint) endpoint,
+                    Kernel.Get<SimulatorStateMachine>(), Kernel.Get<InputParser>())
             );
-
-            var channel = channelFactory.FromConnectionString("dummy");
+            var channel = channelFactory.FromConnectionString(Settings.Default.ConnectionString);
             return channel;
-            }
-
-        private DeviceControllerOptions BuildDeviceOptions(IContext arg)
-            {
-            var options = new DeviceControllerOptions(); // ToDo - populate from AppSettings
-            return options;
             }
         }
     }

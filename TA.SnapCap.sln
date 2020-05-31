@@ -23,7 +23,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TA.SnapCap.SharedCode", "TA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.HardwareSimulator", "TA.SnapCap.HardwareSimulator\TA.SnapCap.HardwareSimulator.csproj", "{393C3897-D66D-46F4-ABC2-1D59EC96095B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.SharedTypes", "TA.SnapCap.SharedTypes\TA.SnapCap.SharedTypes.csproj", "{B625748C-5238-4192-90C1-B386F4D303C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.SnapCap.SharedTypes", "TA.SnapCap.SharedTypes\TA.SnapCap.SharedTypes.csproj", "{B625748C-5238-4192-90C1-B386F4D303C1}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -95,7 +95,6 @@ Global
 		{DE875CEB-B5E0-4B60-B991-DA7261B1D6CC}.Debug|x64.ActiveCfg = Debug|x64
 		{DE875CEB-B5E0-4B60-B991-DA7261B1D6CC}.Debug|x64.Build.0 = Debug|x64
 		{DE875CEB-B5E0-4B60-B991-DA7261B1D6CC}.Debug|x86.ActiveCfg = Debug|x86
-		{DE875CEB-B5E0-4B60-B991-DA7261B1D6CC}.Debug|x86.Build.0 = Debug|x86
 		{DE875CEB-B5E0-4B60-B991-DA7261B1D6CC}.Release|Any CPU.ActiveCfg = Release|x86
 		{DE875CEB-B5E0-4B60-B991-DA7261B1D6CC}.Release|x64.ActiveCfg = Release|x64
 		{DE875CEB-B5E0-4B60-B991-DA7261B1D6CC}.Release|x64.Build.0 = Release|x64

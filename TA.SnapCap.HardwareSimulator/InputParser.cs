@@ -15,17 +15,13 @@ namespace TA.SnapCap.HardwareSimulator
     {
     public class InputParser
         {
-        private readonly ISimulatorStateTriggers stateMachine;
+        private ISimulatorStateTriggers actions;
 
         private readonly StringBuilder inputBuffer = new StringBuilder();
 
-        public InputParser(ISimulatorStateTriggers stateMachine)
+        public void SubscribeTo(IObservable<char> input, ISimulatorStateTriggers actions)
             {
-            this.stateMachine = stateMachine;
-            }
-
-        public void SubscribeTo(IObservable<char> input)
-            {
+            this.actions = actions;
             input.Trace("SimulatorIn")
                 .Subscribe(OnNext, OnError, OnCompleted);
             }
@@ -58,22 +54,22 @@ namespace TA.SnapCap.HardwareSimulator
             switch (command)
                 {
                     case Protocol.OpenCover:
-                        stateMachine.OpenRequested();
+                        actions.OpenRequested();
                         break;
                     case Protocol.CloseCover:
-                        stateMachine.CloseRequested();
+                        actions.CloseRequested();
                         break;
                     case Protocol.GetStatus: // query status
-                        stateMachine.QueryStatusRequested();
+                        actions.QueryStatusRequested();
                         break;
                     case Protocol.ElpOn:
-                        stateMachine.LampOnRequested();
+                        actions.LampOnRequested();
                         break;
                     case Protocol.ElpOff:
-                        stateMachine.LampOffRequested();
+                        actions.LampOffRequested();
                         break;
                     case Protocol.SetBrightness:
-                        stateMachine.SetLampBrightness(ExtractPayload());
+                        actions.SetLampBrightness(ExtractPayload());
                         break;
                     default:
                         Log.Warn().Message("Unsupported command {command}", command).Write();

@@ -2,7 +2,7 @@
 //
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
 //
-// File: CoverCalibrator.cs  Last modified: 2020-05-27@19:35 by Tim Long
+// File: CoverCalibrator.cs  Last modified: 2020-05-28@00:28 by Tim Long
 
 using System.Runtime.InteropServices;
 using ASCOM;
@@ -16,11 +16,16 @@ namespace TA.SnapCap.Server.AscomDriver
     [Guid("2c2a2dfe-497c-4eed-a808-9d038c2b441a")]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
-    //[UsedImplicitly]
+    [UsedImplicitly]
     [ServedClassName(SharedResources.DriverName)]
-    //[NLogTraceWithArguments]
+    [NLogTraceWithArguments]
     public class CoverCalibrator : AscomDriverBase, ICoverCalibratorV1
         {
+        public CoverCalibrator()
+            {
+            clientId = SharedResources.ConnectionManager.RegisterClient(SharedResources.CoverCalibratorDriverId);
+            }
+
         /// <inheritdoc />
         public void OpenCover() { }
 

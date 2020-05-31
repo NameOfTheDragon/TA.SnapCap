@@ -24,7 +24,7 @@ namespace TA.SnapCap.Specifications.Contexts
         /// <param name="receivedCommand">The received command.</param>
         public void SimulateReceivedCommand(string receivedCommand)
             {
-            Parser.SubscribeTo(receivedCommand.ToObservable());
+            Parser.SubscribeTo(receivedCommand.ToObservable(), FakeStateMachine);
             }
 
         /// <summary>

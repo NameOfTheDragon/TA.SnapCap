@@ -45,7 +45,8 @@ namespace TA.SnapCap.Specifications.Contexts
         public SimulatorStateMachine GetStateMachine()
             {
             if (stateMachine.Any()) return stateMachine.Single();
-            var machine = new SimulatorStateMachine(realTime: false, SystemClock.Instance);
+            var parser = Kernel.Get<InputParser>();
+            var machine = new SimulatorStateMachine(realTime: false, SystemClock.Instance, parser);
             stateMachine = new Maybe<SimulatorStateMachine>(machine);
             return stateMachine.Single();
             }

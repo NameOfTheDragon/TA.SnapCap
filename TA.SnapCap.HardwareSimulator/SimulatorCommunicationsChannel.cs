@@ -27,6 +27,11 @@ namespace TA.SnapCap.HardwareSimulator
         /// <param name="endpoint">A valid simulator endpoint.</param>
         public SimulatorCommunicationsChannel(SimulatorEndpoint endpoint, SimulatorStateMachine machine, InputParser parser)
             {
+            /*
+             * ToDo: InputParser is really not needed here except to initialize the
+             * state machine. Can this be injected there instead?
+             */
+
             Contract.Requires(endpoint != null);
             Endpoint = endpoint;
             Simulator = machine;

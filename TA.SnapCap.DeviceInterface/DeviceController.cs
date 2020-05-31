@@ -98,6 +98,7 @@ namespace TA.SnapCap.DeviceInterface
                 return;
                 }
             log.Info($"Closing device endpoint: {channel.Endpoint}");
+            channel.Close();
             log.Info("====== Channel closed: the device is now disconnected ======");
             OnPropertyChanged(nameof(IsOnline));
             }
@@ -211,6 +212,7 @@ namespace TA.SnapCap.DeviceInterface
         public void Open()
             {
             log.Info($"Opening device endpoint: {channel.Endpoint}");
+            channel.Open();
             log.Info("====== Initialization completed successfully : Device is now ready to accept commands ======");
             monitorStateCancellation = new CancellationTokenSource();
             ThreadPool.QueueUserWorkItem(MonitorStateWorker, monitorStateCancellation.Token);

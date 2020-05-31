@@ -9,7 +9,7 @@ namespace TA.SnapCap.Specifications.Contexts
             {
             var context = new InputParserContext();
             context.FakeStateMachine = A.Fake<ISimulatorStateTriggers>();
-            context.Parser = new InputParser(context.FakeStateMachine);
+            context.Parser = new InputParser();
             return context;
             }
         }
