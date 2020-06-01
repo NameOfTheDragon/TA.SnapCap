@@ -25,6 +25,7 @@ namespace TA.SnapCap.Specifications.Contexts
         Maybe<SimulatorStateMachine> stateMachine = Maybe<SimulatorStateMachine>.Empty;
         PropertyChangedEventHandler propertyChangedAction = (sender, args) => { };
         bool initialLampState = false;
+        uint lampBrightness = 0;
 
         /// <inheritdoc />
         public override void Load()
@@ -58,6 +59,7 @@ namespace TA.SnapCap.Specifications.Contexts
             context.SimulatorChannel.IsOpen = openChannel;
             initializeStateMachine(context);
             context.Simulator.LampOn = initialLampState;
+            context.Simulator.LampBrightness = lampBrightness;
             context.Simulator.StateChanged += args => context.StateChanges.Add(args.StateName);
             context.SimulatorChannel.ObservableReceivedCharacters.Subscribe(ch => context.ReceiveBuffer.Append(ch));
             context.Simulator.PropertyChanged += propertyChangedAction;
@@ -109,6 +111,12 @@ namespace TA.SnapCap.Specifications.Contexts
         public SimulatorTestContextBuilder WithLampOn()
             {
             initialLampState = true;
+            return this;
+            }
+
+        public SimulatorTestContextBuilder WithLampBrightness(uint brightness)
+            {
+            lampBrightness = brightness;
             return this;
             }
         }

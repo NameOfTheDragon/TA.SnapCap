@@ -27,6 +27,7 @@ namespace TA.SnapCap.Specifications
         It should_open_the_cover = () => Context.Simulator.SystemStatus.ShouldEqual( SystemStatus.Open);
         It should_stop_the_motor = () => Context.Simulator.MotorEnergized.ShouldBeFalse();
         It should_pass_through_opening_and_open = () => Context.StateChanges.ShouldEqual(ExpectedStates);
+        It should_reply = () => Context.Response.ShouldEqual("*O000\r\n");
         //ToDo: property change order is not deterministic - come up with a better test that is order agnostic
         static List<string> PropertyChanges = new List<string>();
         static List<string> ExpectedPropertyChanges = new List<string> {"MotorEnergized","SystemStatus"};
@@ -44,6 +45,7 @@ namespace TA.SnapCap.Specifications
         It should_close_the_cover = () => Context.Simulator.SystemStatus.ShouldEqual( SystemStatus.Closed);
         It should_stop_the_motor = () => Context.Simulator.MotorEnergized.ShouldBeFalse();
         It should_pass_through_closing_and_closed = () => Context.StateChanges.ShouldEqual(ExpectedStates);
+        It should_reply = () => Context.Response.ShouldEqual("*C000\r\n");
         //ToDo: property change order is not deterministic - come up with a better test that is order agnostic
         static List<string> PropertyChanges = new List<string>();
         static List<string> ExpectedPropertyChanges =

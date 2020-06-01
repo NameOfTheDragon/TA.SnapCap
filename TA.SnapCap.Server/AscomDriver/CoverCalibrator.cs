@@ -4,11 +4,15 @@
 //
 // File: CoverCalibrator.cs  Last modified: 2020-05-28@00:28 by Tim Long
 
+using System;
 using System.Runtime.InteropServices;
 using ASCOM;
 using ASCOM.DeviceInterface;
 using JetBrains.Annotations;
+using NLog.Fluent;
 using TA.SnapCap.Aspects;
+using TA.SnapCap.DeviceInterface;
+using NotImplementedException = ASCOM.NotImplementedException;
 
 namespace TA.SnapCap.Server.AscomDriver
     {
@@ -27,33 +31,69 @@ namespace TA.SnapCap.Server.AscomDriver
             }
 
         /// <inheritdoc />
-        public void OpenCover() { }
+        public void OpenCover() => device.OpenCap();
 
         /// <inheritdoc />
-        public void CloseCover() { }
+        public void CloseCover() => device.CloseCap();
 
         /// <inheritdoc />
-        public void HaltCover() { }
+        public void HaltCover()
+            {
+            Log.Warn().Message("This needs to be implemented").Write();
+            throw new NotImplementedException();
+            }
 
         /// <inheritdoc />
-        public void CalibratorOn(int Brightness) { }
+        public void CalibratorOn(int Brightness)
+            {
+            device.SetBrightness((byte) Brightness);
+            device.ElectroluminescentPanelOn();
+            }
 
         /// <inheritdoc />
-        public void CalibratorOff() { }
+        public void CalibratorOff()
+            {
+            device.ElectroluminescentPanelOff();
+            }
 
         /// <inheritdoc />
         public override short InterfaceVersion => 1;
 
         /// <inheritdoc />
-        public CoverStatus CoverState { get; }
+        public CoverStatus CoverState
+            {
+            get
+                {
+                if (device.MotorRunning)
+                    return CoverStatus.Moving;
+                var status = device.Disposition;
+                switch (status)
+                    {
+                        case SnapCapDisposition.Open:
+                            return CoverStatus.Open;
+                        case SnapCapDisposition.Closed:
+                            return CoverStatus.Closed;
+                        case SnapCapDisposition.Timeout:
+                        case SnapCapDisposition.OpenCircuit:
+                        case SnapCapDisposition.Overcurrent:
+                            return CoverStatus.Error;
+                        default:
+                            return CoverStatus.Unknown;
+                    }
+                }
+            }
 
         /// <inheritdoc />
-        public CalibratorStatus CalibratorState { get; }
+        public CalibratorStatus CalibratorState
+            {
+            //ToDo: must be implemented
+            get { return CalibratorStatus.Error; }
+            }
 
         /// <inheritdoc />
-        public int Brightness { get; }
+        public int Brightness => device.Brightness;
 
         /// <inheritdoc />
-        public int MaxBrightness { get; }
+        public int MaxBrightness => 255;
         }
     }

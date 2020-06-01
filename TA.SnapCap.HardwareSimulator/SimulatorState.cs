@@ -83,7 +83,11 @@ namespace TA.SnapCap.HardwareSimulator
 
         #region State Triggers
         /// <inheritdoc />
-        public virtual void OpenRequested() => Log.Info().Message("Open requested").Write();
+        public virtual void OpenRequested()
+            {
+            Log.Info().Message("Open requested").Write();
+            Machine.SendResponse("*O000");
+            }
 
         /// <inheritdoc />
         public virtual void QueryStatusRequested()
@@ -93,7 +97,11 @@ namespace TA.SnapCap.HardwareSimulator
             Machine.SendResponse(response);
             }
 
-        public virtual void CloseRequested() => Log.Info().Message("Close requested").Write();
+        public virtual void CloseRequested()
+            {
+            Log.Info().Message("Close requested").Write();
+            Machine.SendResponse("*C000");
+            }
 
         #region Lamp Control
         /*
@@ -106,6 +114,7 @@ namespace TA.SnapCap.HardwareSimulator
             {
             Log.Info().Message("Lamp on requested").Write();
             Machine.LampOn = true;
+            Machine.SendResponse("*L000");
             }
 
         /// <inheritdoc />
@@ -113,6 +122,13 @@ namespace TA.SnapCap.HardwareSimulator
             {
             Log.Info().Message("Lamp off requested").Write();
             Machine.LampOn = false;
+            Machine.SendResponse("*D000");
+            }
+
+        public virtual void GetLampBrightness()
+            {
+            Log.Info().Message("Get lamp brightness").Write();
+            Machine.SendResponse($"*J{Machine.LampBrightness:D3}");
             }
 
         /// <inheritdoc />
@@ -120,8 +136,8 @@ namespace TA.SnapCap.HardwareSimulator
             {
             Log.Info().Message("Set lamp brightness to {brightness}", brightness).Write();
             Machine.LampBrightness = brightness;
+            Machine.SendResponse($"*B{brightness:D3}");
             }
-
         #endregion Lamp Control
         #endregion State Triggers
         }

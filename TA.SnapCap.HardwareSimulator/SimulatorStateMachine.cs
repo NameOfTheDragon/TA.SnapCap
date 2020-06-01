@@ -272,5 +272,7 @@ namespace TA.SnapCap.HardwareSimulator
         /// <inheritdoc />
         public void QueryStatusRequested() => CurrentState.QueryStatusRequested();
         #endregion
+
+        public void GetLampBrightness() => CurrentState.GetLampBrightness();
         }
     }

@@ -22,5 +22,7 @@ namespace TA.SnapCap.HardwareSimulator
         void LampOffRequested();
 
         void SetLampBrightness(uint brightness);
+
+        void GetLampBrightness();
         }
     }

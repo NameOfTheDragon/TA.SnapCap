@@ -1,63 +1,34 @@
 // This file is part of the TA.SnapCap project
 // 
-// Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
+// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
 // 
-// File: GarbageCollection.cs  Last modified: 2017-05-06@19:59 by Tim Long
+// File: GarbageCollection.cs  Last modified: 2020-06-01@02:05 by Tim Long
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
+using TA.SnapCap.HardwareSimulator;
 
 namespace TA.SnapCap.Server
     {
-    /// <summary>
-    ///     Summary description for GarbageCollection.
-    /// </summary>
-    internal class GarbageCollection
+    /// <summary>Summary description for GarbageCollection.</summary>
+    internal static class GarbageCollection
         {
-        protected bool m_bContinueThread;
-        protected ManualResetEvent m_EventThreadEnded;
-        protected bool m_GCWatchStopped;
-        protected int m_iInterval;
+        static readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        public GarbageCollection(int iInterval)
+        internal static async Task CollectPeriodically(TimeSpan interval)
             {
-            m_bContinueThread = true;
-            m_GCWatchStopped = false;
-            m_iInterval = iInterval;
-            m_EventThreadEnded = new ManualResetEvent(false);
-            }
-
-        protected bool ContinueThread()
-            {
-            lock (this)
+            var cancellationToken = cancellationTokenSource.Token;
+            while (!cancellationToken.IsCancellationRequested)
                 {
-                return m_bContinueThread;
-                }
-            }
-
-        public void GCWatch()
-            {
-            // Pause for a moment to provide a delay to make threads more apparent.
-            while (ContinueThread())
-                {
+                await Task.Delay(interval, cancellationToken).ContinueOnAnyThread();
                 GC.Collect();
-                Thread.Sleep(m_iInterval);
-                }
-            m_EventThreadEnded.Set();
-            }
-
-        public void StopThread()
-            {
-            lock (this)
-                {
-                m_bContinueThread = false;
                 }
             }
 
-        public void WaitForThreadToStop()
+        public static void Stop()
             {
-            m_EventThreadEnded.WaitOne();
-            m_EventThreadEnded.Reset();
+            cancellationTokenSource.Cancel();
             }
         }
     }

@@ -82,11 +82,7 @@ namespace TA.SnapCap.Server
             //if (StartedByCOM) s_MainForm.WindowState = FormWindowState.Minimized;
 
             var registeredFactories = RegisterClassFactories(drivers);
-            // ToDo: [TPL] Why is this even necessary? Shouldn't GC be automatic?
-            var GarbageCollector = new GarbageCollection(10000);
-            var GCThread = new Thread(GarbageCollector.GCWatch);
-            GCThread.Name = "Garbage Collection Thread";
-            GCThread.Start();
+            var garbageTask = GarbageCollection.CollectPeriodically(TimeSpan.FromSeconds(10));
 
             //
             // Start the message loop. This serializes incoming calls to our
@@ -102,10 +98,7 @@ namespace TA.SnapCap.Server
                 // Don't wait until the thread has stopped before
                 // we perform revocation!!!
                 RevokeClassFactories(registeredFactories);
-
-                // Now stop the Garbage Collector thread.
-                GarbageCollector.StopThread();
-                GarbageCollector.WaitForThreadToStop();
+                GarbageCollection.Stop();
                 Application.ThreadException -= UnhandledThreadException;
                 AppDomain.CurrentDomain.UnhandledException -= UnhandledException;
                 }

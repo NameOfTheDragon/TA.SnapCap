@@ -2,7 +2,7 @@
 //
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
 //
-// File: InputParser.cs  Last modified: 2020-05-24@15:29 by Tim Long
+// File: InputParser.cs  Last modified: 2020-06-01@01:40 by Tim Long
 
 using System;
 using System.Text;
@@ -15,9 +15,8 @@ namespace TA.SnapCap.HardwareSimulator
     {
     public class InputParser
         {
-        private ISimulatorStateTriggers actions;
-
         private readonly StringBuilder inputBuffer = new StringBuilder();
+        private ISimulatorStateTriggers actions;
 
         public void SubscribeTo(IObservable<char> input, ISimulatorStateTriggers actions)
             {
@@ -70,6 +69,9 @@ namespace TA.SnapCap.HardwareSimulator
                         break;
                     case Protocol.SetBrightness:
                         actions.SetLampBrightness(ExtractPayload());
+                        break;
+                    case Protocol.GetBrightness:
+                        actions.GetLampBrightness();
                         break;
                     default:
                         Log.Warn().Message("Unsupported command {command}", command).Write();
