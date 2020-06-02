@@ -6,6 +6,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -26,6 +27,7 @@ namespace TA.SnapCap.DeviceInterface
         private readonly ITransactionProcessor transactionProcessor; // injected
         private bool disposed;
         [NotNull] private CancellationTokenSource monitorStateCancellation = new CancellationTokenSource();
+        private CancellationTokenSource warmUpCancellationSource = null;
 
         public DeviceController(ICommunicationChannel channel, ITransactionProcessor transactionProcessor)
             {
@@ -49,6 +51,8 @@ namespace TA.SnapCap.DeviceInterface
         public bool MotorRunning { get; private set; }
 
         public SnapCapState State { get; private set; }
+
+        public bool LampWarmingUp { get; set; } = false;
 
         public void Dispose()
             {
@@ -121,13 +125,30 @@ namespace TA.SnapCap.DeviceInterface
 
         public void ElectroluminescentPanelOff()
             {
-            TransactSimpleCommand(Protocol.ElpOff);
+            var result = TransactSimpleCommand(Protocol.ElpOff);
+            if (result.Successful)
+                warmUpCancellationSource.Cancel();
             }
 
         public void ElectroluminescentPanelOn()
             {
-            TransactSimpleCommand(Protocol.ElpOn);
+            var result = TransactSimpleCommand(Protocol.ElpOn);
+            if (result.Successful)
+                _ = WarmUpLamp();
             }
+
+        private async Task WarmUpLamp()
+            {
+            warmUpCancellationSource?.Cancel();
+            warmUpCancellationSource = new CancellationTokenSource();
+            LampWarmingUp = true;
+            await Task.Delay(WarmUpPeriod, warmUpCancellationSource.Token);
+            if (!warmUpCancellationSource.IsCancellationRequested)
+                LampWarmingUp = false;
+            }
+
+        // ToDo: this should be configurable in user settings.
+        public TimeSpan WarmUpPeriod => TimeSpan.FromSeconds(10.0);
 
         // The IDisposable pattern, as described at
         // http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
@@ -242,10 +263,19 @@ namespace TA.SnapCap.DeviceInterface
             UpdateStateProperties(state);
             }
 
+        /// <summary>
+        /// Sets the ELP brightness (actually the PWM timer value).
+        /// Setting to values less than 25 is not recommended.
+        /// </summary>
+        /// <param name="brightness">The brightness (PWM timer value) in range 25..255.</param>
         public void SetBrightness(byte brightness)
             {
-            TransactSimpleCommand(Protocol.SetBrightness, brightness);
-            Brightness = BrightnessToPercent(brightness);
+            var result = TransactSimpleCommand(Protocol.SetBrightness, brightness);
+            if (result.Successful)
+                {
+                _ = WarmUpLamp();
+                Brightness = BrightnessToPercent(brightness);
+                }
             }
 
         private SnapCapTransaction TransactSimpleCommand(char command, byte? payload = null)

@@ -82,7 +82,7 @@ namespace TA.SnapCap.Server
             //if (StartedByCOM) s_MainForm.WindowState = FormWindowState.Minimized;
 
             var registeredFactories = RegisterClassFactories(drivers);
-            var garbageTask = GarbageCollection.CollectPeriodically(TimeSpan.FromSeconds(10));
+            //var garbageTask = GarbageCollection.CollectPeriodically(TimeSpan.FromSeconds(10));
 
             //
             // Start the message loop. This serializes incoming calls to our

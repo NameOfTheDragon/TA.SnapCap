@@ -5,12 +5,6 @@ VisualStudioVersion = 16.0.29311.281
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.Aspects", "TA.PostSharp.Aspects\TA.SnapCap.Aspects.csproj", "{9CDCF319-DADC-41EB-B787-DE3862017E95}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Shared Items", "Solution Shared Items", "{2D14AE63-4259-4517-8C0B-B5A2A6D47007}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		ReadMe.md = ReadMe.md
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.DeviceInterface", "TA.SnapCap.DeviceInterface\TA.SnapCap.DeviceInterface.csproj", "{3015F05F-D747-4C3E-A0D4-EC2B3BD76C56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.Specifications", "TA.SnapCap.Specifications\TA.SnapCap.Specifications.csproj", "{C006703F-2193-481D-AA15-F46D2FB2A21B}"
@@ -24,6 +18,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.HardwareSimulator", "TA.SnapCap.HardwareSimulator\TA.SnapCap.HardwareSimulator.csproj", "{393C3897-D66D-46F4-ABC2-1D59EC96095B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.SnapCap.SharedTypes", "TA.SnapCap.SharedTypes\TA.SnapCap.SharedTypes.csproj", "{B625748C-5238-4192-90C1-B386F4D303C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D1C6C67F-2684-4782-9F95-EA3BAACFABF1}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		ReadMe.md = ReadMe.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

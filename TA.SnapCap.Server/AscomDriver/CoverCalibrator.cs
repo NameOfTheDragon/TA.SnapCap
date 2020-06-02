@@ -8,11 +8,13 @@ using System;
 using System.Runtime.InteropServices;
 using ASCOM;
 using ASCOM.DeviceInterface;
+using ASCOM.Utilities.Exceptions;
 using JetBrains.Annotations;
 using NLog.Fluent;
 using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
 using NotImplementedException = ASCOM.NotImplementedException;
+using InvalidValueException = ASCOM.InvalidValueException;
 
 namespace TA.SnapCap.Server.AscomDriver
     {
@@ -25,32 +27,43 @@ namespace TA.SnapCap.Server.AscomDriver
     [NLogTraceWithArguments]
     public class CoverCalibrator : AscomDriverBase, ICoverCalibratorV1
         {
+
         public CoverCalibrator()
             {
             clientId = SharedResources.ConnectionManager.RegisterClient(SharedResources.CoverCalibratorDriverId);
             }
 
         /// <inheritdoc />
-        public void OpenCover() => device.OpenCap();
+        [MustBeConnected] public void OpenCover() => device.OpenCap();
 
         /// <inheritdoc />
-        public void CloseCover() => device.CloseCap();
+        [MustBeConnected] public void CloseCover() => device.CloseCap();
 
         /// <inheritdoc />
+        [MustBeConnected]
         public void HaltCover()
             {
             Log.Warn().Message("This needs to be implemented").Write();
+            //ToDo: must be implemented
             throw new NotImplementedException();
             }
 
         /// <inheritdoc />
+        [MustBeConnected]
         public void CalibratorOn(int Brightness)
             {
-            device.SetBrightness((byte) Brightness);
+            if (Brightness < 1 || Brightness > ValueConverterExtensions.AscomMaxBrightness)
+                {
+                throw new InvalidValueException(
+                    $"Brightness {Brightness} is outside the allowed range of 1..{ValueConverterExtensions.AscomMaxBrightness}");
+                }
+            var deviceBrightness = Brightness.ToDeviceBrightness();
+            device.SetBrightness((byte)deviceBrightness);
             device.ElectroluminescentPanelOn();
             }
 
         /// <inheritdoc />
+        [MustBeConnected]
         public void CalibratorOff()
             {
             device.ElectroluminescentPanelOff();
@@ -64,6 +77,8 @@ namespace TA.SnapCap.Server.AscomDriver
             {
             get
                 {
+                if (device?.IsOnline ?? false)
+                    return CoverStatus.Unknown;
                 if (device.MotorRunning)
                     return CoverStatus.Moving;
                 var status = device.Disposition;
@@ -86,14 +101,24 @@ namespace TA.SnapCap.Server.AscomDriver
         /// <inheritdoc />
         public CalibratorStatus CalibratorState
             {
-            //ToDo: must be implemented
-            get { return CalibratorStatus.Error; }
+            get
+                {
+                if (device?.IsOnline ?? false)
+                    return CalibratorStatus.Unknown;
+                if (!device.Illuminated)
+                    return CalibratorStatus.Off;
+                return device.LampWarmingUp ? CalibratorStatus.NotReady : CalibratorStatus.Ready;
+                }
             }
 
         /// <inheritdoc />
-        public int Brightness => device.Brightness;
+        public int Brightness => device.Brightness.ToAscomBrightness();
 
         /// <inheritdoc />
-        public int MaxBrightness => 255;
+        /// <remarks>
+        /// SnapCap has a range of valid brightnesses of 25..255, therefore we need to scale this
+        /// to a zero-based contiguous range here in the ASCOM interface.
+        /// </remarks>
+        public int MaxBrightness => ValueConverterExtensions.AscomMaxBrightness;
         }
     }

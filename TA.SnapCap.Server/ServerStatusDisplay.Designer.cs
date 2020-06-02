@@ -32,7 +32,6 @@ namespace TA.SnapCap.Server
             this.registeredClientCount = new System.Windows.Forms.Label();
             this.OnlineClients = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.ClientStatus = new System.Windows.Forms.ListBox();
             this.annunciatorPanel1 = new TA.WinFormsControls.AnnunciatorPanel();
             this.ConnectedAnnunciator = new TA.WinFormsControls.Annunciator();
             this.MotorAnnunciator = new TA.WinFormsControls.Annunciator();
@@ -45,7 +44,7 @@ namespace TA.SnapCap.Server
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(12, 10);
+            this.label1.Location = new System.Drawing.Point(12, 44);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(104, 21);
             this.label1.TabIndex = 0;
@@ -54,7 +53,7 @@ namespace TA.SnapCap.Server
             // registeredClientCount
             // 
             this.registeredClientCount.AutoSize = true;
-            this.registeredClientCount.Location = new System.Drawing.Point(122, 10);
+            this.registeredClientCount.Location = new System.Drawing.Point(122, 44);
             this.registeredClientCount.Name = "registeredClientCount";
             this.registeredClientCount.Size = new System.Drawing.Size(13, 13);
             this.registeredClientCount.TabIndex = 1;
@@ -63,7 +62,7 @@ namespace TA.SnapCap.Server
             // OnlineClients
             // 
             this.OnlineClients.AutoSize = true;
-            this.OnlineClients.Location = new System.Drawing.Point(226, 10);
+            this.OnlineClients.Location = new System.Drawing.Point(226, 44);
             this.OnlineClients.Name = "OnlineClients";
             this.OnlineClients.Size = new System.Drawing.Size(13, 13);
             this.OnlineClients.TabIndex = 3;
@@ -71,35 +70,23 @@ namespace TA.SnapCap.Server
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(166, 10);
+            this.label3.Location = new System.Drawing.Point(166, 44);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(54, 21);
             this.label3.TabIndex = 2;
             this.label3.Text = "Online:";
             // 
-            // ClientStatus
-            // 
-            this.ClientStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClientStatus.FormattingEnabled = true;
-            this.ClientStatus.Location = new System.Drawing.Point(13, 35);
-            this.ClientStatus.Name = "ClientStatus";
-            this.ClientStatus.Size = new System.Drawing.Size(725, 108);
-            this.ClientStatus.TabIndex = 4;
-            // 
             // annunciatorPanel1
             // 
-            this.annunciatorPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.annunciatorPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.annunciatorPanel1.Controls.Add(this.ConnectedAnnunciator);
             this.annunciatorPanel1.Controls.Add(this.MotorAnnunciator);
+            this.annunciatorPanel1.Controls.Add(this.DispositionAnnunciator);
             this.annunciatorPanel1.Controls.Add(this.IlluminationAnnunciator);
             this.annunciatorPanel1.Controls.Add(this.BrightnessAnnunciator);
-            this.annunciatorPanel1.Controls.Add(this.DispositionAnnunciator);
-            this.annunciatorPanel1.Location = new System.Drawing.Point(352, 7);
+            this.annunciatorPanel1.Location = new System.Drawing.Point(8, 12);
             this.annunciatorPanel1.Name = "annunciatorPanel1";
-            this.annunciatorPanel1.Size = new System.Drawing.Size(386, 19);
+            this.annunciatorPanel1.Size = new System.Drawing.Size(397, 19);
             this.annunciatorPanel1.TabIndex = 5;
             // 
             // ConnectedAnnunciator
@@ -111,7 +98,6 @@ namespace TA.SnapCap.Server
             this.ConnectedAnnunciator.ForeColor = System.Drawing.Color.DarkSeaGreen;
             this.ConnectedAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.ConnectedAnnunciator.Location = new System.Drawing.Point(3, 0);
-            this.ConnectedAnnunciator.Mute = false;
             this.ConnectedAnnunciator.Name = "ConnectedAnnunciator";
             this.ConnectedAnnunciator.Size = new System.Drawing.Size(90, 19);
             this.ConnectedAnnunciator.TabIndex = 0;
@@ -124,10 +110,9 @@ namespace TA.SnapCap.Server
             this.MotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.MotorAnnunciator.Cadence = TA.WinFormsControls.CadencePattern.BlinkAlarm;
             this.MotorAnnunciator.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+            this.MotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.MotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.MotorAnnunciator.Location = new System.Drawing.Point(99, 0);
-            this.MotorAnnunciator.Mute = false;
             this.MotorAnnunciator.Name = "MotorAnnunciator";
             this.MotorAnnunciator.Size = new System.Drawing.Size(54, 19);
             this.MotorAnnunciator.TabIndex = 0;
@@ -138,12 +123,11 @@ namespace TA.SnapCap.Server
             this.IlluminationAnnunciator.ActiveColor = System.Drawing.Color.PaleGoldenrod;
             this.IlluminationAnnunciator.AutoSize = true;
             this.IlluminationAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.IlluminationAnnunciator.Cadence = TA.WinFormsControls.CadencePattern.Wink;
+            this.IlluminationAnnunciator.Cadence = TA.WinFormsControls.CadencePattern.BlinkFast;
             this.IlluminationAnnunciator.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.IlluminationAnnunciator.ForeColor = System.Drawing.Color.PaleGoldenrod;
             this.IlluminationAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.IlluminationAnnunciator.Location = new System.Drawing.Point(159, 0);
-            this.IlluminationAnnunciator.Mute = false;
+            this.IlluminationAnnunciator.Location = new System.Drawing.Point(273, 0);
             this.IlluminationAnnunciator.Name = "IlluminationAnnunciator";
             this.IlluminationAnnunciator.Size = new System.Drawing.Size(54, 19);
             this.IlluminationAnnunciator.TabIndex = 0;
@@ -157,8 +141,7 @@ namespace TA.SnapCap.Server
             this.BrightnessAnnunciator.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BrightnessAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.BrightnessAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.BrightnessAnnunciator.Location = new System.Drawing.Point(219, 0);
-            this.BrightnessAnnunciator.Mute = false;
+            this.BrightnessAnnunciator.Location = new System.Drawing.Point(333, 0);
             this.BrightnessAnnunciator.Name = "BrightnessAnnunciator";
             this.BrightnessAnnunciator.Size = new System.Drawing.Size(45, 19);
             this.BrightnessAnnunciator.TabIndex = 0;
@@ -172,8 +155,7 @@ namespace TA.SnapCap.Server
             this.DispositionAnnunciator.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DispositionAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.DispositionAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
-            this.DispositionAnnunciator.Location = new System.Drawing.Point(270, 0);
-            this.DispositionAnnunciator.Mute = false;
+            this.DispositionAnnunciator.Location = new System.Drawing.Point(159, 0);
             this.DispositionAnnunciator.Name = "DispositionAnnunciator";
             this.DispositionAnnunciator.Size = new System.Drawing.Size(108, 19);
             this.DispositionAnnunciator.TabIndex = 0;
@@ -181,7 +163,7 @@ namespace TA.SnapCap.Server
             // 
             // SetupCommand
             // 
-            this.SetupCommand.Location = new System.Drawing.Point(265, 5);
+            this.SetupCommand.Location = new System.Drawing.Point(330, 39);
             this.SetupCommand.Name = "SetupCommand";
             this.SetupCommand.Size = new System.Drawing.Size(75, 23);
             this.SetupCommand.TabIndex = 8;
@@ -193,10 +175,11 @@ namespace TA.SnapCap.Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 160);
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(425, 74);
             this.Controls.Add(this.SetupCommand);
             this.Controls.Add(this.annunciatorPanel1);
-            this.Controls.Add(this.ClientStatus);
             this.Controls.Add(this.OnlineClients);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.registeredClientCount);
@@ -222,7 +205,6 @@ namespace TA.SnapCap.Server
         private System.Windows.Forms.Label registeredClientCount;
         private System.Windows.Forms.Label OnlineClients;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ListBox ClientStatus;
         private TA.WinFormsControls.AnnunciatorPanel annunciatorPanel1;
         private System.Windows.Forms.Button SetupCommand;
         private TA.WinFormsControls.Annunciator ConnectedAnnunciator;
