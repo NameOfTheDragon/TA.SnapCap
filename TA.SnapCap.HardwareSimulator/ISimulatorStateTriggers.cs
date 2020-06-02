@@ -15,6 +15,8 @@ namespace TA.SnapCap.HardwareSimulator
 
         void CloseRequested();
 
+        void HaltRequested();
+
         void QueryStatusRequested();
 
         void LampOnRequested();

@@ -73,6 +73,9 @@ namespace TA.SnapCap.HardwareSimulator
                     case Protocol.GetBrightness:
                         actions.GetLampBrightness();
                         break;
+                    case Protocol.Halt:
+                        actions.HaltRequested();
+                        break;
                     default:
                         Log.Warn().Message("Unsupported command {command}", command).Write();
                         break;

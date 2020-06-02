@@ -40,13 +40,7 @@ namespace TA.SnapCap.Server.AscomDriver
         [MustBeConnected] public void CloseCover() => device.CloseCap();
 
         /// <inheritdoc />
-        [MustBeConnected]
-        public void HaltCover()
-            {
-            Log.Warn().Message("This needs to be implemented").Write();
-            //ToDo: must be implemented
-            throw new NotImplementedException();
-            }
+        [MustBeConnected] public void HaltCover() => device.Halt();
 
         /// <inheritdoc />
         [MustBeConnected]

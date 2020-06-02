@@ -30,7 +30,7 @@ namespace TA.SnapCap.Specifications
         It should_reply = () => Context.Response.ShouldEqual("*O000\r\n");
         //ToDo: property change order is not deterministic - come up with a better test that is order agnostic
         static List<string> PropertyChanges = new List<string>();
-        static List<string> ExpectedPropertyChanges = new List<string> {"MotorEnergized","SystemStatus"};
+        static List<string> ExpectedPropertyChanges = new List<string> { "MotorEnergized", "MotorEnergized", "SystemStatus" };
         static List<string> ExpectedStates = new List<string> {nameof(StateOpening), nameof(StateOpen)};
         }
 
@@ -49,7 +49,7 @@ namespace TA.SnapCap.Specifications
         //ToDo: property change order is not deterministic - come up with a better test that is order agnostic
         static List<string> PropertyChanges = new List<string>();
         static List<string> ExpectedPropertyChanges =
-            new List<string> {"MotorDirection", "MotorEnergized", "SystemStatus"};
+            new List<string> {"MotorDirection", "MotorEnergized", "MotorEnergized", "SystemStatus"};
         static List<string> ExpectedStates = new List<string> {nameof(StateClosing), nameof(StateClosed)};
         }
     }

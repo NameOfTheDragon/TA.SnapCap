@@ -69,10 +69,7 @@ namespace TA.SnapCap.HardwareSimulator
         /// <summary>
         ///     Called (by the state machine) when entering the state.
         /// </summary>
-        public virtual Task OnEnter()
-            {
-            return Task.CompletedTask;
-            }
+        public virtual void OnEnter() { }
 
 
         #region Events
@@ -87,6 +84,13 @@ namespace TA.SnapCap.HardwareSimulator
             {
             Log.Info().Message("Open requested").Write();
             Machine.SendResponse("*O000");
+            }
+
+        /// <inheritdoc />
+        public virtual void HaltRequested()
+            {
+            Log.Info().Message("Halt requested").Write();
+            Machine.SendResponse("*A000");
             }
 
         /// <inheritdoc />

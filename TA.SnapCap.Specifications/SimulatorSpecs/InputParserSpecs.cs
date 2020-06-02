@@ -47,4 +47,13 @@ namespace TA.SnapCap.Specifications.SimulatorSpecs
         It should_trigger_the_lamp_brightness_action =
             () => A.CallTo(() => Context.FakeStateMachine.SetLampBrightness(100)).MustHaveHappenedOnceExactly();
         }
+
+    [Subject(typeof(InputParser), "Tokenization and parsing of the input stream")]
+    internal class when_a_halt_command_is_received : with_input_parser_context
+        {
+        Establish context = () => Context = ContextBuilder.Build();
+        Because of = () => Context.SimulateReceivedCommand(Protocol.Halt);
+        It should_trigger_the_halt_action =
+            () => A.CallTo(() => Context.FakeStateMachine.HaltRequested()).MustHaveHappenedOnceExactly();
+        }
     }

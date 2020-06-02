@@ -13,13 +13,23 @@ namespace TA.SnapCap.HardwareSimulator {
         internal StateClosing(SimulatorStateMachine machine) : base(machine) { }
 
         /// <inheritdoc />
-        public override async Task OnEnter()
+        public override void OnEnter()
             {
             base.OnEnter();
-            await Machine.SimulatedDelay(TimeSpan.FromSeconds(10)) // Todo: move magic number to configuration
+            Machine.MotorDirection = MotorDirection.Closing;
+            Machine.MotorEnergized = true;
+            Task.Run(() => Machine.SimulatedDelay(TimeSpan.FromSeconds(10))) // Todo: move magic number to configuration
+                .ContinueWith(task => Machine.Transition(new StateClosed(Machine)),
+                    TaskContinuationOptions.NotOnCanceled)
                 .ContinueOnAnyThread();
-            // ToDo: trigger closed endstop
-            Machine.Transition(new StateClosed(Machine));
+            }
+
+        /// <inheritdoc />
+        public override void HaltRequested()
+            {
+            base.HaltRequested();
+            Machine.CancelSimulatedDelay();
+            Machine.Transition(new StateUserAbort(Machine));
             }
         }
     }

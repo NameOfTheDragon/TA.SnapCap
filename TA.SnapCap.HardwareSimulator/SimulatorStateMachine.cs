@@ -1,8 +1,8 @@
 ﻿// This file is part of the TA.SnapCap project
-//
+// 
 // Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-//
-// File: SimulatorStateMachine.cs  Last modified: 2020-05-24@12:41 by Tim Long
+// 
+// File: SimulatorStateMachine.cs  Last modified: 2020-06-02@23:40 by Tim Long
 
 using System;
 using System.ComponentModel;
@@ -46,6 +46,8 @@ namespace TA.SnapCap.HardwareSimulator
         ///     received.
         /// </summary>
         internal StringBuilder ReceivedChars = new StringBuilder();
+
+        CancellationTokenSource simulatedDelayCancellation = new CancellationTokenSource();
 
         /// <summary>Initializes a new instance of the <see cref="SimulatorStateMachine" /> class.</summary>
         /// <param name="realTime">
@@ -95,6 +97,22 @@ namespace TA.SnapCap.HardwareSimulator
         public uint LampBrightness { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void CloseRequested() => CurrentState.CloseRequested();
+
+        /// <inheritdoc />
+        public void HaltRequested() => CurrentState.HaltRequested();
+
+        /// <inheritdoc />
+        public void LampOnRequested() => CurrentState.LampOnRequested();
+
+        /// <inheritdoc />
+        public void LampOffRequested() => CurrentState.LampOffRequested();
+
+        /// <inheritdoc />
+        public void SetLampBrightness(uint brightness) => CurrentState.SetLampBrightness(brightness);
+
+        public void GetLampBrightness() => CurrentState.GetLampBrightness();
 
         public Task WhenStopped()
             {
@@ -187,7 +205,7 @@ namespace TA.SnapCap.HardwareSimulator
         public void Initialize(SimulatorState startState, InputParser parser)
             {
             Transition(startState);
-            if (!ReferenceEquals(parser,this.parser))
+            if (!ReferenceEquals(parser, this.parser))
                 throw new ArgumentException("Different parsers injected");
             this.parser = parser;
             var receiveObservable = receiveSubject.AsObservable();
@@ -202,10 +220,14 @@ namespace TA.SnapCap.HardwareSimulator
         /// <returns>Task.</returns>
         public Task SimulatedDelay(TimeSpan delay)
             {
+            simulatedDelayCancellation?.Cancel();
+            simulatedDelayCancellation = new CancellationTokenSource();
             if (RealTime)
-                return Task.Delay(delay);
+                return Task.Delay(delay, simulatedDelayCancellation.Token);
             return Task.CompletedTask;
             }
+
+        public void CancelSimulatedDelay() => simulatedDelayCancellation.Cancel();
 
         public void SignalStopped()
             {
@@ -222,17 +244,6 @@ namespace TA.SnapCap.HardwareSimulator
             {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
-
-        public void CloseRequested() => CurrentState.CloseRequested();
-
-        /// <inheritdoc />
-        public void LampOnRequested() => CurrentState.LampOnRequested();
-
-        /// <inheritdoc />
-        public void LampOffRequested() => CurrentState.LampOffRequested();
-
-        /// <inheritdoc />
-        public void SetLampBrightness(uint brightness) => CurrentState.SetLampBrightness(brightness);
 
         #region Disposable pattern
         /// <summary>Releases the resources used by this object.</summary>
@@ -272,7 +283,5 @@ namespace TA.SnapCap.HardwareSimulator
         /// <inheritdoc />
         public void QueryStatusRequested() => CurrentState.QueryStatusRequested();
         #endregion
-
-        public void GetLampBrightness() => CurrentState.GetLampBrightness();
         }
     }

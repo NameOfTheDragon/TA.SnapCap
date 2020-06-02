@@ -16,6 +16,7 @@ namespace TA.SnapCap.SharedTypes
         public const char SetBrightness = 'B';
         public const char OpenCover = 'O';
         public const char CloseCover = 'C';
+        public const char Halt = 'A';
         public const char CommandInitiator = '>';
         public const char CommandTerminator = '\n';
 

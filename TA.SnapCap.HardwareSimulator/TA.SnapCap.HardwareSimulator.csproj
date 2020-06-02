@@ -57,6 +57,7 @@
     <Compile Include="StateEventArgs.cs" />
     <Compile Include="StateOpen.cs" />
     <Compile Include="StateOpening.cs" />
+    <Compile Include="StateUserAbort.cs" />
     <Compile Include="SystemStatus.cs" />
   </ItemGroup>
   <ItemGroup>

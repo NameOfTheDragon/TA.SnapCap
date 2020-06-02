@@ -12,21 +12,18 @@ namespace TA.SnapCap.HardwareSimulator {
         internal StateClosed(SimulatorStateMachine machine) : base(machine) { }
 
         /// <inheritdoc />
-        public override Task OnEnter()
+        public override void OnEnter()
             {
             base.OnEnter();
             Machine.MotorEnergized = false;
             Machine.SetSystemState(SystemStatus.Closed);
             Machine.SignalStopped();
-            return Task.CompletedTask;
             }
 
         /// <inheritdoc />
         public override void OpenRequested()
             {
             base.OpenRequested();
-            Machine.MotorDirection = MotorDirection.Opening;
-            Machine.MotorEnergized = true;
             Machine.Transition(new StateOpening(Machine));
             }
         }

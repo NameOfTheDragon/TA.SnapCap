@@ -107,6 +107,14 @@ namespace TA.SnapCap.DeviceInterface
             OnPropertyChanged(nameof(IsOnline));
             }
 
+        /// <summary>
+        /// Try to immediately stop the cover if it is moving.
+        /// </summary>
+        public void Halt()
+            {
+            TransactSimpleCommand(Protocol.Halt);
+            }
+
         public void CloseCap()
             {
             TransactSimpleCommand(Protocol.CloseCover);
