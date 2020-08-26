@@ -62,6 +62,11 @@ namespace TA.SnapCap.DeviceInterface
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Accepts a percentage and returns a device brightness value in the range 25..100
+        /// </summary>
+        /// <param name="percentBrightness">The desired percentage illumination in the range 0.0 .. 100.0</param>
+        /// <returns></returns>
         internal static byte BrightnessFromPercent(double percentBrightness)
             {
             if (percentBrightness >= 100.0)

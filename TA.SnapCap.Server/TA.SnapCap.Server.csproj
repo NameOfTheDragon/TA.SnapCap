@@ -166,7 +166,6 @@
     </Compile>
     <Compile Include="AscomDriver\CoverCalibrator.cs" />
     <Compile Include="AscomDriver\AscomDriverBase.cs" />
-    <Compile Include="AscomDriver\ValueConverterExtensions.cs" />
     <Compile Include="CompositionRoot.cs" />
     <Compile Include="DeviceControllerOptions.cs" />
     <Compile Include="DriverDiscovery.cs" />
@@ -304,6 +303,10 @@
     <ProjectReference Include="..\TA.SnapCap.HardwareSimulator\TA.SnapCap.HardwareSimulator.csproj">
       <Project>{393C3897-D66D-46F4-ABC2-1D59EC96095B}</Project>
       <Name>TA.SnapCap.HardwareSimulator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TA.SnapCap.SharedTypes\TA.SnapCap.SharedTypes.csproj">
+      <Project>{B625748C-5238-4192-90C1-B386F4D303C1}</Project>
+      <Name>TA.SnapCap.SharedTypes</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

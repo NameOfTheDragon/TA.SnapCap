@@ -3,6 +3,7 @@ using TA.SnapCap.HardwareSimulator;
 
 using Machine.Specifications;
 using TA.SnapCap.Specifications.Contexts;
+using TA.SnapCap.SharedTypes;
 
 namespace TA.SnapCap.Specifications
     {
@@ -18,7 +19,7 @@ namespace TA.SnapCap.Specifications
         It should_turn_the_lamp_on = () => Context.Simulator.LampOn.ShouldBeTrue();
         It should_reply = () => Context.Response.ShouldEqual("*L000\r\n");
         static List<string> PropertyChanges = new List<string>();
-        static List<string> ExpectedPropertyChanges = new List<string> {"LampOn"};
+        static List<string> ExpectedPropertyChanges = new List<string> { "LampOn" };
         }
 
     [Subject(typeof(SimulatorStateMachine), "electroluminescent panel")]
@@ -34,7 +35,7 @@ namespace TA.SnapCap.Specifications
         It should_turn_the_lamp_on = () => Context.Simulator.LampOn.ShouldBeFalse();
         It should_reply = () => Context.Response.ShouldEqual("*D000\r\n");
         static List<string> PropertyChanges = new List<string>();
-        static List<string> ExpectedPropertyChanges = new List<string> {"LampOn"};
+        static List<string> ExpectedPropertyChanges = new List<string> { "LampOn" };
         }
 
     [Subject(typeof(SimulatorStateMachine), "electroluminescent panel")]
@@ -66,4 +67,12 @@ namespace TA.SnapCap.Specifications
         It should_reply = () => Context.Response.ShouldEqual("*J123\r\n");
         static List<string> PropertyChanges = new List<string>();
         }
+
+    internal class when_converting_device_brightness_to_ASCOM
+        {
+        It should_return_0_for_0_percent = () => ValueConverterExtensions.ToAscomBrightness(0).ShouldEqual(0);
+        It should_return_maxBrightness_for_100_percent = () => 100.ToAscomBrightness().ShouldEqual(ValueConverterExtensions.AscomMaxBrightness);
+        It should_return_2_for_1_percent = () => ValueConverterExtensions.ToAscomBrightness(1).ShouldEqual(2);
+        }
+
     }

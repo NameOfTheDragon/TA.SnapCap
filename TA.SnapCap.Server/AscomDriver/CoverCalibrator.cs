@@ -15,6 +15,7 @@ using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
 using NotImplementedException = ASCOM.NotImplementedException;
 using InvalidValueException = ASCOM.InvalidValueException;
+using TA.SnapCap.SharedTypes;
 
 namespace TA.SnapCap.Server.AscomDriver
     {
@@ -108,7 +109,7 @@ namespace TA.SnapCap.Server.AscomDriver
             }
 
         /// <inheritdoc />
-        public int Brightness => device.Brightness.ToAscomBrightness();
+        public int Brightness => device.Brightness.ToAscomBrightness(); // 0..231
 
         /// <inheritdoc />
         /// <remarks>

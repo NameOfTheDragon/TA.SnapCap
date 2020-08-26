@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Linq;
 
-namespace TA.DigitalDomeworks.SharedTypes
+namespace TA.SnapCap.SharedTypes
     {
     public static class NotifyPropertyChangeReactiveExtensions
         {
