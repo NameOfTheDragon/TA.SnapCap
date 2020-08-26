@@ -72,12 +72,12 @@ namespace TA.SnapCap.Server.AscomDriver
             get
                 {
                 if (device?.IsOnline ?? false)
-                    return CoverStatus.Unknown;
-                if (device.MotorRunning)
-                    return CoverStatus.Moving;
-                var status = device.Disposition;
-                switch (status)
                     {
+                    if (device.MotorRunning)
+                        return CoverStatus.Moving;
+                    var status = device.Disposition;
+                    switch (status)
+                        {
                         case SnapCapDisposition.Open:
                             return CoverStatus.Open;
                         case SnapCapDisposition.Closed:
@@ -88,7 +88,9 @@ namespace TA.SnapCap.Server.AscomDriver
                             return CoverStatus.Error;
                         default:
                             return CoverStatus.Unknown;
+                        }
                     }
+                return CoverStatus.Unknown;
                 }
             }
 

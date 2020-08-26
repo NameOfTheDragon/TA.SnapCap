@@ -22,7 +22,11 @@ namespace TA.SnapCap.Specifications
         Establish context = () => Context = ContextBuilder.WithOpenChannel().InClosedState()
             .WithPropertyChangeNotifications((sender,args) => PropertyChanges.Add(args.PropertyName))
             .Build();
-        Because of = () => Context.Simulator.OpenRequested();
+        Because of = async () =>
+        {
+            Context.Simulator.OpenRequested();
+            await Context.Simulator.WhenStopped();
+        };
         It should_change_the_expected_properties = () => PropertyChanges.ShouldEqual(ExpectedPropertyChanges);
         It should_open_the_cover = () => Context.Simulator.SystemStatus.ShouldEqual( SystemStatus.Open);
         It should_stop_the_motor = () => Context.Simulator.MotorEnergized.ShouldBeFalse();
@@ -40,7 +44,11 @@ namespace TA.SnapCap.Specifications
         Establish context = () => Context = ContextBuilder.WithOpenChannel().InOpenState()
             .WithPropertyChangeNotifications((sender,args) => PropertyChanges.Add(args.PropertyName))
             .Build();
-        Because of = () => Context.Simulator.CloseRequested();
+        private Because of = async () =>
+            {
+            Context.Simulator.CloseRequested();
+            await Context.Simulator.WhenStopped();
+            };
         It should_change_the_expected_properties = () => PropertyChanges.ShouldEqual(ExpectedPropertyChanges);
         It should_close_the_cover = () => Context.Simulator.SystemStatus.ShouldEqual( SystemStatus.Closed);
         It should_stop_the_motor = () => Context.Simulator.MotorEnergized.ShouldBeFalse();
