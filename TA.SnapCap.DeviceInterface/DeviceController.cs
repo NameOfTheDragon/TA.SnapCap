@@ -14,6 +14,7 @@ using NLog;
 using NLog.Fluent;
 using PostSharp.Patterns.Model;
 using TA.Ascom.ReactiveCommunications;
+using TA.SnapCap.HardwareSimulator;
 using TA.SnapCap.SharedTypes;
 
 namespace TA.SnapCap.DeviceInterface
@@ -123,6 +124,7 @@ namespace TA.SnapCap.DeviceInterface
         public void CloseCap()
             {
             TransactSimpleCommand(Protocol.CloseCover);
+            MotorRunning = true; // This will be refreshed ion the polling task
             }
 
         protected virtual void Dispose(bool fromUserCode)
@@ -256,6 +258,7 @@ namespace TA.SnapCap.DeviceInterface
         public void OpenCap()
             {
             TransactSimpleCommand(Protocol.OpenCover);
+            MotorRunning = true;
             }
 
         public async Task PerformOnConnectTasks()
@@ -269,7 +272,7 @@ namespace TA.SnapCap.DeviceInterface
             {
             var transaction = TransactionFactory.Create(Protocol.GetStatus);
             transactionProcessor?.CommitTransaction(transaction);
-            await transaction.WaitForCompletionOrTimeoutAsync(cancel).ConfigureAwait(false);
+            await transaction.WaitForCompletionOrTimeoutAsync(cancel).ContinueOnAnyThread();
             if (transaction.Failed)
                 throw new TransactionException(transaction.ToString());
             var state = SnapCapState.FromResponsePayload(transaction.ResponsePayload);

@@ -22,6 +22,7 @@
   <?define SwitchDriverDescription="SnapCap by Gemini Telescope Design" ?>
   <?define CoverCalibratorDriverClassId="{2c2a2dfe-497c-4eed-a808-9d038c2b441a}" ?>
   <?define CoverCalibratorDriverProgId="ASCOM.SnapCap.CoverCalibrator" ?>
+  <?define CoverCalibratorDriverDescription="SnapCap by Gemini Telescope Design" ?>
   <!-- End of User Configuration - do not edit anything beyond this point -->
 
   <!-- Define platform-specific names and locations -->

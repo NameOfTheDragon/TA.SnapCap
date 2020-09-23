@@ -60,4 +60,13 @@ namespace TA.SnapCap.Specifications
             new List<string> {"MotorDirection", "MotorEnergized", "MotorEnergized", "SystemStatus"};
         static List<string> ExpectedStates = new List<string> {nameof(StateClosing), nameof(StateClosed)};
         }
+
+    //[Subject(typeof(SimulatorStateMachine), "status reporting")]
+    //internal class when_open : with_simulator_context
+    //    {
+    //    Establish context = () => Context = ContextBuilder.WithOpenChannel().InOpenState()
+    //        .Build();
+    //    private Because of;
+    //    private It should_report_open;
+    //    }
     }

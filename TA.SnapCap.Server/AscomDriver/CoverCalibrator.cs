@@ -6,6 +6,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using ASCOM;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities.Exceptions;
@@ -35,6 +36,16 @@ namespace TA.SnapCap.Server.AscomDriver
             }
 
         /// <inheritdoc />
+        protected override void Connect()
+            {
+            base.Connect();
+            while (CoverState== CoverStatus.Moving)
+                {
+                Task.Delay(TimeSpan.FromMilliseconds(500)).Wait();
+                }
+            }
+
+        /// <inheritdoc />
         [MustBeConnected] public void OpenCover() => device.OpenCap();
 
         /// <inheritdoc />
@@ -47,14 +58,22 @@ namespace TA.SnapCap.Server.AscomDriver
         [MustBeConnected]
         public void CalibratorOn(int Brightness)
             {
-            if (Brightness < 1 || Brightness > ValueConverterExtensions.AscomMaxBrightness)
+            if (Brightness < 0 || Brightness > ValueConverterExtensions.AscomMaxBrightness)
                 {
                 throw new InvalidValueException(
-                    $"Brightness {Brightness} is outside the allowed range of 1..{ValueConverterExtensions.AscomMaxBrightness}");
+                    $"Brightness {Brightness} is outside the allowed range of 0..{ValueConverterExtensions.AscomMaxBrightness}");
                 }
-            var deviceBrightness = Brightness.ToDeviceBrightness();
-            device.SetBrightness((byte)deviceBrightness);
-            device.ElectroluminescentPanelOn();
+            if (Brightness == 0)
+                {
+                device.SetBrightness(0);
+                device.ElectroluminescentPanelOff();
+                }
+            else
+                {
+                var deviceBrightness = Brightness.ToDeviceBrightness();
+                device.SetBrightness((byte) deviceBrightness);
+                device.ElectroluminescentPanelOn();
+                }
             }
 
         /// <inheritdoc />
@@ -100,7 +119,7 @@ namespace TA.SnapCap.Server.AscomDriver
             {
             get
                 {
-                if (device?.IsOnline ?? false)
+                if (!(device?.IsOnline ?? false))
                     return CalibratorStatus.Unknown;
                 if (!device.Illuminated)
                     return CalibratorStatus.Off;
