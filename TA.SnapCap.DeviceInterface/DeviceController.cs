@@ -29,6 +29,7 @@ namespace TA.SnapCap.DeviceInterface
         private bool disposed;
         [NotNull] private CancellationTokenSource monitorStateCancellation = new CancellationTokenSource();
         private CancellationTokenSource warmUpCancellationSource = null;
+        private readonly ManualResetEvent statusUpdatedEvent = new ManualResetEvent(false);
 
         public DeviceController(ICommunicationChannel channel, ITransactionProcessor transactionProcessor)
             {
@@ -119,6 +120,7 @@ namespace TA.SnapCap.DeviceInterface
         public void Halt()
             {
             TransactSimpleCommand(Protocol.Halt);
+            BlockUntilStatusUpdated();
             }
 
         public void CloseCap()
@@ -143,6 +145,7 @@ namespace TA.SnapCap.DeviceInterface
             var result = TransactSimpleCommand(Protocol.ElpOff);
             if (result.Successful)
                 warmUpCancellationSource.Cancel();
+            BlockUntilStatusUpdated();
             }
 
         public void ElectroluminescentPanelOn()
@@ -150,6 +153,7 @@ namespace TA.SnapCap.DeviceInterface
             var result = TransactSimpleCommand(Protocol.ElpOn);
             if (result.Successful)
                 _ = WarmUpLamp();
+            BlockUntilStatusUpdated();
             }
 
         private async Task WarmUpLamp()
@@ -277,6 +281,12 @@ namespace TA.SnapCap.DeviceInterface
                 throw new TransactionException(transaction.ToString());
             var state = SnapCapState.FromResponsePayload(transaction.ResponsePayload);
             UpdateStateProperties(state);
+            SignalStatusUpdated();
+            }
+
+        private void SignalStatusUpdated()
+            {
+            statusUpdatedEvent.Set();
             }
 
         /// <summary>
@@ -302,6 +312,12 @@ namespace TA.SnapCap.DeviceInterface
             if (transaction.Failed)
                 throw new TransactionException($"Transaction failed: {transaction}");
             return transaction;
+            }
+
+        private void BlockUntilStatusUpdated()
+            {
+            statusUpdatedEvent.Reset();
+            statusUpdatedEvent.WaitOne(TimeSpan.FromSeconds(5));
             }
 
         private void UpdateStateProperties(SnapCapState state)

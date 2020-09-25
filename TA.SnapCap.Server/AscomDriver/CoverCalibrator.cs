@@ -66,7 +66,7 @@ namespace TA.SnapCap.Server.AscomDriver
             if (Brightness == 0)
                 {
                 device.SetBrightness(0);
-                device.ElectroluminescentPanelOff();
+                device.ElectroluminescentPanelOn();
                 }
             else
                 {
@@ -80,6 +80,7 @@ namespace TA.SnapCap.Server.AscomDriver
         [MustBeConnected]
         public void CalibratorOff()
             {
+            device.SetBrightness(0);
             device.ElectroluminescentPanelOff();
             }
 
