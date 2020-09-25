@@ -1,0 +1,18 @@
+@startuml SnapCap Hardware Simulator
+title SnapCap Hardware State Machine
+
+state STARTOPEN
+state STARTCLOSE
+state OPENING
+state CLOSEING
+state READY
+state CLOSE_AFTER_START
+state CLOSEING_AFTER_START
+
+STARTOPEN --> OPENING : Relay on\nMotor on
+
+OPENING --> READY : __Under-current && moved for > 1 sec__\nStatus := OPEN 
+OPENING --> READY : __Under-current && moved for <= 1 sec__\nStatus := OPEN_CIRCUIT 
+OPENING --> READY : __Over-current && moved for <= 1 sec__\nStatus := OVERCURRENT 
+
+@enduml

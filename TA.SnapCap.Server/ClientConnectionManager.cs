@@ -1,18 +1,19 @@
 ﻿// This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: ClientConnectionManager.cs  Last modified: 2017-05-06@20:01 by Tim Long
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Ninject;
 using NLog;
 using PostSharp.Patterns.Model;
 using PostSharp.Patterns.Threading;
 using TA.Ascom.ReactiveCommunications;
-using TA.PostSharp.Aspects;
+using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
 
 namespace TA.SnapCap.Server
@@ -28,7 +29,7 @@ namespace TA.SnapCap.Server
         [Reference] private readonly ILogger log = LogManager.GetCurrentClassLogger();
         private readonly bool performActionsOnOpen;
         [Reference] private Maybe<DeviceController> controllerInstance;
-        [Reference] private ITransactionProcessorFactory factory;
+        //[Reference] private ITransactionProcessorFactory factory;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ClientConnectionManager" /> class.
@@ -37,24 +38,18 @@ namespace TA.SnapCap.Server
         ///     A factory class that can create and destroy transaction processors (and by implication,
         ///     the entire communications stack).
         /// </param>
-        public ClientConnectionManager(ITransactionProcessorFactory factory) : this(factory,
-            performActionsOnOpen: true) { }
+        public ClientConnectionManager() : this(performActionsOnOpen: true) { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ClientConnectionManager" /> class and allows
         ///     control of whether an On Connected actions will be performed. This is primarily intended
         ///     for use in unit testing so is not visible to clients.
         /// </summary>
-        /// <param name="factory">
-        ///     A factory class that can construct instances of a trnasaction processor (and by
-        ///     implication, the entire communications stack).
-        /// </param>
         /// <param name="performActionsOnOpen">
         ///     if set to <c>true</c> [perform actions on open].
         /// </param>
-        internal ClientConnectionManager(ITransactionProcessorFactory factory, bool performActionsOnOpen)
+        internal ClientConnectionManager(bool performActionsOnOpen)
             {
-            this.factory = factory;
             this.performActionsOnOpen = performActionsOnOpen;
             Clients = new List<ClientStatus>();
             controllerInstance = Maybe<DeviceController>.Empty;
@@ -84,20 +79,20 @@ namespace TA.SnapCap.Server
         /// <exception cref="InvalidOperationException">
         ///     Cannot change or set the Transaction Processor Factory while there are connected clients
         /// </exception>
-        internal ITransactionProcessorFactory TransactionProcessorFactory
-            {
-            get => factory;
-            set
-                {
-                log.Warn("Setting the TransactionProcessorFactory");
-                if (OnlineClientCount > 0)
-                    throw new InvalidOperationException(
-                        "Cannot change or set the Transaction Processor Factory while there are connected clients");
-                // We have no online clients, so destroy any existing transaction processors.
-                factory?.DestroyTransactionProcessor();
-                factory = value;
-                }
-            }
+        //internal ITransactionProcessorFactory TransactionProcessorFactory
+        //    {
+        //    get => factory;
+        //    set
+        //        {
+        //        log.Warn("Setting the TransactionProcessorFactory");
+        //        if (OnlineClientCount > 0)
+        //            throw new InvalidOperationException(
+        //                "Cannot change or set the Transaction Processor Factory while there are connected clients");
+        //        // We have no online clients, so destroy any existing transaction processors.
+        //        factory?.DestroyTransactionProcessor();
+        //        factory = value;
+        //        }
+        //    }
 
         internal event EventHandler<EventArgs> ClientStatusChanged;
 
@@ -114,7 +109,8 @@ namespace TA.SnapCap.Server
             {
             if (!controllerInstance.Any())
                 {
-                var controller = new DeviceController(factory);
+                CompositionRoot.BeginSessionScope(); // Begins a new composition session
+                var controller = CompositionRoot.Kernel.Get<DeviceController>(); //new DeviceController(factory);
                 controllerInstance = new Maybe<DeviceController>(controller);
                 }
             var instance = controllerInstance.Single();
@@ -149,6 +145,7 @@ namespace TA.SnapCap.Server
                     controllerInstance.Single().Close();
                     controllerInstance = Maybe<DeviceController>.Empty;
                     }
+                CompositionRoot.EndSessionScope();  // Disposes session-scoped objects
                 }
             }
 

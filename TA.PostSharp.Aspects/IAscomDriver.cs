@@ -5,7 +5,7 @@
 // 
 // File: IAscomDriver.cs  Last modified: 2017-03-16@23:34 by Tim Long
 
-namespace TA.PostSharp.Aspects
+namespace TA.SnapCap.Aspects
     {
     public interface IAscomDriver
         {

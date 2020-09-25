@@ -9,15 +9,15 @@
               Vital="yes" 
               KeyPath="yes" />
       </Component>
-      <Component Id="cmpPostSharpPatternsCommon" Guid="*" Win64="no">
-        <File Id="filPostSharpPatternsCommon"     
-              Source="$(var.Server.TargetDir)PostSharp.Patterns.Common.dll"                         
+      <Component Id="cmpPostSharpAggregation"  Guid="*" Win64="no">
+        <File Id="filPostSharpAggregation"     
+              Source="$(var.Server.TargetDir)PostSharp.Patterns.Aggregation.dll"                         
               Vital="yes" 
               KeyPath="yes" />
       </Component>
-      <Component Id="cmpPostSharpPatternsThreading"  Guid="*" Win64="no">
-        <File Id="filPostSharpPatternsThreading"     
-              Source="$(var.Server.TargetDir)PostSharp.Patterns.Threading.dll"                         
+      <Component Id="cmpPostSharpPatternsCommon" Guid="*" Win64="no">
+        <File Id="filPostSharpPatternsCommon"     
+              Source="$(var.Server.TargetDir)PostSharp.Patterns.Common.dll"                         
               Vital="yes" 
               KeyPath="yes" />
       </Component>
@@ -27,9 +27,9 @@
               Vital="yes" 
               KeyPath="yes" />
       </Component>
-      <Component Id="cmpPostSharpAggregation"  Guid="*" Win64="no">
-        <File Id="filPostSharpAggregation"     
-              Source="$(var.Server.TargetDir)PostSharp.Patterns.Aggregation.dll"                         
+      <Component Id="cmpPostSharpPatternsThreading"  Guid="*" Win64="no">
+        <File Id="filPostSharpPatternsThreading"     
+              Source="$(var.Server.TargetDir)PostSharp.Patterns.Threading.dll"                         
               Vital="yes" 
               KeyPath="yes" />
       </Component>

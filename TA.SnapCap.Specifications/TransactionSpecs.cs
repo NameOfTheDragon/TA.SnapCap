@@ -1,12 +1,14 @@
 ﻿// This file is part of the TA.SnapCap project
-// 
+//
 // Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: TransactionSpecs.cs  Last modified: 2017-05-07@04:58 by Tim Long
 
 using System;
 using Machine.Specifications;
 using TA.SnapCap.DeviceInterface;
+using TA.SnapCap.SharedTypes;
+using TA.SnapCap.Specifications.Contexts;
 
 namespace TA.SnapCap.Specifications
     {

@@ -1,12 +1,13 @@
 ﻿// This file is part of the AWR Drive System ASCOM Driver project
-// 
+//
 // Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
-// 
+//
 // File: TransactionExtensions.cs  Created: 2017-03-21@01:29
 // Last modified: 2017-03-21@01:33 by Tim Long
 
 using System;
 using System.Reflection;
+using JetBrains.Annotations;
 using Machine.Specifications.Annotations;
 using TA.Ascom.ReactiveCommunications;
 

@@ -13,41 +13,51 @@
     <OutputPath>bin\Debug\x86\</OutputPath>
     <IntermediateOutputPath>obj\Debug\x86\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\Release\x86\</OutputPath>
     <IntermediateOutputPath>obj\Release\x86\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\Debug\x64\</OutputPath>
     <IntermediateOutputPath>obj\Debug\x64\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\Release\x64\</OutputPath>
     <IntermediateOutputPath>obj\Release\x64\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AscomCoverCalibratorDriver.wxs" />
     <Compile Include="AscomCustomActions.wxs" />
     <Compile Include="AscomLocalServer.wxs" />
     <Compile Include="AscomSwitchDriver.wxs" />
     <Compile Include="DeviceControlLayer.wxs" />
     <Compile Include="Directories.wxs" />
     <Compile Include="FeatureTree.wxs" />
+    <Compile Include="SharedTypes.wxs" />
+    <Compile Include="HardwareSimulator.wxs" />
     <Compile Include="JetBrains.wxs" />
     <Compile Include="NLog.wxs" />
+    <Compile Include="NodaTime.wxs" />
     <Compile Include="PostSharp.wxs" />
     <Compile Include="PostSharpAspects.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="ReactiveAscom.wxs" />
     <Compile Include="ReactiveExtensions.wxs" />
+    <Compile Include="System.wxs" />
+    <Compile Include="WinFormsControls.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config.wxi" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TA.PostSharp.Aspects\TA.PostSharp.Aspects.csproj">
+    <ProjectReference Include="..\TA.PostSharp.Aspects\TA.SnapCap.Aspects.csproj">
       <Name>Aspects</Name>
       <Project>{9cdcf319-dadc-41eb-b787-de3862017e95}</Project>
       <Private>True</Private>
@@ -66,14 +76,6 @@
     <ProjectReference Include="..\TA.SnapCap.Server\TA.SnapCap.Server.csproj">
       <Name>Server</Name>
       <Project>{3689a2cb-94c5-4012-a5cf-7e7d1dd27143}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-    <ProjectReference Include="..\TA.SnapCap.Switch\TA.SnapCap.AscomSwitch.csproj">
-      <Name>SwitchDriver</Name>
-      <Project>{ed0fe6aa-e1e5-4d21-9b5e-802d50edcce1}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

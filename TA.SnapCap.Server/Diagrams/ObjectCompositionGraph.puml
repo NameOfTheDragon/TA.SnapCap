@@ -1,0 +1,23 @@
+@startuml Composition Root
+class SimulatorCommunicationsChannel
+class DeviceController
+DeviceController *.. ICommunicationsChannel
+ICommunicationsChannel <|-- SimulatorCommunicationsChannel
+SimulatorCommunicationsChannel *.. SimulatorEndpoint
+SimulatorCommunicationsChannel *.. SimulatorStateMachine
+
+SimulatorStateMachine *.. FastOrRealtime : <<bool>>
+SimulatorStateMachine *.. InputParser : <<subscribe>>
+SimulatorStateMachine *.. IClock
+IClock <|-- SystemClock.Instance
+
+SimulatorEndpoint *.. ConnectionString : <<string>>
+
+
+ICommunicationsChannel <|-- SerialCommunicationsChannel
+
+DeviceController *.. ITransactionProcessor
+ITransactionProcessor <|-- ReactiveTransactionProcessor
+ReactiveTransactionProcessor ..> TransactionObserver : <<subscribe>>
+IObservable ()-- ReactiveTransactionProcessor
+@enduml

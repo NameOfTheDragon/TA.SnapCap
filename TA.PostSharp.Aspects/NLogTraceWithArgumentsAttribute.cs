@@ -13,7 +13,7 @@ using NLog;
 using PostSharp.Aspects;
 using PostSharp.Aspects.Dependencies;
 
-namespace TA.PostSharp.Aspects
+namespace TA.SnapCap.Aspects
     {
     /// <summary>
     ///     Class NLogTraceWithArgumentsAttribute. This class cannot be inherited. Traces member entry and exit, with

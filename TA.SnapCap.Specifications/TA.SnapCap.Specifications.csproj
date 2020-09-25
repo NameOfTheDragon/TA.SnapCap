@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TA.SnapCap.Specifications</RootNamespace>
     <AssemblyName>TA.SnapCap.Specifications</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -36,47 +36,39 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Specifications, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.11.0\lib\net45\Machine.Specifications.dll</HintPath>
-    </Reference>
-    <Reference Include="Machine.Specifications.Should, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.Should.0.11.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.10\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\packages\JetBrains.Annotations.2019.1.3\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization" />
-    <Reference Include="TA.Ascom.ReactiveCommunications, Version=0.4.6306.31345, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TA.Ascom.ReactiveCommunications.0.4.2\lib\net45\TA.Ascom.ReactiveCommunications.dll</HintPath>
-    </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contexts\InputParserContext.cs" />
+    <Compile Include="Contexts\InputParserContextBuilder.cs" />
+    <Compile Include="Contexts\SimulatorContext.cs" />
+    <Compile Include="Contexts\SimulatorTestContextBuilder.cs" />
+    <Compile Include="Contexts\with_input_parser_context.cs" />
+    <Compile Include="Contexts\with_simulator_context.cs" />
+    <Compile Include="SimulatorSpecs\CommandProtocolSpecs.cs" />
+    <Compile Include="SimulatorSpecs\InputParserSpecs.cs" />
+    <Compile Include="SimulatorSpecs\CreationSpecs.cs" />
+    <Compile Include="SimulatorSpecs\LampSpecs.cs" />
+    <Compile Include="SimulatorSpecs\StateTransitionSpecs.cs" />
     <Compile Include="TestHelpers\DeviceLayerContextBuilder.cs" />
     <Compile Include="Fakes\BufferInputUntilCompletedTransaction.cs" />
     <Compile Include="Fakes\FakeCommunicationChannel.cs" />
@@ -86,25 +78,63 @@
     <Compile Include="TestHelpers\TestableDeviceTransaction.cs" />
     <Compile Include="TestHelpers\TransactionExtensions.cs" />
     <Compile Include="TransactionSpecs.cs" />
-    <Compile Include="Fakes\UnitTestTransactionProcessorFactory.cs" />
     <Compile Include="UnitTestTransaction.cs" />
-    <Compile Include="with_device_context.cs" />
+    <Compile Include="Contexts\with_device_context.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TA.PostSharp.Aspects\TA.SnapCap.Aspects.csproj">
+      <Project>{9cdcf319-dadc-41eb-b787-de3862017e95}</Project>
+      <Name>TA.SnapCap.Aspects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TA.SnapCap.DeviceInterface\TA.SnapCap.DeviceInterface.csproj">
       <Project>{3015f05f-d747-4c3e-a0d4-ec2b3bd76c56}</Project>
       <Name>TA.SnapCap.DeviceInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TA.SnapCap.HardwareSimulator\TA.SnapCap.HardwareSimulator.csproj">
+      <Project>{393c3897-d66d-46f4-abc2-1d59ec96095b}</Project>
+      <Name>TA.SnapCap.HardwareSimulator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TA.SnapCap.SharedTypes\TA.SnapCap.SharedTypes.csproj">
+      <Project>{b625748c-5238-4192-90c1-b386f4d303c1}</Project>
+      <Name>TA.SnapCap.SharedTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.DependencyValidation.Analyzers.0.9.0\analyzers\dotnet\cs\Microsoft.DependencyValidation.Analyzers.resources.dll" />
+    <PackageReference Include="FakeItEasy">
+      <Version>6.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="GitVersionTask">
+      <Version>5.1.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Machine.Specifications">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Machine.Specifications.Should">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Ninject">
+      <Version>3.3.4</Version>
+    </PackageReference>
+    <PackageReference Include="NLog">
+      <Version>4.6.8</Version>
+    </PackageReference>
+    <PackageReference Include="TA.Ascom.ReactiveCommunications">
+      <Version>1.3.0-alpha0010</Version>
+    </PackageReference>
   </ItemGroup>
+  <Import Project="..\TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

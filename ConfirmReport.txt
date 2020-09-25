@@ -1,0 +1,93 @@
+Start-up ASCOM Device Conformance Checker - 64bit mode
+Start-up ASCOM Platform 6.5 6.5.0.3091
+ 
+ 
+CheckForUpdates Checking for Conform updates with 10 second timeout
+18:20:27.330 CheckForUpdates                   INFO     This version of Conform is:           6.5.7490.28323
+18:20:28.143 CheckForUpdates                   INFO     The production version of Conform is: 6.5.7500.22515
+ 
+18:20:28.154 CheckForUpdates                   INFO     ***** A NEWER VERSION OF CONFORM IS AVAILABLE: 6.5.7500.22515 *****
+18:20:28.162 CheckForUpdates                   INFO     ***** It can be found at https://ascom-standards.org/Downloads/DevTools.htm *****
+ 
+18:20:28.171 CheckForUpdates                   INFO     Version 6.5.7500.22515 - This version requires Platform 6.5
+18:20:28.177 CheckForUpdates                   INFO       All - Improved exception handling when creating drivers
+18:20:28.184 CheckForUpdates                   INFO       All - Fixed version check that failed because ascom-standards web site has moved to HTTPS only
+18:20:28.190 CheckForUpdates                   INFO       All - Version numbering revised so that it is  unique to each build
+18:20:28.197 CheckForUpdates                   INFO       All - Drivers are now correctly released at the end of each conformance test
+18:20:28.203 CheckForUpdates                   INFO       Camera - Added test for Camera.ImageReady returning True during an asynchronous exposure
+18:20:28.211 CheckForUpdates                   INFO       Camera - Memory management improved to support large images
+18:20:28.218 CheckForUpdates                   INFO       Camera - Added support for new ICameraV3 members
+18:20:28.224 CheckForUpdates                   INFO       CoverCalibrator - Added support for this new type of device
+18:20:28.231 CheckForUpdates                   INFO       Dome - Added test for inverted "Dome.Slewing behaviour
+18:20:28.237 CheckForUpdates                   INFO       Dome - Added test for Dome.Slewing returning True when the driver is created
+18:20:28.244 CheckForUpdates                   INFO       Rotator - Added support for new IRotatorV3 members and behaviour
+ 
+ 
+ConformanceCheck ASCOM Device Conformance Checker Version 6.5.7490.28323, Build time: 04/07/2020 15:44:08
+ConformanceCheck Running on: ASCOM Platform 6.5 6.5.0.3091
+ 
+ConformanceCheck Driver ProgID: ASCOM.SnapCap.CoverCalibrator
+ 
+Error handling 
+Error number for "Not Implemented" is: 80040400
+Error number for "Invalid Value 1" is: 80040405
+Error number for "Value Not Set 1" is: 80040402
+Error number for "Value Not Set 2" is: 80040403
+Error messages will not be interpreted to infer state.
+ 
+18:21:12.394 Driver Access Checks              OK       
+18:21:13.122 AccessChecks                      OK       Successfully created driver using late binding
+18:21:13.518 AccessChecks                      OK       Successfully connected using late binding
+18:21:13.538 AccessChecks                      INFO     The driver is a COM object
+18:21:14.406 AccessChecks                      OK       Successfully created driver using early binding to ICoverCalibratorV1 interface
+18:21:14.659 AccessChecks                      OK       Successfully connected using early binding to ICoverCalibratorV1 interface
+18:21:14.848 AccessChecks                      OK       Successfully created driver using driver access toolkit
+18:21:15.142 AccessChecks                      OK       Successfully connected using driver access toolkit
+ 
+Conform is using ASCOM.DriverAccess.CoverCalibrator to get a CoverCalibrator object
+18:21:15.496 ConformanceCheck                  OK       Driver instance created successfully
+ 
+Pre-connect checks 
+ 
+Connect 
+18:21:15.897 ConformanceCheck                  OK       Connected OK
+ 
+Common Driver Methods 
+18:21:15.978 InterfaceVersion                  OK       1
+18:21:16.021 Connected                         OK       True
+18:21:16.069 Description                       OK       SnapCap Controller
+18:21:16.116 DriverInfo                        OK       ASCOM Switch driver for GTD SnapCap
+                                                    Professionally developed by Tigra Astronomy
+18:21:16.164 DriverVersion                     OK       1.0
+18:21:16.210 Name                              OK       SnapCap from Gemini Telescope Design
+18:21:16.257 CommandString                     INFO     Conform cannot test the CommandString method
+18:21:16.267 CommandBlind                      INFO     Conform cannot test the CommandBlind method
+18:21:16.280 CommandBool                       INFO     Conform cannot test the CommandBool method
+18:21:16.289 Action                            INFO     Conform cannot test the Action method
+18:21:16.366 SupportedActions                  OK       Driver returned an empty action list
+ 
+Properties 
+18:21:16.571 CalibratorState                   OK       Unknown
+18:21:16.586 CoverState                        OK       Unknown
+18:21:16.629 MaxBrightness                     OK       231
+18:21:16.741 Brightness                        ISSUE    The returned Brightness value -24 is invalid, it must be >= 0
+ 
+Methods 
+18:21:16.931 OpenCover                         ERROR    OpenCover was unsuccessful - the returned CoverState was 'Unknown' instead of 'Open'. The synchronous open took 0.1 seconds
+18:21:17.020 CloseCover                        ERROR    CloseCover was unsuccessful - the returned CoverState was 'Unknown' instead of 'Closed'. The synchronous close took 0.0 seconds
+18:21:17.134 HaltCover                         ERROR    The cover operates synchronously but did not throw a MethodNotImplementedException in response to the HaltCover command
+18:21:51.629 CalibratorOn                      OK       CalibratorOn with brightness -1 threw an InvalidValueException as expected
+18:21:51.826 CalibratorOn                      ERROR    Unexpected DriverAccessCOMException, CalibratorStatus indicates that the device is a calibrator: Brightness 0 is outside the allowed range of 1..231
+18:21:52.090 CalibratorOn                      ERROR    CalibratorOn with brightness 57 was unsuccessful - the returned CalibratorState was 'Unknown' instead of 'Ready'. The synchronous operation took 0.1 seconds
+18:21:52.292 CalibratorOn                      ERROR    CalibratorOn with brightness 115 was unsuccessful - the returned CalibratorState was 'Unknown' instead of 'Ready'. The synchronous operation took 0.2 seconds
+18:21:52.572 CalibratorOn                      ERROR    CalibratorOn with brightness 173 was unsuccessful - the returned CalibratorState was 'Unknown' instead of 'Ready'. The synchronous operation took 0.2 seconds
+18:21:52.773 CalibratorOn                      ERROR    CalibratorOn with brightness 231 was unsuccessful - the returned CalibratorState was 'Unknown' instead of 'Ready'. The synchronous operation took 0.1 seconds
+18:21:52.843 CalibratorOn                      OK       CalibratorOn with brightness 232 threw an InvalidValueException as expected
+18:21:53.057 CalibratorOff                     ERROR    CalibratorOff was unsuccessful - the returned CalibratorState was 'Unknown' instead of 'Off'. The synchronous action took 0.2 seconds
+ 
+Conformance test complete 
+ 
+Your driver had 9 errors, 0 warnings and 1 issues 
+ 
+CONFORM ERROR: During validation, Conform could not find your executable at the location given in the registry.
+Please turn on Conform debug, run again and post the log file to the ASCOM Talk Yahoo group. Thanks, Peter 

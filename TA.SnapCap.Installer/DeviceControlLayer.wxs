@@ -3,6 +3,7 @@
 	<Fragment>
     <DirectoryRef Id="INSTALLDIRECTORY"/>
     <ComponentGroup Id="cgDeviceLayer" Directory="INSTALLDIRECTORY">
+      <ComponentGroupRef Id="cgSharedTypes"/>
       <ComponentGroupRef Id="cgPostSharp"/>
       <ComponentGroupRef Id="cgReactiveAscom" />
       <ComponentGroupRef Id="cgPostSharpAspects" />

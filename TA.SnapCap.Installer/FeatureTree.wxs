@@ -6,7 +6,13 @@
     <FeatureGroup Id="fgRoot" >
       <Feature Id="featAscomDrivers" Title="ASCOM drivers" Level="1" Absent="disallow"
                Display="expand" >
-          <ComponentGroupRef Id="cgAscomSwitchDriver"/>
+        <!-- 
+            The driver references bring in the driver registration actions.
+            The drivers themselves are now incorporated in the LocalServer project.
+        -->
+        <ComponentGroupRef Id="cgAscomSwitchDriver"/>
+        <ComponentGroupRef Id="cgAscomCoverCalibratorDriver"/>
+        <ComponentGroupRef Id="cgAscomLocalServer"/>
       </Feature>
     </FeatureGroup>
   </Fragment>

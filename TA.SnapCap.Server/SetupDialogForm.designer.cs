@@ -32,7 +32,7 @@ namespace TA.SnapCap.Server
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.communicationSettingsControl1 = new CommunicationSettingsControl();
+            this.communicationSettingsControl1 = new TA.SnapCap.Server.CommunicationSettingsControl();
             this.AboutBox = new System.Windows.Forms.Button();
             this.ConnectionErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
@@ -41,9 +41,9 @@ namespace TA.SnapCap.Server
             // 
             // cmdOK
             // 
-            this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(12, 139);
+            this.cmdOK.Location = new System.Drawing.Point(12, 141);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -53,9 +53,9 @@ namespace TA.SnapCap.Server
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(77, 139);
+            this.cmdCancel.Location = new System.Drawing.Point(77, 141);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -68,7 +68,7 @@ namespace TA.SnapCap.Server
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::TA.SnapCap.Server.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(292, 9);
+            this.picASCOM.Location = new System.Drawing.Point(351, 9);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -79,15 +79,17 @@ namespace TA.SnapCap.Server
             // 
             // communicationSettingsControl1
             // 
+            this.communicationSettingsControl1.AutoSize = true;
             this.ConnectionErrorProvider.SetIconAlignment(this.communicationSettingsControl1, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
             this.communicationSettingsControl1.Location = new System.Drawing.Point(12, 43);
             this.communicationSettingsControl1.Name = "communicationSettingsControl1";
-            this.communicationSettingsControl1.Size = new System.Drawing.Size(238, 22);
+            this.communicationSettingsControl1.Size = new System.Drawing.Size(311, 24);
             this.communicationSettingsControl1.TabIndex = 7;
             // 
             // AboutBox
             // 
-            this.AboutBox.Location = new System.Drawing.Point(263, 139);
+            this.AboutBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AboutBox.Location = new System.Drawing.Point(322, 141);
             this.AboutBox.Name = "AboutBox";
             this.AboutBox.Size = new System.Drawing.Size(75, 23);
             this.AboutBox.TabIndex = 8;
@@ -107,7 +109,7 @@ namespace TA.SnapCap.Server
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cmdCancel;
-            this.ClientSize = new System.Drawing.Size(350, 175);
+            this.ClientSize = new System.Drawing.Size(409, 177);
             this.Controls.Add(this.AboutBox);
             this.Controls.Add(this.communicationSettingsControl1);
             this.Controls.Add(this.picASCOM);

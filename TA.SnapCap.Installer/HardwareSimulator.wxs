@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIRECTORY"/>
+    <ComponentGroup Id="cgSimulator">
+      <Component Id="cmpSimulator" Directory="INSTALLDIRECTORY" Guid="*" Win64="no">
+        <File Id="filSimulatorDll" Source="$(var.Server.TargetDir)TA.SnapCap.HardwareSimulator.dll" Vital="yes"
+              KeyPath="yes" />
+      </Component>
+      <ComponentGroupRef Id="cgSharedTypes"/>
+      <ComponentGroupRef Id="cgNLog"/>
+      <ComponentGroupRef Id="cgNodaTime"/>
+      <ComponentGroupRef Id="cgPostSharp"/>
+      <ComponentGroupRef Id="cgReactiveAscom"/>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

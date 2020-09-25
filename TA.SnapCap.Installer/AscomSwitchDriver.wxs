@@ -17,16 +17,16 @@
       <ComponentGroupRef Id="cgPostSharpAspects" />
       <ComponentGroupRef Id="cgAscomLocalServer" />
       <ComponentGroupRef Id="cgJetBrains"/>
-      <Component Id="cmpAscomSwitchDriver" 
-                 Directory="INSTALLDIRECTORY" 
-                 Guid="*" 
+      <Component Id="cmpAscomSwitchDriver"
+                 Directory="INSTALLDIRECTORY"
+                 Guid="*"
                  Win64="no">
-        <File Id="filSwitchDriverAssembly" 
-              Source="$(var.SwitchDriver.TargetPath)" 
+        <!--<File Id="filSwitchDriverAssembly"
+              Source="$(var.SwitchDriver.TargetPath)"
               KeyPath="yes"
-              Vital="yes" 
+              Vital="yes"
               Assembly=".net"
-              AssemblyApplication="filSwitchDriverAssembly" />
+              AssemblyApplication="filSwitchDriverAssembly" />-->
         <!-- Registry entries suitable for a LocalServer served class -->
         <!-- HKCR\CLSID\{driver-guid} -->
         <RegistryKey Root="HKCR" Key="CLSID">
@@ -34,14 +34,14 @@
             <RegistryValue Value="$(var.SwitchDriverProgId)" Type="string"/>
             <RegistryValue Name="AppId" Value="$(var.LocalServerAppId)" Type="string"/>
             <RegistryKey Key="Implemented Categories">
-              <RegistryKey Key="{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" 
+              <RegistryKey Key="{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}"
                            ForceCreateOnInstall="yes"
                            ForceDeleteOnUninstall="yes"/>
             </RegistryKey>
             <RegistryKey Key="ProgId">
               <RegistryValue Value="$(var.SwitchDriverProgId)" Type="string"/>
             </RegistryKey>
-            <RegistryKey Key="Programmable" 
+            <RegistryKey Key="Programmable"
                          ForceCreateOnInstall="yes"
                          ForceDeleteOnUninstall="yes" />
             <RegistryKey Key="LocalServer32">
@@ -49,7 +49,7 @@
             </RegistryKey>
           </RegistryKey>
         </RegistryKey>
-        
+
         <!-- HKCR\{driver-prog-id} -->
         <RegistryKey Root="HKCR" Key="$(var.SwitchDriverProgId)">
           <RegistryValue Value="$(var.SwitchDriverDescription)" Type="string"/>
