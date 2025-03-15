@@ -1,15 +1,17 @@
-﻿// This file is part of the TA.SnapCap project
-//
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-//
-// File: InputParser.cs  Last modified: 2020-06-01@01:40 by Tim Long
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.Text;
+using JetBrains.Annotations;
 using NLog.Fluent;
-using PostSharp.Patterns.Model;
-using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.SnapCap.SharedTypes;
+using Timtek.ReactiveCommunications.Diagnostics;
 
 namespace TA.SnapCap.HardwareSimulator
     {
@@ -25,9 +27,15 @@ namespace TA.SnapCap.HardwareSimulator
                 .Subscribe(OnNext, OnError, OnCompleted);
             }
 
-        private void OnCompleted() => Log.Info().Message("Completed").Write();
+        private void OnCompleted()
+            {
+            Log.Info().Message("Completed").Write();
+            }
 
-        private void OnError(Exception ex) => Log.Error().Exception(ex).Message("Sequence error").Write();
+        private void OnError(Exception ex)
+            {
+            Log.Error().Exception(ex).Message("Sequence error").Write();
+            }
 
         private void OnNext(char input)
             {

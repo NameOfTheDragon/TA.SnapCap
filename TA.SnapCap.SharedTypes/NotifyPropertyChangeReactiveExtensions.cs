@@ -1,8 +1,10 @@
-﻿// This file is part of the TA.DigitalDomeworks project
+﻿// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: NotifyPropertyChangeReactiveExtensions.cs  Last modified: 2018-03-30@01:42 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.ComponentModel;
@@ -18,8 +20,8 @@ namespace TA.SnapCap.SharedTypes
         // Returns the values of property (an Expression) as they
         // change, starting with the current value
         /// <summary>
-        ///     Gets an observable sequence that produces a new value whenever the value of a property (member expression) changes,
-        ///     starting with the current value.
+        ///     Gets an observable sequence that produces a new value whenever the value of a property (member
+        ///     expression) changes, starting with the current value.
         /// </summary>
         /// <typeparam name="TSource">The type of the t source.</typeparam>
         /// <typeparam name="TValue">The type of the t value.</typeparam>
@@ -27,8 +29,8 @@ namespace TA.SnapCap.SharedTypes
         /// <param name="property">The property.</param>
         /// <returns>IObservable&lt;TValue&gt;.</returns>
         /// <exception cref="System.ArgumentException">
-        ///     property must directly access " +
-        ///     "a property of the source
+        ///     property must directly access " + "a property of the
+        ///     source
         /// </exception>
         public static IObservable<TValue> GetObservableValueFor<TSource, TValue>(
             this TSource source, Expression<Func<TSource, TValue>> property)

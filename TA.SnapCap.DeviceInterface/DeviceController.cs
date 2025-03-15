@@ -1,8 +1,10 @@
-﻿// This file is part of the TA.SnapCap project
-//
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-//
-// File: DeviceController.cs  Last modified: 2020-05-27@21:00 by Tim Long
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.ComponentModel;
@@ -12,24 +14,22 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using NLog;
 using NLog.Fluent;
-using PostSharp.Patterns.Model;
-using TA.Ascom.ReactiveCommunications;
 using TA.SnapCap.HardwareSimulator;
 using TA.SnapCap.SharedTypes;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.DeviceInterface
     {
-    [NotifyPropertyChanged]
     public class DeviceController : IDisposable, INotifyPropertyChanged
         {
         private const double BrightnessRange = 255.0 - 24.0;
         private readonly ICommunicationChannel channel; // Injected
         private readonly Logger log = LogManager.GetCurrentClassLogger();
+        private readonly ManualResetEvent statusUpdatedEvent = new ManualResetEvent(false);
         private readonly ITransactionProcessor transactionProcessor; // injected
         private bool disposed;
         [NotNull] private CancellationTokenSource monitorStateCancellation = new CancellationTokenSource();
-        private CancellationTokenSource warmUpCancellationSource = null;
-        private readonly ManualResetEvent statusUpdatedEvent = new ManualResetEvent(false);
+        private CancellationTokenSource warmUpCancellationSource;
 
         public DeviceController(ICommunicationChannel channel, ITransactionProcessor transactionProcessor)
             {
@@ -47,14 +47,16 @@ namespace TA.SnapCap.DeviceInterface
 
         public bool Illuminated { get; private set; }
 
-        [SafeForDependencyAnalysis]
         public bool IsOnline => channel?.IsOpen ?? false;
 
         public bool MotorRunning { get; private set; }
 
         public SnapCapState State { get; private set; }
 
-        public bool LampWarmingUp { get; set; } = false;
+        public bool LampWarmingUp { get; set; }
+
+        // ToDo: this should be configurable in user settings.
+        public TimeSpan WarmUpPeriod => TimeSpan.FromSeconds(10.0);
 
         public void Dispose()
             {
@@ -64,9 +66,7 @@ namespace TA.SnapCap.DeviceInterface
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        /// Accepts a percentage and returns a device brightness value in the range 25..100
-        /// </summary>
+        /// <summary>Accepts a percentage and returns a device brightness value in the range 25..100</summary>
         /// <param name="percentBrightness">The desired percentage illumination in the range 0.0 .. 100.0</param>
         /// <returns></returns>
         internal static byte BrightnessFromPercent(double percentBrightness)
@@ -76,8 +76,8 @@ namespace TA.SnapCap.DeviceInterface
             if (percentBrightness <= 0.0)
                 return 0;
             var fractionOfUnity = percentBrightness / 100.0;
-            var brightness = (int) Math.Ceiling(BrightnessRange * fractionOfUnity);
-            return (byte) (brightness + 24);
+            var brightness = (int)Math.Ceiling(BrightnessRange * fractionOfUnity);
+            return (byte)(brightness + 24);
             }
 
         internal static int BrightnessToPercent(byte brightness)
@@ -87,7 +87,7 @@ namespace TA.SnapCap.DeviceInterface
             var offsetBrightness = brightness - 24;
 
             var fractionOfUnity = offsetBrightness / BrightnessRange;
-            return (int) (fractionOfUnity * 100.0);
+            return (int)(fractionOfUnity * 100.0);
             }
 
         /// <summary>Close the connection to the target system. This should never fail.</summary>
@@ -114,9 +114,7 @@ namespace TA.SnapCap.DeviceInterface
             OnPropertyChanged(nameof(IsOnline));
             }
 
-        /// <summary>
-        /// Try to immediately stop the cover if it is moving.
-        /// </summary>
+        /// <summary>Try to immediately stop the cover if it is moving.</summary>
         public void Halt()
             {
             TransactSimpleCommand(Protocol.Halt);
@@ -166,9 +164,6 @@ namespace TA.SnapCap.DeviceInterface
                 LampWarmingUp = false;
             }
 
-        // ToDo: this should be configurable in user settings.
-        public TimeSpan WarmUpPeriod => TimeSpan.FromSeconds(10.0);
-
         // The IDisposable pattern, as described at
         // http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
 
@@ -203,25 +198,22 @@ namespace TA.SnapCap.DeviceInterface
              */
             await Task.Delay(TimeSpan.FromSeconds(5), cancel).ConfigureAwait(false);
             while (!cancel.IsCancellationRequested)
-                {
                 try
                     {
                     var delayTask = Task.Delay(TimeSpan.FromSeconds(5), cancel);
                     var transactionTask = PollDeviceState(cancel);
-                    Task.WaitAll(new[] {delayTask, transactionTask}, cancel);
+                    Task.WaitAll(new[] { delayTask, transactionTask }, cancel);
                     }
                 catch (Exception e)
                     {
                     log.Error($"Error in state monitoring task: {e.Message}");
                     }
-                }
             }
 
         private void MonitorStateWorker(object state)
             {
-            var cancel = (CancellationToken) state;
+            var cancel = (CancellationToken)state;
             while (!cancel.IsCancellationRequested)
-                {
                 try
                     {
                     Task.Delay(TimeSpan.FromSeconds(1), cancel).Wait(cancel);
@@ -235,7 +227,6 @@ namespace TA.SnapCap.DeviceInterface
                     {
                     log.Error($"Error in State Monitor Worker: {e.Message}");
                     }
-                }
             }
 
         [NotifyPropertyChangedInvocator]
@@ -269,7 +260,7 @@ namespace TA.SnapCap.DeviceInterface
             {
             await PollDeviceState(monitorStateCancellation.Token).ConfigureAwait(false);
             var brightness = GetBrightness();
-            Brightness = BrightnessToPercent((byte) brightness);
+            Brightness = BrightnessToPercent((byte)brightness);
             }
 
         private async Task PollDeviceState(CancellationToken cancel)
@@ -290,8 +281,8 @@ namespace TA.SnapCap.DeviceInterface
             }
 
         /// <summary>
-        /// Sets the ELP brightness (actually the PWM timer value).
-        /// Setting to values less than 25 is not recommended.
+        ///     Sets the ELP brightness (actually the PWM timer value). Setting to values less than 25 is not
+        ///     recommended.
         /// </summary>
         /// <param name="brightness">The brightness (PWM timer value) in range 25..255.</param>
         public void SetBrightness(byte brightness)

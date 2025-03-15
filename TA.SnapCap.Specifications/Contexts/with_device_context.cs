@@ -1,8 +1,10 @@
-﻿// This file is part of the TA.SnapCap project
+﻿// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: with_device_context.cs  Last modified: 2017-05-07@04:47 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using Machine.Specifications;
 using TA.SnapCap.DeviceInterface;
@@ -11,12 +13,14 @@ using TA.SnapCap.Specifications.TestHelpers;
 
 namespace TA.SnapCap.Specifications
     {
-    class with_device_context
+    #region Context base classes
+    internal class with_device_context
         {
+        private Establish context = () => ContextBuilder = new DeviceLayerContextBuilder();
         protected static DeviceLayerContextBuilder ContextBuilder;
         protected static DeviceController Controller;
-        Establish context = () => ContextBuilder = new DeviceLayerContextBuilder();
 
         protected static FakeTransactionProcessor Processor => ContextBuilder.TransactionProcessor;
         }
+    #endregion
     }

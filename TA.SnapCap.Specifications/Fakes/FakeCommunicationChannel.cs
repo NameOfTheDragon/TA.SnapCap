@@ -1,35 +1,36 @@
-﻿// This file is part of the AWR Drive System ASCOM Driver project
+﻿// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2010-2015 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: FakeCommunicationChannel.cs  Last modified: 2015-09-09@01:18 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.Reactive.Linq;
 using System.Text;
-using TA.Ascom.ReactiveCommunications;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.Specifications.Fakes
     {
     /// <summary>
-    ///     A fake communication channel that logs any sent data in <see cref="SendLog" />
-    ///     and receives a fake pre-programmed response passed into the constructor.
-    ///     The class also keeps a count of how many times each method of <see cref="ICommunicationChannel" /> was called.
+    ///     A fake communication channel that logs any sent data in <see cref="SendLog" /> and receives a
+    ///     fake pre-programmed response passed into the constructor. The class also keeps a count of how
+    ///     many times each method of <see cref="ICommunicationChannel" /> was called.
     /// </summary>
     public class FakeCommunicationChannel : ICommunicationChannel
         {
-        readonly DeviceEndpoint endpoint;
-        readonly IObservable<char> receivedCharacters;
-        readonly StringBuilder sendLog;
+        private readonly IObservable<char> receivedCharacters;
+        private readonly StringBuilder sendLog;
 
         /// <summary>
-        ///     Dependency injection constructor.
-        ///     Initializes a new instance of the <see cref="SafetyMonitorDriver" /> class.
+        ///     Dependency injection constructor. Initializes a new instance of the
+        ///     <see cref="SafetyMonitorDriver" /> class.
         /// </summary>
         /// <param name="fakeResponse">Implementation of the injected dependency.</param>
         public FakeCommunicationChannel(string fakeResponse)
             {
-            endpoint = new InvalidEndpoint();
+            Endpoint = new InvalidEndpoint();
             Response = fakeResponse;
             receivedCharacters = fakeResponse.ToCharArray().ToObservable();
             ObservableReceivedCharacters = receivedCharacters.Concat(Observable.Never<char>());
@@ -37,18 +38,11 @@ namespace TA.SnapCap.Specifications.Fakes
             IsOpen = true;
             }
 
-        /// <summary>
-        ///     Gets the send log.
-        /// </summary>
+        /// <summary>Gets the send log.</summary>
         /// <value>The send log.</value>
-        public string SendLog
-            {
-            get { return sendLog.ToString(); }
-            }
+        public string SendLog => sendLog.ToString();
 
-        /// <summary>
-        ///     Gets a copy of the fake pre-programmed response.
-        /// </summary>
+        /// <summary>Gets a copy of the fake pre-programmed response.</summary>
         /// <value>The response.</value>
         public string Response { get; }
 
@@ -82,9 +76,6 @@ namespace TA.SnapCap.Specifications.Fakes
 
         public bool IsOpen { get; set; }
 
-        public DeviceEndpoint Endpoint
-            {
-            get { return endpoint; }
-            }
+        public DeviceEndpoint Endpoint { get; }
         }
     }

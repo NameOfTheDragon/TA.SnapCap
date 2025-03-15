@@ -13,10 +13,10 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using NLog;
-using TA.Ascom.ReactiveCommunications.Diagnostics;
 using TA.SnapCap.DeviceInterface;
 using TA.SnapCap.Server.Properties;
-using TA.WinFormsControls;
+using Timtek.ReactiveCommunications.Diagnostics;
+using Timtek.WinForms;
 
 namespace TA.SnapCap.Server
     {

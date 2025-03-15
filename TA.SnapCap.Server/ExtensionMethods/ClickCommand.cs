@@ -1,23 +1,24 @@
-﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 namespace TA.NexDome.Server
     {
     using System;
     using System.Windows.Forms;
-
     using JetBrains.Annotations;
 
     internal class ClickCommand : IDisposable
         {
-        [CanBeNull]
-        private readonly Func<bool> canExecute;
+        [CanBeNull] private readonly Func<bool> canExecute;
 
-        [NotNull]
-        private readonly Control control;
+        [NotNull] private readonly Control control;
 
-        [NotNull]
-        private readonly Action execute;
+        [NotNull] private readonly Action execute;
 
         public ClickCommand(Control control, Action execute, Func<bool> canExecute = null)
             {
@@ -27,7 +28,10 @@ namespace TA.NexDome.Server
             control.Click += Execute;
             }
 
-        public void Execute(object sender, EventArgs eventArgs) => execute.Invoke();
+        public void Execute(object sender, EventArgs eventArgs)
+            {
+            execute.Invoke();
+            }
 
         public void CanExecuteChanged()
             {
@@ -38,17 +42,15 @@ namespace TA.NexDome.Server
         // The IDisposable pattern, as described at
         // http://www.codeproject.com/Articles/15360/Implementing-IDisposable-and-the-Dispose-Pattern-P
 
-        /// <summary>
-        ///     Finalizes this instance (called prior to garbage collection by the CLR)
-        /// </summary>
+        /// <summary>Finalizes this instance (called prior to garbage collection by the CLR)</summary>
         ~ClickCommand()
             {
-            Dispose(fromUserCode: false);
+            Dispose(false);
             }
 
         public void Dispose()
             {
-            Dispose(fromUserCode: true);
+            Dispose(true);
             GC.SuppressFinalize(this);
             }
 
@@ -65,7 +67,6 @@ namespace TA.NexDome.Server
             // ToDo: Call the base class's Dispose(Boolean) method, if available.
             // base.Dispose(fromUserCode);
             }
-
         #endregion
         }
 

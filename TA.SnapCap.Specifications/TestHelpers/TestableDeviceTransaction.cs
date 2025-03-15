@@ -1,5 +1,6 @@
 ﻿using System;
-using TA.Ascom.ReactiveCommunications;
+using TA.Utils.Core;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.Specifications.TestHelpers
     {
@@ -19,7 +20,7 @@ namespace TA.SnapCap.Specifications.TestHelpers
 
         void SetResponse(string response)
             {
-            Response = new Maybe<string>(response);
+            Response = Maybe<string>.From(response);
             }
 
         internal void SignalCompletion(string fakeResponse)

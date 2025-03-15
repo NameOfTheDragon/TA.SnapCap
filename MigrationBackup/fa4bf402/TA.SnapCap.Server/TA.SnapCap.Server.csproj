@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TA.SnapCap.Server</RootNamespace>
     <AssemblyName>TA.SnapCap.Server</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -63,18 +63,83 @@
     <AssemblyOriginatorKeyFile>LocalServer.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.Astrometry.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.Attributes.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Controls, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.DeviceInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.DriverAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.Exceptions.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Internal.Extensions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.Internal.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.SettingsProvider, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.SettingsProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASCOM.Platform.6.5.2\lib\net40\ASCOM.Utilities.Video.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=4242.42.42.42, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.2024.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.3.6.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.6\lib\net45\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.5.4.0\lib\net46\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NodaTime, Version=3.2.1.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.3.2.1\lib\netstandard2.0\NodaTime.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Reactive, Version=6.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.6.0.1\lib\net472\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.0\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.0\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TA.Utils.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Tim\.nuget\packages\ta.utils.core\2.3.0\lib\netstandard2.0\TA.Utils.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Timtek.ReactiveCommunications, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Tim\.nuget\packages\timtek.reactivecommunications\2.1.1\lib\netstandard2.0\Timtek.ReactiveCommunications.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +211,9 @@
     <Content Include="Resources\ASCOM.png" />
     <None Include="BootstrapAscomProfileStore.ps1" />
     <None Include="Diagrams\ObjectCompositionGraph.puml" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\GTD-logo.jpg" />
     <Content Include="Resources\TiGra Astronomy Icon 256x256.png" />
     <Content Include="Resources\TiGra Astronomy logo 800x900.png" />
@@ -170,6 +238,7 @@
       <DependentUpon>NLog.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -221,41 +290,7 @@
       <Name>TA.SnapCap.SharedTypes</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ASCOM.Platform">
-      <Version>6.5.2</Version>
-    </PackageReference>
-    <PackageReference Include="JetBrains.Annotations">
-      <Version>2024.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="Ninject">
-      <Version>3.3.6</Version>
-    </PackageReference>
-    <PackageReference Include="NLog">
-      <Version>5.4.0</Version>
-    </PackageReference>
-    <PackageReference Include="NLog.Schema">
-      <Version>5.4.0</Version>
-    </PackageReference>
-    <PackageReference Include="NodaTime">
-      <Version>3.2.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Reactive">
-      <Version>6.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Threading.Tasks.Extensions">
-      <Version>4.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.ValueTuple">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Timtek.ReactiveCommunications">
-      <Version>2.2.0</Version>
-    </PackageReference>
-    <PackageReference Include="Timtek.WinForms">
-      <Version>1.2.2</Version>
-    </PackageReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

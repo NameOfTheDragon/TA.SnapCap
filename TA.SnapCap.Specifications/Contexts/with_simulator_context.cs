@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using TA.Ascom.ReactiveCommunications;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.Specifications.Contexts
     {

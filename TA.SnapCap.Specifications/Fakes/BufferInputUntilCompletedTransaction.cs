@@ -14,7 +14,7 @@ using System;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using TA.Ascom.ReactiveCommunications;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.Specifications.Fakes
     {

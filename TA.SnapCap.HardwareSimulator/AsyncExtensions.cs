@@ -1,5 +1,10 @@
-﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.Runtime.CompilerServices;
@@ -14,25 +19,27 @@ namespace TA.SnapCap.HardwareSimulator
             {
             var tcs = new TaskCompletionSource<bool>();
             using (cancellationToken.Register(s => ((TaskCompletionSource<bool>)s).TrySetResult(true), tcs))
+                {
                 if (task != await Task.WhenAny(task, tcs.Task))
                     throw new OperationCanceledException(cancellationToken);
+                }
 
             return task.Result;
             }
 
         public static ConfiguredTaskAwaitable<TResult> ContinueOnAnyThread<TResult>(this Task<TResult> task)
             {
-            return task.ConfigureAwait(continueOnCapturedContext: false);
+            return task.ConfigureAwait(false);
             }
 
         public static ConfiguredTaskAwaitable ContinueOnAnyThread(this Task task)
             {
-            return task.ConfigureAwait(continueOnCapturedContext: false);
+            return task.ConfigureAwait(false);
             }
 
         public static ConfiguredTaskAwaitable ContinueOnCurrentThread(this Task task)
             {
-            return task.ConfigureAwait(continueOnCapturedContext: true);
+            return task.ConfigureAwait(true);
             }
 
         public static Task AsTask(this WaitHandle handle)
@@ -50,8 +57,9 @@ namespace TA.SnapCap.HardwareSimulator
                     localTcs.TrySetCanceled();
                 else
                     localTcs.TrySetResult(null);
-                }, tcs, timeout, executeOnlyOnce: true);
-            tcs.Task.ContinueWith((_, state) => ((RegisteredWaitHandle)state).Unregister(null), registration, TaskScheduler.Default);
+                }, tcs, timeout, true);
+            tcs.Task.ContinueWith((_, state) => ((RegisteredWaitHandle)state).Unregister(null), registration,
+                TaskScheduler.Default);
             return tcs.Task;
             }
         }

@@ -1,8 +1,10 @@
-﻿// This file is part of the TA.SnapCap project
+﻿// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: Settings.cs  Last modified: 2017-05-06@20:16 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using System.ComponentModel;
 using System.Configuration;
@@ -50,7 +52,7 @@ namespace TA.SnapCap.Server.Properties
 
         private void SettingsSavingEventHandler(object sender, CancelEventArgs e)
             {
-            log.Warn($"Saving settings");
+            log.Warn("Saving settings");
             }
         }
     }

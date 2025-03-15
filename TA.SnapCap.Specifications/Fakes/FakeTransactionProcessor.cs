@@ -1,34 +1,36 @@
-// This file is part of the AWR Drive System ASCOM Driver project
+// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2010-2016 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: FakeTransactionProcessor.cs  Last modified: 2016-01-21@16:02 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using System.Collections.Generic;
-using TA.Ascom.ReactiveCommunications;
 using TA.SnapCap.Specifications.TestHelpers;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.Specifications.Fakes
     {
     internal class FakeTransactionProcessor : ITransactionProcessor
         {
-        readonly IEnumerator<string> responseEnumerator;
+        private readonly IEnumerator<string> responseEnumerator;
 
         public FakeTransactionProcessor(IEnumerable<string> fakeResponses)
-        {
-        responseEnumerator = fakeResponses.GetEnumerator();
-        }
+            {
+            responseEnumerator = fakeResponses.GetEnumerator();
+            }
 
         public List<DeviceTransaction> TransactionHistory { get; } = new List<DeviceTransaction>();
 
         public void CommitTransaction(DeviceTransaction transaction)
-        {
+            {
             var moreResponses = responseEnumerator.MoveNext();
             if (moreResponses)
                 transaction.SimulateCompletionWithResponse(responseEnumerator.Current);
             else
                 transaction.TimedOut("Timeout");
             TransactionHistory.Add(transaction);
+            }
         }
     }
-}

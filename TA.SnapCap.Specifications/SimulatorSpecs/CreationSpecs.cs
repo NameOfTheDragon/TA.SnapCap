@@ -1,8 +1,10 @@
-﻿// This file is part of the TA.SnapCap project
-//
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-//
-// File: CreationSpecs.cs  Last modified: 2020-02-27@21:37 by Tim Long
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System.Collections.Generic;
 using System.Linq;
@@ -17,37 +19,38 @@ namespace TA.SnapCap.Specifications.SimulatorSpecs
     [Subject(typeof(SimulatorCommunicationsChannel), "create from connection string")]
     internal class when_creating_a_realtime_simulator : with_simulator_context
         {
-        Establish context = () => Context = ContextBuilder
+        private Establish context = () => Context = ContextBuilder
             .WithRealtimeSimulator()
             .Build();
-        It should_be_real_time = () => Context.Endpoint.Realtime.ShouldBeTrue();
+        private It should_be_real_time = () => Context.Endpoint.Realtime.ShouldBeTrue();
         // We don' test for other states because it would take too long.
         }
 
     [Subject(typeof(SimulatorCommunicationsChannel), "create from connection string")]
     internal class when_creating_a_fast_simulator : with_simulator_context
         {
-        static readonly IEnumerable<string> expectedStates = new List<string>
-                {nameof(StateClosing), nameof(StateClosed)};
-        Establish context = () => Context = ContextBuilder
+        private Establish context = () => Context = ContextBuilder
             .WithFastSimulator()
             .Build();
-        Because of = () => OpenChannelAndWaitUntilStopped();
-        It should_be_fast = () => Context.Endpoint.Realtime.ShouldBeFalse();
-        It should_have_passed_through_closing_then_closed_states =
+        private Because of = () => OpenChannelAndWaitUntilStopped();
+        private It should_be_fast = () => Context.Endpoint.Realtime.ShouldBeFalse();
+        private It should_have_passed_through_closing_then_closed_states =
             () => Context.StateChanges.ShouldBeLike(expectedStates);
+        private static readonly IEnumerable<string> expectedStates = new List<string>
+                { nameof(StateClosing), nameof(StateClosed) };
         }
 
     [Subject(typeof(SimulatorStateMachine), "Opening")]
     internal class when_closed_and_an_open_request_is_received : with_simulator_context
         {
-        Establish context = () => Context = ContextBuilder
+        private Establish context = () => Context = ContextBuilder
             .WithFastSimulator()
             .WithOpenChannel()
             .InClosedState()
             .Build();
-        Because of = () => Context.Channel.Send(Protocol.GetCommandString(Protocol.OpenCover));
-        It should_transition_through_opening_state = () => Context.StateChanges.First().ShouldEqual(nameof(StateOpening));
+        private Because of = () => Context.Channel.Send(Protocol.GetCommandString(Protocol.OpenCover));
+        private It should_transition_through_opening_state =
+            () => Context.StateChanges.First().ShouldEqual(nameof(StateOpening));
         }
 
     /*

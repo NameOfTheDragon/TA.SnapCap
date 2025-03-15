@@ -1,9 +1,13 @@
-﻿// This file is part of the TA.SnapCap project
+﻿// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: MotorDirection.cs  Last modified: 2020-05-13@18:35 by Tim Long
-namespace TA.SnapCap.HardwareSimulator {
+// Tim Long, Timtek Systems, 2025.
+
+namespace TA.SnapCap.HardwareSimulator
+    {
     public enum MotorDirection
         {
         Opening,

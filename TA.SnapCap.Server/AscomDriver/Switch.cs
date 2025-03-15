@@ -6,11 +6,11 @@
 
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using ASCOM;
 using ASCOM.DeviceInterface;
 using JetBrains.Annotations;
-using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
 using TA.SnapCap.Server.Properties;
 
@@ -26,7 +26,6 @@ namespace TA.SnapCap.Server.AscomDriver
     [ClassInterface(ClassInterfaceType.None)]
     [UsedImplicitly]
     [ServedClassName(SharedResources.DriverName)]
-    [NLogTraceWithArguments]
     public class Switch : AscomDriverBase, ISwitchV2
         {
         private readonly IDictionary<short, ISnapCapSwitch> switches = new Dictionary<short, ISnapCapSwitch>();
@@ -47,10 +46,18 @@ namespace TA.SnapCap.Server.AscomDriver
             return true;
             }
 
-        [MustBeConnected]
         public bool GetSwitch(short id)
             {
+            AssertConnected();
             return switches[id].GetState();
+            }
+
+        private void AssertConnected([CallerMemberName] string caller = null)
+            {
+            if (Connected) return;
+            var message = $"The device is not connected. Method {caller} requires a connected device.";
+            log.Error(message);
+            throw new NotConnectedException(message);
             }
 
         public string GetSwitchDescription(short id)
@@ -64,9 +71,9 @@ namespace TA.SnapCap.Server.AscomDriver
             }
 
         /// <summary>Returns the value for switch device id as a double</summary>
-        [MustBeConnected]
         public double GetSwitchValue(short id)
             {
+            AssertConnected();
             return switches[id].GetValue();
             }
 
@@ -87,9 +94,9 @@ namespace TA.SnapCap.Server.AscomDriver
             return switches[id].MinimumValue;
             }
 
-        [MustBeConnected]
         public void SetSwitch(short id, bool state)
             {
+            AssertConnected();
             switches[id].SetValue(state);
             }
 
@@ -100,9 +107,9 @@ namespace TA.SnapCap.Server.AscomDriver
             }
 
         /// <summary>Set the value for this device as a double.</summary>
-        [MustBeConnected]
         public void SetSwitchValue(short id, double value)
             {
+            AssertConnected();
             switches[id].SetValue(value);
             }
 

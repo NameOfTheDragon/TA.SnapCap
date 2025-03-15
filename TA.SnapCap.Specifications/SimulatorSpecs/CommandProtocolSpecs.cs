@@ -1,8 +1,10 @@
-﻿// This file is part of the TA.SnapCap project
+﻿// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: CommandProtocolSpecs.cs  Last modified: 2020-05-18@17:02 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using Machine.Specifications;
 using TA.SnapCap.HardwareSimulator;
@@ -26,17 +28,18 @@ namespace TA.SnapCap.Specifications
     [Subject(typeof(SimulatorStateMachine), "Command/Response processing")]
     internal class when_requesting_status_from_a_closed_idle_snapcap : with_simulator_context
         {
-        Establish context = () => Context = ContextBuilder.InClosedState().WithOpenChannel().Build();
-        Because of = () => Context.Channel.Send(Protocol.GetCommandString(Protocol.GetStatus));
-        It should_receive_a_status_response = () => Context.Response.ShouldEqual(Expected);
-        const string Expected = "*S002\r\n";
+        private Establish context = () => Context = ContextBuilder.InClosedState().WithOpenChannel().Build();
+        private Because of = () => Context.Channel.Send(Protocol.GetCommandString(Protocol.GetStatus));
+        private It should_receive_a_status_response = () => Context.Response.ShouldEqual(Expected);
+        private const string Expected = "*S002\r\n";
         }
+
     [Subject(typeof(SimulatorStateMachine), "Command/Response processing")]
     internal class when_requesting_status_from_an_open_idle_snapcap : with_simulator_context
         {
-        Establish context = () => Context = ContextBuilder.InOpenState().WithOpenChannel().Build();
-        Because of = () => Context.Channel.Send(Protocol.GetCommandString(Protocol.GetStatus));
-        It should_receive_a_status_response = () => Context.Response.ShouldEqual(Expected);
-        const string Expected = "*S001\r\n";
+        private Establish context = () => Context = ContextBuilder.InOpenState().WithOpenChannel().Build();
+        private Because of = () => Context.Channel.Send(Protocol.GetCommandString(Protocol.GetStatus));
+        private It should_receive_a_status_response = () => Context.Response.ShouldEqual(Expected);
+        private const string Expected = "*S001\r\n";
         }
     }

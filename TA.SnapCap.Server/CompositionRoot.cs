@@ -1,5 +1,10 @@
-﻿// This file is part of the TA.NexDome.AscomServer project
-// Copyright © 2019-2019 Tigra Astronomy, all rights reserved.
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.Collections.Generic;
@@ -11,10 +16,10 @@ using Ninject.Modules;
 using Ninject.Syntax;
 using NLog.Fluent;
 using NodaTime;
-using TA.Ascom.ReactiveCommunications;
 using TA.SnapCap.DeviceInterface;
 using TA.SnapCap.HardwareSimulator;
 using TA.SnapCap.Server.Properties;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.Server
     {
@@ -27,17 +32,14 @@ namespace TA.SnapCap.Server
             AddBindings(new CoreModule());
             }
 
-        public static void AddBindings(params INinjectModule[] bindingModules)
-            {
-            foreach (var module in bindingModules)
-                {
-                Kernel.Load(bindingModules);
-                }
-            }
-
         private static ScopeObject CurrentScope { get; set; }
 
         public static IKernel Kernel { get; }
+
+        public static void AddBindings(params INinjectModule[] bindingModules)
+            {
+            foreach (var module in bindingModules) Kernel.Load(bindingModules);
+            }
 
         public static void BeginSessionScope()
             {
@@ -90,7 +92,10 @@ namespace TA.SnapCap.Server
         public event EventHandler Disposed;
 
         /// <inheritdoc />
-        public override string ToString() => $"{nameof(ScopeId)}: {ScopeId}";
+        public override string ToString()
+            {
+            return $"{nameof(ScopeId)}: {ScopeId}";
+            }
         }
 
     internal class CoreModule : NinjectModule
@@ -102,7 +107,7 @@ namespace TA.SnapCap.Server
             Bind<DeviceController>().ToMethod(BuildDeviceController).InSessionScope();
             Bind<ICommunicationChannel>().ToMethod(BuildCommunicationsChannel).InSessionScope();
             Bind<ChannelFactory>().ToSelf().InSessionScope();
-            Bind<IClock>().ToMethod((context) => SystemClock.Instance).InSingletonScope();
+            Bind<IClock>().ToMethod(context => SystemClock.Instance).InSingletonScope();
             Bind<ReactiveTransactionProcessor>().ToSelf().InSessionScope();
             Bind<TransactionObserver>().ToSelf().InSessionScope();
             Bind<ITransactionProcessor>().ToMethod(BuildTransactionProcessor).InSessionScope();
@@ -112,7 +117,7 @@ namespace TA.SnapCap.Server
             {
             var parser = Kernel.Get<InputParser>();
             var clock = Kernel.Get<IClock>();
-            var machine = new SimulatorStateMachine(realTime: true, clock, parser);
+            var machine = new SimulatorStateMachine(true, clock, parser);
             return machine;
             }
 
@@ -137,7 +142,7 @@ namespace TA.SnapCap.Server
             channelFactory.RegisterChannelType(
                 SimulatorEndpoint.IsConnectionStringValid,
                 SimulatorEndpoint.FromConnectionString,
-                endpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint) endpoint,
+                endpoint => new SimulatorCommunicationsChannel((SimulatorEndpoint)endpoint,
                     Kernel.Get<SimulatorStateMachine>(), Kernel.Get<InputParser>())
             );
             var channel = channelFactory.FromConnectionString(Settings.Default.ConnectionString);

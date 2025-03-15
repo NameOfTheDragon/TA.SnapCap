@@ -1,9 +1,10 @@
-﻿// This file is part of the TI.DigitalDomeWorks project
-//
-// Copyright © 2016 TiGra Astronomy, all rights reserved.
-//
-// File: SimulatorState.cs  Created: 2016-06-20@18:14
-// Last modified: 2016-06-21@10:01 by Tim
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.Threading.Tasks;
@@ -13,69 +14,52 @@ using NLog.Fluent;
 namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>
-    ///     This is the base class for all simulator state-machine states. It defines the behaviours common to all states,
-    ///     as well as static data (shared state) and methods that perform the logic required to make the state machine work.
+    ///     This is the base class for all simulator state-machine states. It defines the behaviours common
+    ///     to all states, as well as static data (shared state) and methods that perform the logic
+    ///     required to make the state machine work.
     /// </summary>
     public class SimulatorState : ISimulatorStateTriggers
         {
-        /// <summary>
-        ///     Provides logging services
-        /// </summary>
+        /// <summary>Provides logging services</summary>
         protected static readonly Logger Log = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// A reference to the state machine that created the state.
-        /// </summary>
-        protected readonly SimulatorStateMachine Machine;
         protected static readonly TimeSpan StallTimeout = TimeSpan.FromSeconds(20);
 
-        /// <summary>
-        ///     Initializes the simulator state with a reference to the parent state machine.
-        /// </summary>
+        /// <summary>A reference to the state machine that created the state.</summary>
+        protected readonly SimulatorStateMachine Machine;
+
+        /// <summary>Initializes the simulator state with a reference to the parent state machine.</summary>
         /// <param name="machine">The associated state machine.</param>
         internal SimulatorState(SimulatorStateMachine machine)
             {
-            this.Machine = machine;
+            Machine = machine;
             }
 
-        /// <summary>
-        ///     Gets the descriptive name of the current state.
-        /// </summary>
+        /// <summary>Gets the descriptive name of the current state.</summary>
         /// <value>The state's descriptive name, as a string.</value>
         public virtual string Name
             {
             get
                 {
                 Log.Warn("State does not override the Name property.");
-                return this.GetType().Name;
+                return GetType().Name;
                 }
             }
 
-
         #region IDisposable Members
         /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged
+        ///     resources.
         /// </summary>
-        public void Dispose()
-            {
-            }
+        public void Dispose() { }
         #endregion
 
-        /// <summary>
-        ///     Called (by the state machine) when exiting from the state
-        /// </summary>
+        /// <summary>Called (by the state machine) when exiting from the state</summary>
         public virtual void OnExit() { }
 
-        /// <summary>
-        ///     Called (by the state machine) when entering the state.
-        /// </summary>
+        /// <summary>Called (by the state machine) when entering the state.</summary>
         public virtual void OnEnter() { }
 
-
         #region Events
-        #region Delegates
-        #endregion
-
         #endregion
 
         #region State Triggers

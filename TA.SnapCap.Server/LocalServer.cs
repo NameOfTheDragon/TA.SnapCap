@@ -20,7 +20,6 @@ using ASCOM.Utilities;
 using Microsoft.Win32;
 using NLog;
 using NLog.Fluent;
-using TA.SnapCap.Aspects;
 using TA.SnapCap.Server.ExtensionMethods;
 
 namespace TA.SnapCap.Server
@@ -42,7 +41,6 @@ namespace TA.SnapCap.Server
         // ==================
         //
         [STAThread]
-        [NLogTraceWithArguments]
         private static void Main(string[] args)
             {
 #if DEBUG_IN_EXTERNAL_APP

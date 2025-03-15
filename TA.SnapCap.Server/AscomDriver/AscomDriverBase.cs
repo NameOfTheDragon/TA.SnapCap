@@ -9,13 +9,12 @@ using System.Collections;
 using System.Reflection;
 using ASCOM;
 using NLog;
-using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
 using NotImplementedException = System.NotImplementedException;
 
 namespace TA.SnapCap.Server.AscomDriver
     {
-    public abstract class AscomDriverBase : ReferenceCountedObjectBase, IDisposable, IAscomDriver
+    public abstract class AscomDriverBase : ReferenceCountedObjectBase, IDisposable
         {
         protected readonly ILogger log = LogManager.GetCurrentClassLogger();
         protected Guid clientId;
@@ -74,7 +73,6 @@ Professionally developed by Tigra Astronomy";
             GC.SuppressFinalize(this);
             }
 
-        [MustBeConnected]
         public string Action(string ActionName, string ActionParameters)
             {
             throw new NotImplementedException();

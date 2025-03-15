@@ -1,20 +1,22 @@
-﻿// This file is part of the TA.DigitalDomeworks project
+﻿// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: SimulatorEndpoint.cs  Last modified: 2018-03-28@15:51 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
 using NLog.Fluent;
-using TA.Ascom.ReactiveCommunications;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.HardwareSimulator
     {
     /// <summary>
-    ///     Endpoint representing the hardware simulator.
-    ///     Connection string format: Simulator:Realtime or Simulator:Fast
+    ///     Endpoint representing the hardware simulator. Connection string format: Simulator:Realtime or
+    ///     Simulator:Fast
     /// </summary>
     public class SimulatorEndpoint : DeviceEndpoint
         {
@@ -30,20 +32,15 @@ namespace TA.SnapCap.HardwareSimulator
             }
 
         /// <summary>
-        ///     When <c>true</c>, delays are added to simulate realtime operation.
-        ///     When <c>false</c>, all operations complete nearly instantly. This is
-        ///     useful for unit testing.
+        ///     When <c>true</c>, delays are added to simulate realtime operation. When <c>false</c>, all
+        ///     operations complete nearly instantly. This is useful for unit testing.
         /// </summary>
         public bool Realtime { get; set; }
 
-        /// <summary>
-        ///     Creates a simulator endpoint from a valid simulator connection string.
-        /// </summary>
+        /// <summary>Creates a simulator endpoint from a valid simulator connection string.</summary>
         /// <param name="connection">A valid simulator connection string.</param>
         /// <returns>Creates and returns an endpoint object for the connection string.</returns>
-        /// <exception cref="ArgumentException">
-        ///     Thrown if the connection string is empty or invalid.
-        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if the connection string is empty or invalid.</exception>
         public static SimulatorEndpoint FromConnectionString(string connection)
             {
             Contract.Requires(!string.IsNullOrWhiteSpace(connection));
@@ -54,16 +51,12 @@ namespace TA.SnapCap.HardwareSimulator
                     nameof(connection));
             var speed = CaptureGroupOrDefault(matches, "Speed", "Fast");
             var timing = speed.Equals(realtime, StringComparison.InvariantCultureIgnoreCase);
-            return new SimulatorEndpoint(connection) {Realtime = timing};
+            return new SimulatorEndpoint(connection) { Realtime = timing };
             }
 
-        /// <summary>
-        /// Tests whether a connection string is valid for the simulator.
-        /// </summary>
+        /// <summary>Tests whether a connection string is valid for the simulator.</summary>
         /// <param name="connection"></param>
-        /// <returns>
-        /// <c>true</c> if the connection string is valid; <c>false</c> otherwise.
-        /// </returns>
+        /// <returns><c>true</c> if the connection string is valid; <c>false</c> otherwise.</returns>
         [Pure]
         public static bool IsConnectionStringValid(string connection)
             {
@@ -84,9 +77,7 @@ namespace TA.SnapCap.HardwareSimulator
                 }
             }
 
-        /// <summary>
-        /// Gets the connection string for this endpoint.
-        /// </summary>
+        /// <summary>Gets the connection string for this endpoint.</summary>
         /// <returns></returns>
         public override string ToString()
             {

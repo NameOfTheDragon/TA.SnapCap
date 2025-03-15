@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29311.281
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35507.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.Aspects", "TA.PostSharp.Aspects\TA.SnapCap.Aspects.csproj", "{9CDCF319-DADC-41EB-B787-DE3862017E95}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.DeviceInterface", "TA.SnapCap.DeviceInterface\TA.SnapCap.DeviceInterface.csproj", "{3015F05F-D747-4C3E-A0D4-EC2B3BD76C56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.SnapCap.Specifications", "TA.SnapCap.Specifications\TA.SnapCap.Specifications.csproj", "{C006703F-2193-481D-AA15-F46D2FB2A21B}"
@@ -28,14 +26,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{3015f05f-d747-4c3e-a0d4-ec2b3bd76c56}*SharedItemsImports = 4
-		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{3689a2cb-94c5-4012-a5cf-7e7d1dd27143}*SharedItemsImports = 4
-		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{393c3897-d66d-46f4-abc2-1d59ec96095b}*SharedItemsImports = 4
-		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{60286353-ae35-4a4d-8ba4-adee435bddc7}*SharedItemsImports = 13
-		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{9cdcf319-dadc-41eb-b787-de3862017e95}*SharedItemsImports = 4
-		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{c006703f-2193-481d-aa15-f46d2fb2a21b}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -45,18 +35,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Debug|x64.Build.0 = Debug|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Debug|x86.Build.0 = Debug|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Release|x64.ActiveCfg = Release|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Release|x64.Build.0 = Release|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Release|x86.ActiveCfg = Release|Any CPU
-		{9CDCF319-DADC-41EB-B787-DE3862017E95}.Release|x86.Build.0 = Release|Any CPU
 		{3015F05F-D747-4C3E-A0D4-EC2B3BD76C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3015F05F-D747-4C3E-A0D4-EC2B3BD76C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3015F05F-D747-4C3E-A0D4-EC2B3BD76C56}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -132,5 +110,12 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {443C5521-EBEC-4337-8085-1C679BB347DE}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{3015f05f-d747-4c3e-a0d4-ec2b3bd76c56}*SharedItemsImports = 4
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{3689a2cb-94c5-4012-a5cf-7e7d1dd27143}*SharedItemsImports = 4
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{393c3897-d66d-46f4-abc2-1d59ec96095b}*SharedItemsImports = 4
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{60286353-ae35-4a4d-8ba4-adee435bddc7}*SharedItemsImports = 13
+		TA.SnapCap.SharedCode\TA.SnapCap.SharedCode.projitems*{c006703f-2193-481d-aa15-f46d2fb2a21b}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

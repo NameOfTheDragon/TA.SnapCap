@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ninject;
-using TA.Ascom.ReactiveCommunications;
 using TA.SnapCap.HardwareSimulator;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.Specifications.Contexts
     {

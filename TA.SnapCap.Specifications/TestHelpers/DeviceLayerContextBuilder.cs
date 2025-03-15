@@ -1,36 +1,36 @@
-﻿// This file is part of the TA.SnapCap project
-//
-// Copyright © 2007-2017 Tigra Astronomy, all rights reserved.
-//
-// File: DeviceLayerContextBuilder.cs  Created: 2017-05-07@12:52
-// Last modified: 2017-05-10@18:40 by Tim Long
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System.Collections.Generic;
 using FakeItEasy;
-using TA.Ascom.ReactiveCommunications;
 using TA.SnapCap.DeviceInterface;
 using TA.SnapCap.Specifications.Fakes;
 
 namespace TA.SnapCap.Specifications.TestHelpers
-{
-    class DeviceLayerContextBuilder
     {
-        readonly List<string> fakeResponses = new List<string>();
-        FakeCommunicationChannel channel;
+    internal class DeviceLayerContextBuilder
+        {
+        private readonly List<string> fakeResponses = new List<string>();
+        private FakeCommunicationChannel channel;
 
         public FakeTransactionProcessor TransactionProcessor { get; private set; }
 
-    public DeviceController Build()
-        {
-        channel = new FakeCommunicationChannel(string.Empty);
-        TransactionProcessor = new FakeTransactionProcessor(fakeResponses);
-        return new DeviceController(this.channel, TransactionProcessor);
-        }
+        public DeviceController Build()
+            {
+            channel = new FakeCommunicationChannel(string.Empty);
+            TransactionProcessor = new FakeTransactionProcessor(fakeResponses);
+            return new DeviceController(channel, TransactionProcessor);
+            }
 
-    public DeviceLayerContextBuilder WithResponses(params string[] responses)
-        {
+        public DeviceLayerContextBuilder WithResponses(params string[] responses)
+            {
             fakeResponses.AddRange(responses);
             return this;
+            }
         }
     }
-}

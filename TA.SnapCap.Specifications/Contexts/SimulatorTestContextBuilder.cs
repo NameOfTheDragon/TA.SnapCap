@@ -1,8 +1,10 @@
-﻿// This file is part of the TA.SnapCap project
-//
-// Copyright © 2016-2020 Tigra Astronomy, all rights reserved.
-//
-// File: SimulatorTestContextBuilder.cs  Last modified: 2020-03-22@16:40 by Tim Long
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.ComponentModel;
@@ -10,22 +12,23 @@ using System.Linq;
 using Ninject;
 using Ninject.Modules;
 using NodaTime;
-using TA.Ascom.ReactiveCommunications;
 using TA.SnapCap.HardwareSimulator;
+using TA.Utils.Core;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.Specifications.Contexts
     {
-    class SimulatorTestContextBuilder : NinjectModule
+    internal class SimulatorTestContextBuilder : NinjectModule
         {
         private readonly IKernel testKernel = new StandardKernel();
-        string connectionString = "Simulator:Fast";
-        Action<SimulatorContext>
+        private string connectionString = "Simulator:Fast";
+        private Action<SimulatorContext>
             initializeStateMachine = machine => { }; // called to initialize the state machine. DO nothing by default.
-        bool openChannel;
-        Maybe<SimulatorStateMachine> stateMachine = Maybe<SimulatorStateMachine>.Empty;
-        PropertyChangedEventHandler propertyChangedAction = (sender, args) => { };
-        bool initialLampState = false;
-        uint lampBrightness = 0;
+        private bool openChannel;
+        private Maybe<SimulatorStateMachine> stateMachine = Maybe<SimulatorStateMachine>.Empty;
+        private PropertyChangedEventHandler propertyChangedAction = (sender, args) => { };
+        private bool initialLampState;
+        private uint lampBrightness;
 
         /// <inheritdoc />
         public override void Load()
@@ -47,8 +50,8 @@ namespace TA.SnapCap.Specifications.Contexts
             {
             if (stateMachine.Any()) return stateMachine.Single();
             var parser = Kernel.Get<InputParser>();
-            var machine = new SimulatorStateMachine(realTime: false, SystemClock.Instance, parser);
-            stateMachine = new Maybe<SimulatorStateMachine>(machine);
+            var machine = new SimulatorStateMachine(false, SystemClock.Instance, parser);
+            stateMachine = Maybe<SimulatorStateMachine>.From(machine);
             return stateMachine.Single();
             }
 

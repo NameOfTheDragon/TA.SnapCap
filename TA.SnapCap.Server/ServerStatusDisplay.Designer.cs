@@ -32,12 +32,12 @@ namespace TA.SnapCap.Server
             this.registeredClientCount = new System.Windows.Forms.Label();
             this.OnlineClients = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.annunciatorPanel1 = new TA.WinFormsControls.AnnunciatorPanel();
-            this.ConnectedAnnunciator = new TA.WinFormsControls.Annunciator();
-            this.MotorAnnunciator = new TA.WinFormsControls.Annunciator();
-            this.IlluminationAnnunciator = new TA.WinFormsControls.Annunciator();
-            this.BrightnessAnnunciator = new TA.WinFormsControls.Annunciator();
-            this.DispositionAnnunciator = new TA.WinFormsControls.Annunciator();
+            this.annunciatorPanel1 = new Timtek.WinForms.AnnunciatorPanel();
+            this.ConnectedAnnunciator = new Timtek.WinForms.Annunciator();
+            this.MotorAnnunciator = new Timtek.WinForms.Annunciator();
+            this.IlluminationAnnunciator = new Timtek.WinForms.Annunciator();
+            this.BrightnessAnnunciator = new Timtek.WinForms.Annunciator();
+            this.DispositionAnnunciator = new Timtek.WinForms.Annunciator();
             this.SetupCommand = new System.Windows.Forms.Button();
             this.annunciatorPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -108,7 +108,7 @@ namespace TA.SnapCap.Server
             this.MotorAnnunciator.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.MotorAnnunciator.AutoSize = true;
             this.MotorAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.MotorAnnunciator.Cadence = TA.WinFormsControls.CadencePattern.BlinkAlarm;
+            this.MotorAnnunciator.Cadence = Timtek.WinForms.CadencePattern.BlinkAlarm;
             this.MotorAnnunciator.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MotorAnnunciator.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
             this.MotorAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -123,7 +123,7 @@ namespace TA.SnapCap.Server
             this.IlluminationAnnunciator.ActiveColor = System.Drawing.Color.PaleGoldenrod;
             this.IlluminationAnnunciator.AutoSize = true;
             this.IlluminationAnnunciator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.IlluminationAnnunciator.Cadence = TA.WinFormsControls.CadencePattern.BlinkFast;
+            this.IlluminationAnnunciator.Cadence = Timtek.WinForms.CadencePattern.BlinkFast;
             this.IlluminationAnnunciator.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.IlluminationAnnunciator.ForeColor = System.Drawing.Color.PaleGoldenrod;
             this.IlluminationAnnunciator.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
@@ -205,13 +205,13 @@ namespace TA.SnapCap.Server
         private System.Windows.Forms.Label registeredClientCount;
         private System.Windows.Forms.Label OnlineClients;
         private System.Windows.Forms.Label label3;
-        private TA.WinFormsControls.AnnunciatorPanel annunciatorPanel1;
+        private Timtek.WinForms.AnnunciatorPanel annunciatorPanel1;
         private System.Windows.Forms.Button SetupCommand;
-        private TA.WinFormsControls.Annunciator ConnectedAnnunciator;
-        private TA.WinFormsControls.Annunciator MotorAnnunciator;
-        private TA.WinFormsControls.Annunciator IlluminationAnnunciator;
-        private TA.WinFormsControls.Annunciator BrightnessAnnunciator;
-        private TA.WinFormsControls.Annunciator DispositionAnnunciator;
+        private Timtek.WinForms.Annunciator ConnectedAnnunciator;
+        private Timtek.WinForms.Annunciator MotorAnnunciator;
+        private Timtek.WinForms.Annunciator IlluminationAnnunciator;
+        private Timtek.WinForms.Annunciator BrightnessAnnunciator;
+        private Timtek.WinForms.Annunciator DispositionAnnunciator;
     }
 }
 

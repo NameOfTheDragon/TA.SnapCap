@@ -8,7 +8,7 @@
                  Guid="*"
                  Win64="no" >
         <File Id="filReactiveAscom" 
-              Source="$(var.Server.TargetDir)TA.Ascom.ReactiveCommunications.dll" 
+              Source="$(var.Server.TargetDir)Timtek.ReactiveCommunications.dll" 
               KeyPath="yes" 
               Vital="yes" />
       </Component>

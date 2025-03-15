@@ -1,21 +1,19 @@
-﻿// This file is part of the TA.SnapCap project
+﻿// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2017-2017 Tigra Astronomy, all rights reserved.
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: CLientStatus.cs  Last modified: 2017-05-06@19:59 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 
 namespace TA.SnapCap.Server
     {
-    /// <summary>
-    ///     Records the connection status of a client.
-    /// </summary>
+    /// <summary>Records the connection status of a client.</summary>
     internal class ClientStatus : IEquatable<ClientStatus>
         {
-        /// <summary>
-        ///     Gets or sets the client unique identifier.
-        /// </summary>
+        /// <summary>Gets or sets the client unique identifier.</summary>
         /// <value>The client identifier.</value>
         public Guid ClientId { get; set; }
 
@@ -27,9 +25,9 @@ namespace TA.SnapCap.Server
         public string Name { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether the is "online". A client is considered to be
-        ///     online if it has requested to open the communications channel, and "offline" if it has
-        ///     requested to close it.
+        ///     Gets or sets a value indicating whether the is "online". A client is considered to be online if
+        ///     it has requested to open the communications channel, and "offline" if it has requested to close
+        ///     it.
         /// </summary>
         /// <value><c>true</c> if online; otherwise, <c>false</c>.</value>
         public bool Online { get; set; }
@@ -51,7 +49,7 @@ namespace TA.SnapCap.Server
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof(ClientStatus)) return false;
-            return Equals((ClientStatus) obj);
+            return Equals((ClientStatus)obj);
             }
 
         public override int GetHashCode()

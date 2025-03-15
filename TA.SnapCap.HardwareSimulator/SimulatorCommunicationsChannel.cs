@@ -1,31 +1,28 @@
-﻿// This file is part of the TA.DigitalDomeworks project
-//
-// Copyright © 2016-2018 Tigra Astronomy, all rights reserved.
-//
-// File: SimulatorCommunicationsChannel.cs  Last modified: 2018-03-28@22:45 by Tim Long
+﻿// This file is part of the TA.SnapCap project.
+// 
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
+// 
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using NodaTime;
-using TA.Ascom.ReactiveCommunications;
+using Timtek.ReactiveCommunications;
 
 namespace TA.SnapCap.HardwareSimulator
     {
-    /// <summary>
-    ///     Provides a direct in-memory communications link to the hardware simulator.
-    /// </summary>
+    /// <summary>Provides a direct in-memory communications link to the hardware simulator.</summary>
     public class SimulatorCommunicationsChannel : ICommunicationChannel
         {
         internal readonly InputParser inputParser;
 
-        internal SimulatorStateMachine Simulator { get; }
-
-        /// <summary>
-        ///     Creates a simulator communications channel from a valid endpoint.
-        /// </summary>
+        /// <summary>Creates a simulator communications channel from a valid endpoint.</summary>
         /// <param name="endpoint">A valid simulator endpoint.</param>
-        public SimulatorCommunicationsChannel(SimulatorEndpoint endpoint, SimulatorStateMachine machine, InputParser parser)
+        public SimulatorCommunicationsChannel(SimulatorEndpoint endpoint, SimulatorStateMachine machine,
+            InputParser parser)
             {
             /*
              * ToDo: InputParser is really not needed here except to initialize the
@@ -38,9 +35,9 @@ namespace TA.SnapCap.HardwareSimulator
             inputParser = parser;
             }
 
-        /// <summary>
-        ///     Keeps a log of all commands sent to the simulator.
-        /// </summary>
+        internal SimulatorStateMachine Simulator { get; }
+
+        /// <summary>Keeps a log of all commands sent to the simulator.</summary>
         public List<string> SendLog { get; } = new List<string>();
 
         /// <inheritdoc />

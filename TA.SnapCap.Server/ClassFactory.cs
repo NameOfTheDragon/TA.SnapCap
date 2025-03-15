@@ -1,9 +1,10 @@
-// This file is part of the TA.SnapCap project
+// This file is part of the TA.SnapCap project.
 // 
-// Copyright © 2016-2017 Tigra Astronomy, all rights reserved.
-// Licensed under the MIT license, see http://tigra.mit-license.org/
+// This source code is dedicated to the memory of Andras Dan, late owner of Gemini Telescope Design.
+// Licensed under the Tigra/Timtek MIT License. In summary, you may do anything at all with this source code,
+// but whatever you do is your own responsibility and not mine, and nothing you do affects my ownership of my intellectual property.
 // 
-// File: ClassFactory.cs  Last modified: 2017-03-16@23:33 by Tim Long
+// Tim Long, Timtek Systems, 2025.
 
 using System;
 using System.Collections;
@@ -11,7 +12,6 @@ using System.Runtime.InteropServices;
 
 namespace TA.SnapCap.Server
     {
-
     #region C# Definition of IClassFactory
     //
     // Provide a definition of theCOM IClassFactory interface.
@@ -36,7 +36,6 @@ namespace TA.SnapCap.Server
     public class ClassFactory : IClassFactory
         {
         #region Access to ole32.dll functions for class factories
-
         // Define two common GUID objects for public usage.
         public static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
         public static Guid IID_IDispatch = new Guid("{00020400-0000-0000-C000-000000000046}");
@@ -135,9 +134,9 @@ namespace TA.SnapCap.Server
             //PWGS Get the ProgID from the MetaData
             m_progid = Marshal.GenerateProgIdForType(type);
             m_ClassId = Marshal.GenerateGuidForType(type); // Should be nailed down by [Guid(...)]
-            m_ClassContext = (uint) CLSCTX.CLSCTX_LOCAL_SERVER; // Default
-            m_Flags = (uint) REGCLS.REGCLS_MULTIPLEUSE | // Default
-                      (uint) REGCLS.REGCLS_SUSPENDED;
+            m_ClassContext = (uint)CLSCTX.CLSCTX_LOCAL_SERVER; // Default
+            m_Flags = (uint)REGCLS.REGCLS_MULTIPLEUSE | // Default
+                      (uint)REGCLS.REGCLS_SUSPENDED;
             m_InterfaceTypes = new ArrayList();
             foreach (var T in type.GetInterfaces()) // Save all of the implemented interfaces
                 m_InterfaceTypes.Add(T);
@@ -147,20 +146,20 @@ namespace TA.SnapCap.Server
         #region Common ClassFactory Methods
         public uint ClassContext
             {
-            get { return m_ClassContext; }
-            set { m_ClassContext = value; }
+            get => m_ClassContext;
+            set => m_ClassContext = value;
             }
 
         public Guid ClassId
             {
-            get { return m_ClassId; }
-            set { m_ClassId = value; }
+            get => m_ClassId;
+            set => m_ClassId = value;
             }
 
         public uint Flags
             {
-            get { return m_Flags; }
-            set { m_Flags = value; }
+            get => m_Flags;
+            set => m_Flags = value;
             }
 
         public bool RegisterClassObject()
@@ -209,31 +208,23 @@ namespace TA.SnapCap.Server
             // Handle specific requests for implemented interfaces
             //
             foreach (Type iType in m_InterfaceTypes)
-                {
                 if (riid == Marshal.GenerateGuidForType(iType))
                     {
                     ppvObject = Marshal.GetComInterfaceForObject(Activator.CreateInstance(m_ClassType), iType);
                     return;
                     }
-                }
             //
             // Handle requests for IDispatch or IUnknown on the class
             //
             if (riid == IID_IDispatch)
-                {
                 ppvObject = Marshal.GetIDispatchForObject(Activator.CreateInstance(m_ClassType));
-                }
             else if (riid == IID_IUnknown)
-                {
                 ppvObject = Marshal.GetIUnknownForObject(Activator.CreateInstance(m_ClassType));
-                }
             else
-                {
                 //
                 // Oops, some interface that the class doesn't implement
                 //
-                throw new COMException("No interface", unchecked((int) 0x80004002));
-                }
+                throw new COMException("No interface", unchecked((int)0x80004002));
             }
 
         void IClassFactory.LockServer(bool bLock)

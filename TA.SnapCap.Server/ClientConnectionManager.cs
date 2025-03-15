@@ -10,25 +10,20 @@ using System.Linq;
 using JetBrains.Annotations;
 using Ninject;
 using NLog;
-using PostSharp.Patterns.Model;
-using PostSharp.Patterns.Threading;
-using TA.Ascom.ReactiveCommunications;
-using TA.SnapCap.Aspects;
 using TA.SnapCap.DeviceInterface;
+using TA.Utils.Core;
 
 namespace TA.SnapCap.Server
     {
     /// <summary>
-    ///     Manages client (driver) connections to the shared device controller. Uses the Reader
-    ///     Writer Lock pattern to ensure thread safety.
+    ///     Manages client (driver) connections to the shared device controller. Uses the Reader Writer
+    ///     Lock pattern to ensure thread safety.
     /// </summary>
-    [ReaderWriterSynchronized]
-    [NLogTraceWithArguments]
     public class ClientConnectionManager
         {
-        [Reference] private readonly ILogger log = LogManager.GetCurrentClassLogger();
+        private readonly ILogger log = LogManager.GetCurrentClassLogger();
         private readonly bool performActionsOnOpen;
-        [Reference] private Maybe<DeviceController> controllerInstance;
+        private Maybe<DeviceController> controllerInstance;
         //[Reference] private ITransactionProcessorFactory factory;
 
         /// <summary>
@@ -55,7 +50,6 @@ namespace TA.SnapCap.Server
             controllerInstance = Maybe<DeviceController>.Empty;
             }
 
-        [Reference]
         internal List<ClientStatus> Clients { get; }
 
         /// <summary>
@@ -96,7 +90,6 @@ namespace TA.SnapCap.Server
 
         internal event EventHandler<EventArgs> ClientStatusChanged;
 
-        [Writer]
         private void DestroyControllerInstance()
             {
             if (controllerInstance.Any())
@@ -104,14 +97,13 @@ namespace TA.SnapCap.Server
             controllerInstance = Maybe<DeviceController>.Empty;
             }
 
-        [Writer]
         private void EnsureControllerInstanceCreatedAndOpen()
             {
             if (!controllerInstance.Any())
                 {
                 CompositionRoot.BeginSessionScope(); // Begins a new composition session
                 var controller = CompositionRoot.Kernel.Get<DeviceController>(); //new DeviceController(factory);
-                controllerInstance = new Maybe<DeviceController>(controller);
+                controllerInstance = controller.AsMaybe();
                 }
             var instance = controllerInstance.Single();
             if (!instance.IsOnline)
@@ -120,7 +112,6 @@ namespace TA.SnapCap.Server
                 }
             }
 
-        [Writer]
         public void GoOffline(Guid clientId)
             {
             log.Info($"Go offline for client {clientId}");
@@ -149,18 +140,19 @@ namespace TA.SnapCap.Server
                 }
             }
 
-        /// <summary>
-        ///     Gets the controller instance, ensuring that it is open and ready for use.
-        /// </summary>
+        /// <summary>Gets the controller instance, ensuring that it is open and ready for use.</summary>
         /// <param name="clientId">
         ///     The client must provide it's ID which has previously been obtained by calling
         ///     <see cref="RegisterClient" />.
         /// </param>
-        /// <returns>An instance of <see cref="DeviceController" /> which is online and ready to accept commands.</returns>
+        /// <returns>
+        ///     An instance of <see cref="DeviceController" /> which is online and ready to accept
+        ///     commands.
+        /// </returns>
         /// <exception cref="System.InvalidOperationException">
-        ///     Clients must release previous controller instances before requesting another
+        ///     Clients must release previous controller
+        ///     instances before requesting another
         /// </exception>
-        [Writer]
         public DeviceController GoOnline(Guid clientId)
             {
             log.Info($"Go online for client {clientId}");
@@ -193,13 +185,9 @@ namespace TA.SnapCap.Server
             return clientOnline ? controllerInstance.Single() : null;
             }
 
-
-        /// <summary>
-        ///     Determines whether the client with the specified ID is registered.
-        /// </summary>
+        /// <summary>Determines whether the client with the specified ID is registered.</summary>
         /// <param name="clientId">The client unique identifier.</param>
         /// <returns><c>true</c> if the client is connected; otherwise, <c>false</c>.</returns>
-        [Reader]
         public bool IsClientRegistered(Guid clientId)
             {
             return Clients.Any(p => p.Equals(clientId));
@@ -210,11 +198,8 @@ namespace TA.SnapCap.Server
             ClientStatusChanged?.Invoke(this, EventArgs.Empty);
             }
 
-        /// <summary>
-        ///     Gets a new unique client identifier.
-        /// </summary>
+        /// <summary>Gets a new unique client identifier.</summary>
         /// <returns>Guid.</returns>
-        [Writer]
         public Guid RegisterClient(string name = null)
             {
             var id = Guid.NewGuid();
@@ -240,7 +225,6 @@ namespace TA.SnapCap.Server
             throw ex;
             }
 
-        [Writer]
         public void UnregisterClient(Guid clientId)
             {
             log.Info($"Unregistering client {clientId}");
